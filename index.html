@@ -203,7 +203,14 @@ nav svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;st
 import {initializeApp} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
 import {getAuth,onAuthStateChanged,signInWithEmailAndPassword,createUserWithEmailAndPassword,signOut} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 import {getFirestore,doc,getDoc,setDoc} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
-const firebaseConfig={apiKey:"DEIN_API_KEY",authDomain:"DEIN_PROJEKT.firebaseapp.com",projectId:"DEIN_PROJEKT",appId:"DEINE_APP_ID"};
+const firebaseConfig = {
+    apiKey: "AIzaSyDyAl0GHXrSs8WK4Ca0jBc_IDM75ZJB46c",
+    authDomain: "dizzipline-7cea0.firebaseapp.com",
+    projectId: "dizzipline-7cea0",
+    storageBucket: "dizzipline-7cea0.firebasestorage.app",
+    messagingSenderId: "464321825850",
+    appId: "1:464321825850:web:a226b5edf6cf0f8c1eb903"
+  };
 const FB_ON=!firebaseConfig.apiKey.startsWith('DEIN');
 let auth,db,synced=false,cloudT;
 if(FB_ON){const app=initializeApp(firebaseConfig);auth=getAuth(app);db=getFirestore(app)}
