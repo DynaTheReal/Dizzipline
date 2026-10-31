@@ -137,6 +137,8 @@ textarea.in{height:auto;padding:14px 18px;resize:none;display:block}
 .bb.g{background:radial-gradient(circle at 35% 30%,#fff3b0,#ffd60a 60%,#c97a00);box-shadow:0 0 10px rgba(255,214,10,.8)}
 nav button.pulse svg{animation:pls .4s var(--ease)}
 @keyframes pls{40%{transform:scale(1.4)}}
+#exg circle.db{fill:#fff;stroke:rgba(255,255,255,.5);stroke-width:2}
+.chips.eq .chip.on{background:#fff;border-color:#fff;color:#000}
 /* Tab-Leiste */
 nav{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(440px,calc(100% - 32px));display:flex;padding:6px;border-radius:30px;background:rgba(30,30,32,.7);backdrop-filter:blur(26px) saturate(180%);-webkit-backdrop-filter:blur(26px) saturate(180%);border:1px solid var(--line);z-index:20}
 nav button{flex:1;background:none;border:0;padding:9px 0 7px;border-radius:24px;display:grid;justify-items:center;gap:3px;font-size:11px;font-weight:500;color:var(--mu);cursor:pointer;transition:.3s}
@@ -226,7 +228,7 @@ nav svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;st
     <div class="form">
       <h3>Neuer Schritt</h3>
       <div class="seg" id="seg"><button data-t="w" class="on">Aufgabe</button><button data-t="p">Pause</button><button data-t="e">Essen</button><button data-t="b">Belohnung</button></div>
-      <input class="in" id="fn" list="exl" placeholder="Name, z. B. 30 Crunches"><datalist id="exl"><option value="Kniebeugen"><option value="Sprungkniebeugen"><option value="Liegestütze"><option value="Crunches"><option value="Sit-ups"><option value="Fahrrad-Crunches"><option value="Ausfallschritte"><option value="Hampelmänner"><option value="Mountain Climbers"><option value="Plank"><option value="Beinheben"><option value="Scherenkicks"><option value="Hüftheben"><option value="Kniehebelauf"><option value="Trizeps-Dips"><option value="Wadenheben"><option value="Superman"><option value="Donkey Kicks"><option value="Bird Dog"><option value="Seilspringen"><option value="Vorbeuge dehnen"><option value="Schulterdrücken"><option value="Armkreisen"><option value="Wandsitzen"><option value="Schattenboxen"><option value="Burpees"></datalist>
+      <input class="in" id="fn" list="exl" placeholder="Name, z. B. 30 Crunches"><datalist id="exl"><option value="Kniebeugen"><option value="Sprungkniebeugen"><option value="Liegestütze"><option value="Crunches"><option value="Sit-ups"><option value="Fahrrad-Crunches"><option value="Ausfallschritte"><option value="Hampelmänner"><option value="Mountain Climbers"><option value="Plank"><option value="Beinheben"><option value="Scherenkicks"><option value="Hüftheben"><option value="Kniehebelauf"><option value="Trizeps-Dips"><option value="Wadenheben"><option value="Superman"><option value="Donkey Kicks"><option value="Bird Dog"><option value="Seilspringen"><option value="Vorbeuge dehnen"><option value="Schulterdrücken"><option value="Armkreisen"><option value="Wandsitzen"><option value="Schattenboxen"><option value="Burpees"><option value="Seilspringen"><option value="Klimmzüge"><option value="Hantel-Kniebeugen"><option value="Hantel-Ausfallschritte"><option value="Hantel-Schulterdrücken"><option value="Hantel-Bizepscurls"><option value="Hantel-Rudern"></datalist>
       <div class="amt" id="amt"><input class="in" id="fa" type="number" min="1" value="30" inputmode="numeric" placeholder="Wiederholungen"></div>
       <div class="sw" id="sw"><button class="t0 on" data-th="0"></button><button class="t1" data-th="1"></button><button class="t2" data-th="2"></button><button class="t3" data-th="3"></button><button class="t4" data-th="4"></button></div>
       <label class="tg">Gesperrt, bis der Schritt davor erledigt ist<input type="checkbox" id="fl" checked></label>
@@ -259,6 +261,7 @@ nav svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;st
         <p class="mu" style="font-size:14px;margin-top:10px">Der tägliche Plan baut auf gestern und deinen Angaben auf.</p>
       </div>
     </div>
+    <div class="form" style="margin-top:14px"><h3>Equipment</h3><p class="mu" style="font-size:14px;margin:-6px 0 12px">Was du zur Hand hast. Die KI mischt Übungen mit und ohne Equipment ausgewogen. Ohne Auswahl gibt es nur Körpergewicht.</p><div class="chips eq" id="eq" style="justify-content:flex-start;margin:0"><button class="chip" data-e="hantel">Hanteln</button><button class="chip" data-e="stange">Klimmzugstange</button><button class="chip" data-e="seil">Springseil</button></div></div>
     <button class="ghost" id="redo" style="margin-top:20px">Einrichtung neu starten</button>
   </section>
 </div>
@@ -494,12 +497,16 @@ const EX={
  rope:[100,24,100,40,100,74,90,58,84,70,110,58,116,70,100,96,100,118,103,96,103,118, 100,16,100,32,100,66,90,50,80,58,110,50,118,58,100,88,100,108,103,88,103,108, 520],
  fold:[100,24,100,40,100,74,100,58,100,74,103,58,103,74,100,96,100,118,103,96,103,118, 142,100,128,86,96,76,134,100,140,116,136,101,142,117,98,97,98,118,101,97,101,118, 3000],
  flutter:[40,110,56,112,90,112,72,114,88,114,72,115,88,115,112,102,134,92,112,111,134,109, 40,110,56,112,90,112,72,114,88,114,72,115,88,115,112,111,134,109,112,102,134,92, 500],
- boxing:[100,26,100,42,100,76,116,44,134,42,104,60,112,48,108,98,112,118,92,98,88,118, 100,26,100,42,100,76,106,58,114,46,116,46,134,44,108,98,112,118,92,98,88,118, 700]
+ boxing:[100,26,100,42,100,76,116,44,134,42,104,60,112,48,108,98,112,118,92,98,88,118, 100,26,100,42,100,76,106,58,114,46,116,46,134,44,108,98,112,118,92,98,88,118, 700],
+ curl:[100,24,100,40,100,74,100,58,100,76,103,58,103,76,100,96,100,118,103,96,103,118, 100,24,100,40,100,74,100,58,112,42,103,58,115,44,100,96,100,118,103,96,103,118, 1800],
+ row:[130,58,116,66,88,86,118,84,118,102,121,84,121,102,102,100,96,118,104,100,98,118, 130,58,116,66,88,86,100,74,112,84,103,75,115,85,102,100,96,118,104,100,98,118, 1700],
+ pullup:[100,30,100,46,100,80,99,28,100,8,101,28,102,8,100,100,88,110,102,100,90,110, 100,14,100,28,100,62,86,24,98,8,114,24,102,8,100,82,88,92,102,82,90,92, 2200]
 };
 const EXT={jack:'Spring mit gegrätschten Beinen und den Armen über dem Kopf, dann zurück.',squat:'Hüfte nach hinten, Rücken gerade, bis die Oberschenkel waagerecht sind.',pushup:'Der Körper bleibt eine gerade Linie. Brust nah zum Boden, dann hochdrücken.',crunch:'Schultern vom Boden heben, Bauch anspannen, kontrolliert zurück.',lunge:'Großer Schritt nach vorn, das hintere Knie sinkt Richtung Boden.',climber:'In der Liegestütz-Position die Knie schnell abwechselnd zur Brust ziehen.',plank:'Auf den Unterarmen stützen und den Körper gerade halten.',legraise:'Beine gestreckt anheben bis senkrecht, langsam wieder absenken.',bridge:'Hüfte hochdrücken, bis Schultern, Hüfte und Knie eine Linie bilden.',highknees:'Auf der Stelle laufen und die Knie abwechselnd hoch ziehen.',dips:'Hände hinter dem Körper, Ellbogen beugen und wieder hochdrücken.',calf:'Auf die Zehenspitzen steigen, kurz halten, langsam absenken.',superman:'Bauchlage, Arme und Beine gleichzeitig anheben und kurz halten.',
- burpee:'Hocke, Hände auf den Boden, in die Liegestütz-Position springen, zurück und hochspringen.',jumpsquat:'Tief in die Kniebeuge, dann explosiv nach oben springen und weich landen.',situp:'Aus der Rückenlage den ganzen Oberkörper aufrichten und kontrolliert zurück.',bicycle:'Schultern anheben, gegenüberliegenden Ellbogen und Knie zusammenführen, wechseln.',press:'Hände auf Schulterhöhe, Arme gestreckt über den Kopf drücken und wieder absenken.',armcircle:'Gestreckte Arme in großen Kreisen nach hinten kreisen lassen.',wallsit:'Rücken an die Wand, Oberschenkel waagerecht, Position halten.',donkey:'Im Vierfüßlerstand ein Bein angewinkelt nach hinten oben strecken.',birddog:'Im Vierfüßlerstand gegenüberliegenden Arm und Bein gestreckt anheben.',rope:'Mit kleinen Sprüngen auf den Fußballen hüpfen, die Handgelenke kreisen.',fold:'Oberkörper mit geradem Rücken nach vorn beugen und die Arme hängen lassen.',flutter:'Gestreckte Beine knapp über dem Boden abwechselnd auf und ab bewegen.',boxing:'Leichter Stand, abwechselnd Links und Rechts nach vorn schlagen.'};
-const NAMES=['Kniebeugen','Sprungkniebeugen','Liegestütze','Crunches','Sit-ups','Fahrrad-Crunches','Ausfallschritte','Hampelmänner','Mountain Climbers','Plank','Beinheben','Scherenkicks','Hüftheben','Kniehebelauf','Trizeps-Dips','Wadenheben','Superman','Donkey Kicks','Bird Dog','Seilspringen','Vorbeuge dehnen','Schulterdrücken','Armkreisen','Wandsitzen','Schattenboxen','Burpees'];
-const EXR=[[/burpee/,'burpee'],[/sprungkniebeug|jump ?squat|strecksprung/,'jumpsquat'],[/hampel|jumping/,'jack'],[/kniebeug|squat/,'squat'],[/liegest|push/,'pushup'],[/fahrrad|bicycle/,'bicycle'],[/sit-?up|aufrichten/,'situp'],[/crunch|bauchpresse/,'crunch'],[/ausfall|lunge/,'lunge'],[/climber|bergsteig/,'climber'],[/beinheb|leg ?raise/,'legraise'],[/schere|flutter/,'flutter'],[/bridge|brücke|hüftheb|glute/,'bridge'],[/high ?knee|kniehebe|joggen|laufen|sprint/,'highknees'],[/dip/,'dips'],[/wade|calf|fersenheb|zehenstand/,'calf'],[/superman|rückenstreck|rückenheb/,'superman'],[/donkey|kickback|eselkick|gesäßheb/,'donkey'],[/bird ?dog|vierfüßler/,'birddog'],[/seilspring|jump ?rope|rope/,'rope'],[/vorbeug|toe ?touch|dehn|stretch/,'fold'],[/schulterdr|shoulder ?press|überkopf|overhead|military/,'press'],[/armkreis|arm ?circle|schulterkreis/,'armcircle'],[/wandsitz|wall ?sit/,'wallsit'],[/box|punch/,'boxing'],[/plank|unterarmst/,'plank']];
+ burpee:'Hocke, Hände auf den Boden, in die Liegestütz-Position springen, zurück und hochspringen.',jumpsquat:'Tief in die Kniebeuge, dann explosiv nach oben springen und weich landen.',situp:'Aus der Rückenlage den ganzen Oberkörper aufrichten und kontrolliert zurück.',bicycle:'Schultern anheben, gegenüberliegenden Ellbogen und Knie zusammenführen, wechseln.',press:'Hände auf Schulterhöhe, Arme gestreckt über den Kopf drücken und wieder absenken.',armcircle:'Gestreckte Arme in großen Kreisen nach hinten kreisen lassen.',wallsit:'Rücken an die Wand, Oberschenkel waagerecht, Position halten.',donkey:'Im Vierfüßlerstand ein Bein angewinkelt nach hinten oben strecken.',birddog:'Im Vierfüßlerstand gegenüberliegenden Arm und Bein gestreckt anheben.',rope:'Mit kleinen Sprüngen auf den Fußballen hüpfen, die Handgelenke kreisen.',fold:'Oberkörper mit geradem Rücken nach vorn beugen und die Arme hängen lassen.',flutter:'Gestreckte Beine knapp über dem Boden abwechselnd auf und ab bewegen.',boxing:'Leichter Stand, abwechselnd Links und Rechts nach vorn schlagen.',curl:'Ellbogen am Körper, Hanteln kontrolliert hochführen und langsam absenken.',row:'Oberkörper nach vorn gebeugt, Rücken gerade, Hanteln zur Hüfte ziehen.',pullup:'Am Griff hängen und den Körper hochziehen, bis das Kinn über der Stange ist.'};
+const NAMES=['Kniebeugen','Sprungkniebeugen','Liegestütze','Crunches','Sit-ups','Fahrrad-Crunches','Ausfallschritte','Hampelmänner','Mountain Climbers','Plank','Beinheben','Scherenkicks','Hüftheben','Kniehebelauf','Trizeps-Dips','Wadenheben','Superman','Donkey Kicks','Bird Dog','Vorbeuge dehnen','Schulterdrücken','Armkreisen','Wandsitzen','Schattenboxen','Burpees'];
+const EQN={hantel:['Hantel-Kniebeugen','Hantel-Ausfallschritte','Hantel-Schulterdrücken','Hantel-Bizepscurls','Hantel-Rudern'],stange:['Klimmzüge'],seil:['Seilspringen']},EQL={hantel:'Kurzhanteln',stange:'Klimmzugstange',seil:'Springseil'};
+const EXR=[[/burpee/,'burpee'],[/sprungkniebeug|jump ?squat|strecksprung/,'jumpsquat'],[/hampel|jumping/,'jack'],[/kniebeug|squat/,'squat'],[/liegest|push/,'pushup'],[/fahrrad|bicycle/,'bicycle'],[/sit-?up|aufrichten/,'situp'],[/crunch|bauchpresse/,'crunch'],[/ausfall|lunge/,'lunge'],[/climber|bergsteig/,'climber'],[/beinheb|leg ?raise/,'legraise'],[/schere|flutter/,'flutter'],[/bridge|brücke|hüftheb|glute/,'bridge'],[/high ?knee|kniehebe|joggen|laufen|sprint/,'highknees'],[/dip/,'dips'],[/wade|calf|fersenheb|zehenstand/,'calf'],[/superman|rückenstreck|rückenheb/,'superman'],[/donkey|kickback|eselkick|gesäßheb/,'donkey'],[/bird ?dog|vierfüßler/,'birddog'],[/seilspring|jump ?rope|rope/,'rope'],[/vorbeug|toe ?touch|dehn|stretch/,'fold'],[/schulterdr|shoulder ?press|überkopf|overhead|military/,'press'],[/armkreis|arm ?circle|schulterkreis/,'armcircle'],[/wandsitz|wall ?sit/,'wallsit'],[/box|punch/,'boxing'],[/curl|bizeps/,'curl'],[/rudern|\brow\b/,'row'],[/klimmzug|pull-?up|chin-?up/,'pullup'],[/plank|unterarmst/,'plank']];
 const exOf=n=>{n=n.toLowerCase();const r=EXR.find(x=>x[0].test(n));return r?r[1]:null};
 const SEG=[[0,1,0],[1,2,0],[1,3,1],[3,4,1],[1,5,0],[5,6,0],[2,7,1],[7,8,1],[2,9,0],[9,10,0]];
 let exRaf=0;
@@ -510,16 +517,17 @@ function showEx(i){
   o.classList.add('on');requestAnimationFrame(()=>requestAnimationFrame(()=>o.classList.add('show')));
   $('#exv').style.display=k?'':'none';
   $('#exp').textContent=k?EXT[k]:'Für diesen Namen gibt es noch keine Animation. Tipp: Nimm im Plan einen Namen aus der Vorschlagsliste, z. B. Kniebeugen, Burpees oder Plank.';
-  if(k)playEx(EX[k]);
+  if(k)playEx(EX[k],/hantel|dumbbell/i.test(s.n));
 }
-function playEx(d){
+function playEx(d,db){
   const K=(d.length-1)/22,T=d[d.length-1],P=Array.from({length:K},(_,j)=>d.slice(j*22,j*22+22)),g=$('#exg');
-  g.innerHTML=SEG.map(q=>`<line class="${q[2]?'far':''}"/>`).join('')+'<circle r="9"/>';
-  const ls=g.querySelectorAll('line'),hd=g.querySelector('circle'),t0=performance.now();
+  g.innerHTML=SEG.map(q=>`<line class="${q[2]?'far':''}"/>`).join('')+'<circle r="9"/>'+(db?'<circle class="db" r="5"/><circle class="db" r="5"/>':'');
+  const ls=g.querySelectorAll('line'),hd=g.querySelector('circle'),dbs=g.querySelectorAll('.db'),t0=performance.now();
   const f=t=>{
     const x=((t-t0)/T%1)*K,j=Math.floor(x),u=x-j,e=u*u*(3-2*u),a=P[j%K],b=P[(j+1)%K],pt=a.map((v,m)=>v+(b[m]-v)*e);
     SEG.forEach((q,m)=>{ls[m].setAttribute('x1',pt[q[0]*2]);ls[m].setAttribute('y1',pt[q[0]*2+1]);ls[m].setAttribute('x2',pt[q[1]*2]);ls[m].setAttribute('y2',pt[q[1]*2+1])});
     hd.setAttribute('cx',pt[0]);hd.setAttribute('cy',pt[1]);
+    if(db){dbs[0].setAttribute('cx',pt[8]);dbs[0].setAttribute('cy',pt[9]);dbs[1].setAttribute('cx',pt[12]);dbs[1].setAttribute('cy',pt[13])}
     exRaf=requestAnimationFrame(f);
   };
   exRaf=requestAnimationFrame(f);
@@ -565,8 +573,10 @@ $('#ob').onclick=e=>{
 const KEY='dizzipline-gem',getKey=()=>{try{return localStorage.getItem(KEY)||''}catch(e){return ''}};
 const aiOn=n=>!!(S.ai&&S.ai.on&&S.ai['f'+n]&&getKey());
 let busy='',aiFail=0;
+let gemBest='';const gemCool={};
 async function gem(prompt,onP){
-  const ms=['gemini-flash-latest','gemini-3.5-flash','gemini-2.5-flash'],K=getKey(),B=JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{responseMimeType:'application/json'}});
+  /* Jedes Modell hat sein eigenes Limit. Bei "zu viele Anfragen" (429) geht es sofort mit dem nächsten Modell weiter. */
+  const all=['gemini-flash-latest','gemini-2.5-flash','gemini-3.5-flash','gemini-2.5-flash-lite','gemini-flash-lite-latest'],ms=gemBest?[gemBest,...all.filter(x=>x!=gemBest)]:all,K=getKey(),B=JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{responseMimeType:'application/json'}});
   /* fb=false: Stream mit Header-Key. fb=true: normaler Aufruf mit Key in der URL (zweite Runde). */
   const call=async(m,fb)=>{
     const ctl=new AbortController(),to=setTimeout(()=>ctl.abort(),35000),base='https://generativelanguage.googleapis.com/v1beta/models/'+m+':';
@@ -581,26 +591,30 @@ async function gem(prompt,onP){
       eat(buf);return{txt};
     }finally{clearTimeout(to)}
   };
-  let code=0,net=0;
-  for(let k=0;k<6;k++){
-    let o;try{o=await call(ms[k%3],k>2)}catch(e){net=1;await sleep(500);continue}
+  let code=0,net=0,rate=0;
+  for(let k=0;k<ms.length*2;k++){
+    const m=ms[k%ms.length];
+    if(k==ms.length){if(rate)await sleep(3000);Object.keys(gemCool).forEach(x=>delete gemCool[x])}
+    if(gemCool[m]>Date.now())continue;
+    let o;try{o=await call(m,k>=ms.length)}catch(e){net=1;await sleep(400);continue}
     if(o.code){
       if(o.code==404)continue;
-      if(o.code>=500){code=o.code;await sleep(700);continue}
-      if(o.code==429)throw new Error('Zu viele KI-Anfragen. Bitte warte kurz.');
+      if(o.code==429){rate=1;gemCool[m]=Date.now()+60000;continue}
+      if(o.code>=500){code=o.code;await sleep(500);continue}
       throw new Error(o.code==400||o.code==403?'Der Gemini-API-Key wurde abgelehnt ('+o.code+').':'KI nicht erreichbar ('+o.code+').');
     }
-    try{return JSON.parse(o.txt.slice(o.txt.indexOf('{'),o.txt.lastIndexOf('}')+1))}catch(e){}
+    try{const r=JSON.parse(o.txt.slice(o.txt.indexOf('{'),o.txt.lastIndexOf('}')+1));gemBest=m;return r}catch(e){}
   }
-  throw new Error(code?'Die KI ist gerade überlastet (Fehler '+code+'). Probier es in einer Minute noch einmal.':net?'Keine Verbindung zur KI. Prüfe Internet und API-Key.':'Die KI hat keinen gültigen Plan geliefert.');
+  throw new Error(rate?'Alle KI-Modelle sind gerade ausgelastet. Warte etwa eine Minute und versuche es dann noch einmal.':code?'Die KI ist gerade überlastet (Fehler '+code+'). Probier es in einer Minute noch einmal.':net?'Keine Verbindung zur KI. Prüfe Internet und API-Key.':'Die KI hat keinen gültigen Plan geliefert.');
 }
 function aiPrompt(kind,desc){
-  const p=S.prof||{},h=S.hist;
+  const p=S.prof||{},h=S.hist,eq=S.eq||[];
   return `Du bist ein Trainingscoach in einer Disziplin-App. Erstelle einen Tagesplan auf Deutsch.
 Nutzer: ${p.g=='f'?'Frau':'Mann'}, Intensität ${p.i}, Ziel-Muskeln: ${(p.m||[]).map(x=>LB[x]).join(', ')||'Ganzkörper'}.
+Equipment: ${eq.length?eq.map(k=>EQL[k]).join(', ')+'. Mische Übungen mit Equipment und Körpergewichtsübungen ausgewogen: höchstens die Hälfte der Übungen nutzt Equipment.':'keines, nur Körpergewichtsübungen.'}
 ${kind=='daily'?'Gestern: '+(h?h.steps.map(x=>x.n+(x.done?' (geschafft)':' (nicht geschafft)')).join('; '):'keine Daten')+'. Baue sinnvoll darauf auf und überlaste nicht dieselben Muskeln.':'Wunsch des Nutzers: '+desc}
 Antworte NUR mit JSON: {"steps":[{"n":"Name","t":"w|p|e|b","a":Zahl}]}
-t: w=Übung (a=Wiederholungen oder Durchgänge, der Name nennt sie, z. B. "30 Crunches"; erlaubte Übungen NUR: ${NAMES.join(', ')}), p=Pause (a=Minuten), e=Mahlzeit (a=0), b=Belohnung (a=Bonuspunkte 10 bis 30).
+t: w=Übung (a=Wiederholungen oder Durchgänge, der Name nennt sie, z. B. "30 Crunches"; erlaubte Übungen NUR: ${[...NAMES,...eq.flatMap(k=>EQN[k]||[])].join(', ')}), p=Pause (a=Minuten), e=Mahlzeit (a=0), b=Belohnung (a=Bonuspunkte 10 bis 30).
 6 bis 12 Schritte, Pausen zwischen den Übungen, mindestens eine Mahlzeit, eine Belohnung am Ende.`;
 }
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
@@ -620,7 +634,7 @@ async function gen(kind,desc){
   let st=null,err='';
   try{
     const o=await gem(aiPrompt(kind,desc),n=>set(Math.min(.95,n/700)));
-    st=(o.steps||[]).slice(0,14).map((x,i)=>{const t='wpeb'.includes(x.t)?x.t:'w';return{n:String(x.n||'Schritt').slice(0,60),t,a:t=='e'?0:Math.min(999,Math.max(1,Math.round(+x.a||1))),th:t=='w'?i%2:DEF[t],lk:i>0}});
+    st=(o.steps||[]).slice(0,14).map((x,i)=>{const t='wpeb'.includes(x.t)?x.t:'w';return{n:String(x.n||'Schritt').slice(0,60).replace((S.eq||[]).includes('hantel')?/$^/:/hantel-?\s*/i,''),t,a:t=='e'?0:Math.min(999,Math.max(1,Math.round(+x.a||1))),th:t=='w'?i%2:DEF[t],lk:i>0}});
     if(!st.length)throw new Error('Die KI hat keinen Plan geliefert.');
     set(1);await sleep(600);
   }catch(e){st=null;aiFail=1;err=e.message||'KI-Fehler.'}
@@ -644,7 +658,7 @@ $('#aigo').onclick=async()=>{
 
 /* Einstellungen */
 const A=()=>S.ai||(S.ai={}),show=id=>{document.querySelectorAll('.screen').forEach(x=>x.classList.toggle('on',x.id=='s-'+id));scrollTo(0,0)};
-function renderSet(){const a=S.ai||{};$('#ai0').checked=!!a.on;$('#ai1').checked=!!a.f1;$('#ai2').checked=!!a.f2;$('#aibox').classList.toggle('h',!a.on);$('#key').value=getKey()}
+function renderSet(){const a=S.ai||{};$('#ai0').checked=!!a.on;$('#ai1').checked=!!a.f1;$('#ai2').checked=!!a.f2;$('#aibox').classList.toggle('h',!a.on);$('#key').value=getKey();document.querySelectorAll('#eq .chip').forEach(x=>x.classList.toggle('on',(S.eq||[]).includes(x.dataset.e)))}
 $('#setb').onclick=()=>{renderSet();show('set')};
 $('#sback').onclick=()=>show('profil');
 $('#ai0').onchange=e=>{A().on=e.target.checked;aiFail=0;save();$('#aibox').classList.toggle('h',!A().on);render()};
@@ -652,6 +666,7 @@ $('#ai1').onchange=e=>{A().f1=e.target.checked;save();render()};
 $('#ai2').onchange=e=>{A().f2=e.target.checked;aiFail=0;save();render()};
 $('#key').onchange=e=>{try{localStorage.setItem(KEY,e.target.value.trim())}catch(x){}aiFail=0;render()};
 $('#reload').onclick=()=>{if(busy)return;if(S.steps.some(x=>x.done)&&!confirm('Plan neu erstellen? Dein Fortschritt von heute geht dabei verloren.'))return;aiFail=0;gen('daily')};
+$('#eq').onclick=e=>{const b=e.target.closest('[data-e]');if(!b)return;const a=S.eq||(S.eq=[]),i=a.indexOf(b.dataset.e);i<0?a.push(b.dataset.e):a.splice(i,1);b.classList.toggle('on',i<0);save()};
 $('#redo').onclick=()=>{S.prof=null;save();show('profil');render()};
 
 /* Profil */
