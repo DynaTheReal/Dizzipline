@@ -106,6 +106,20 @@ textarea.in{height:auto;padding:14px 18px;resize:none;display:block}
 .chip.on{background:#ff453a;border-color:#ff453a}
 #toast{position:fixed;top:calc(14px + env(safe-area-inset-top));left:50%;transform:translate(-50%,-90px);background:rgba(40,40,42,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--line);padding:12px 18px;border-radius:22px;z-index:200;font-size:15px;max-width:90vw;text-align:center;transition:transform .5s var(--ease)}
 #toast.on{transform:translate(-50%,0)}
+.card.vanish,.row.vanish{transition:opacity .35s,transform .35s var(--ease)}
+.vanish{opacity:0!important;transform:translateY(-16px) scale(.95)!important}
+#gen{position:fixed;inset:0;z-index:150;background:#000;display:none;align-items:center;justify-content:center;padding:30px;opacity:0;transition:opacity .4s}
+#gen.on{display:flex}#gen.show{opacity:1}
+.gw{width:100%;max-width:320px;text-align:center}
+.gw h2{font-size:28px;letter-spacing:-.03em;margin-bottom:8px}
+.gbar{height:6px;border-radius:3px;background:rgba(255,255,255,.12);overflow:hidden;margin:26px 0 12px}
+.gbar i{display:block;height:100%;width:0;background:#fff;border-radius:3px;transition:width .5s var(--ease)}
+.gw span{font-size:15px;color:var(--mu);font-variant-numeric:tabular-nums}
+.tr{display:flex;gap:8px;align-items:center}
+.rl{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.07);display:grid;place-items:center;cursor:pointer}
+.rl.h{display:none}
+.rl svg{width:19px;height:19px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .5s var(--ease)}
+.rl:active svg{transform:rotate(200deg)}
 /* Tab-Leiste */
 nav{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(440px,calc(100% - 32px));display:flex;padding:6px;border-radius:30px;background:rgba(30,30,32,.7);backdrop-filter:blur(26px) saturate(180%);-webkit-backdrop-filter:blur(26px) saturate(180%);border:1px solid var(--line);z-index:20}
 nav button{flex:1;background:none;border:0;padding:9px 0 7px;border-radius:24px;display:grid;justify-items:center;gap:3px;font-size:11px;font-weight:500;color:var(--mu);cursor:pointer;transition:.3s}
@@ -180,7 +194,7 @@ nav svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;st
 
 <div id="app">
   <section class="screen on" id="s-heute">
-    <div class="top"><div><p class="mu" id="date"></p><h2>Heute</h2></div><div class="pill" id="ppill"><span id="pp">0</span> Punkte</div></div>
+    <div class="top"><div><p class="mu" id="date"></p><h2>Heute</h2></div><div class="tr"><div class="pill" id="ppill"><span id="pp">0</span> Punkte</div><button class="rl h" id="reload" aria-label="Plan neu erstellen"><svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 11-2.6-5.9M20 4v5h-5"/></svg></button></div></div>
     <p class="mu" id="sub"></p>
     <div class="bar"><i id="bar"></i></div>
     <div id="list"></div>
@@ -232,6 +246,7 @@ nav svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;st
 </div>
 
 <div id="ob"></div><div id="toast"></div>
+<div id="gen"><div class="gw"><h2>Plan wird erstellt</h2><p class="mu" id="gp">Die KI plant deinen Tag</p><div class="gbar"><i id="gb"></i></div><span id="gpct">0 %</span></div></div>
 <nav id="nav">
   <button data-s="heute" class="on"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l3 3 5-6"/></svg>Heute</button>
   <button data-s="plan"><svg viewBox="0 0 24 24"><path d="M8 7h12M8 12h12M8 17h12M4 7h.01M4 12h.01M4 17h.01"/></svg>Plan</button>
@@ -454,15 +469,18 @@ $('#ob').onclick=e=>{
 const KEY='dizzipline-gem',getKey=()=>{try{return localStorage.getItem(KEY)||''}catch(e){return ''}};
 const aiOn=n=>!!(S.ai&&S.ai.on&&S.ai['f'+n]&&getKey());
 let busy='',aiFail=0;
-async function gem(prompt){
+async function gem(prompt,onP){
   for(const m of ['gemini-flash-latest','gemini-3.5-flash','gemini-2.5-flash']){
-    const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent`,{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':getKey()},body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{responseMimeType:'application/json'}})});
+    const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${m}:streamGenerateContent?alt=sse`,{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':getKey()},body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{responseMimeType:'application/json'}})});
     if(r.status==404)continue;
     if(r.status==400||r.status==403)throw new Error('Der Gemini-API-Key ist ungültig.');
     if(r.status==429)throw new Error('Zu viele KI-Anfragen. Bitte warte kurz.');
     if(!r.ok)throw new Error('KI nicht erreichbar ('+r.status+').');
-    const j=await r.json();
-    return JSON.parse(j.candidates[0].content.parts.map(p=>p.text||'').join('').replace(/```json|```/g,''));
+    const rd=r.body.getReader(),dec=new TextDecoder();let buf='',txt='';
+    const eat=l=>{if(!l.startsWith('data:'))return;try{const j=JSON.parse(l.slice(5));txt+=(j.candidates?.[0]?.content?.parts||[]).map(p=>p.text||'').join('');onP&&onP(txt.length)}catch(e){}};
+    for(;;){const{done,value}=await rd.read();if(done)break;buf+=dec.decode(value,{stream:true});const ls=buf.split('\n');buf=ls.pop();ls.forEach(eat)}
+    eat(buf);
+    return JSON.parse(txt.replace(/```json|```/g,''));
   }
   throw new Error('Kein Gemini-Modell verfügbar.');
 }
@@ -475,21 +493,39 @@ Antworte NUR mit JSON: {"steps":[{"n":"Name","t":"w|p|e|b","a":Zahl}]}
 t: w=Übung (a=Wiederholungen, der Name nennt sie, z. B. "30 Crunches"), p=Pause (a=Minuten), e=Mahlzeit (a=0), b=Belohnung (a=Bonuspunkte 10 bis 30).
 6 bis 12 Schritte, Pausen zwischen den Übungen, mindestens eine Mahlzeit, eine Belohnung am Ende.`;
 }
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 async function gen(kind,desc){
-  busy=kind=='daily'?'KI erstellt deinen Tagesplan…':'KI erstellt deinen Plan…';renderHeute();
+  busy='KI erstellt deinen Plan…';
+  /* 1) Aufgaben blenden nacheinander aus */
+  document.querySelectorAll('#list .card,#plist .row').forEach((c,i)=>{c.style.transitionDelay=i*35+'ms';c.classList.add('vanish')});
+  await sleep(550);
+  /* 2) schwarze Seite mit Fortschrittsbalken */
+  const g=$('#gen'),gb=$('#gb');let p=0;
+  const set=x=>{if(x<=p)return;p=x;gb.style.width=p*100+'%';$('#gpct').textContent=Math.round(p*100)+' %';$('#gp').textContent=p<.25?'Die KI plant deinen Tag':p<.7?'Übungen werden zusammengestellt':'Letzter Feinschliff'};
+  gb.style.transition='none';gb.style.width='0';void gb.offsetWidth;gb.style.transition='';
+  $('#gpct').textContent='0 %';$('#gp').textContent='Die KI plant deinen Tag';
+  g.classList.add('on');requestAnimationFrame(()=>requestAnimationFrame(()=>g.classList.add('show')));
+  const t0=Date.now(),tm=setInterval(()=>set(Math.min(.25,.03+(Date.now()-t0)/40000)),400);
+  let st=null,err='';
   try{
-    const o=await gem(aiPrompt(kind,desc));
-    const st=(o.steps||[]).slice(0,14).map((x,i)=>{const t='wpeb'.includes(x.t)?x.t:'w';return{n:String(x.n||'Schritt').slice(0,60),t,a:t=='e'?0:Math.min(999,Math.max(1,Math.round(+x.a||1))),th:t=='w'?i%2:DEF[t],lk:i>0}});
+    const o=await gem(aiPrompt(kind,desc),n=>set(Math.min(.92,n/700)));
+    st=(o.steps||[]).slice(0,14).map((x,i)=>{const t='wpeb'.includes(x.t)?x.t:'w';return{n:String(x.n||'Schritt').slice(0,60),t,a:t=='e'?0:Math.min(999,Math.max(1,Math.round(+x.a||1))),th:t=='w'?i%2:DEF[t],lk:i>0}});
     if(!st.length)throw new Error('Die KI hat keinen Plan geliefert.');
-    S.steps=st;if(kind=='daily')S.aiDay=TK;sig='';save();toast('Dein Plan ist bereit.');
-  }catch(e){aiFail=1;toast(e.message||'KI-Fehler.')}
-  busy='';render();
+    set(1);await sleep(600);
+  }catch(e){st=null;aiFail=1;err=e.message||'KI-Fehler.'}
+  clearInterval(tm);
+  /* 3) Überblenden zum neuen Plan */
+  g.classList.remove('show');await sleep(250);
+  if(st){S.steps=st;if(kind=='daily')S.aiDay=TK;save();toast('Dein Plan ist bereit.');if(kind=='desc')document.querySelector('nav [data-s=heute]').click()}else toast(err);
+  sig='';busy='';render();
+  await sleep(200);g.classList.remove('on');
 }
 function renderAI(){
   const need=S.user&&!S.prof&&(!S.user.uid||synced),o=$('#ob');
   if(need&&!o.classList.contains('on')){obStart();o.classList.add('on')}
   if(!need)o.classList.remove('on');
   $('#aip').classList.toggle('h',!aiOn(1));
+  $('#reload').classList.toggle('h',!(aiOn(1)||aiOn(2)));
   if(aiOn(2)&&S.prof&&S.user&&S.aiDay!==TK&&!busy&&!aiFail&&(!S.user.uid||synced))gen('daily');
 }
 $('#aigo').onclick=async()=>{
@@ -506,6 +542,7 @@ $('#ai0').onchange=e=>{A().on=e.target.checked;aiFail=0;save();$('#aibox').class
 $('#ai1').onchange=e=>{A().f1=e.target.checked;save();render()};
 $('#ai2').onchange=e=>{A().f2=e.target.checked;aiFail=0;save();render()};
 $('#key').onchange=e=>{try{localStorage.setItem(KEY,e.target.value.trim())}catch(x){}aiFail=0;render()};
+$('#reload').onclick=()=>{if(busy)return;if(S.steps.some(x=>x.done)&&!confirm('Plan neu erstellen? Dein Fortschritt von heute geht dabei verloren.'))return;aiFail=0;gen('daily')};
 $('#redo').onclick=()=>{S.prof=null;save();show('profil');render()};
 
 /* Profil */
