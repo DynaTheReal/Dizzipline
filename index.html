@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="utf-8">
-<meta name="app-version" content="1.2.0">
+<meta name="app-version" content="1.2.1">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#000000">
 <title>Dizzipline</title>
@@ -199,20 +199,31 @@ nav button.pulse svg{animation:pls .4s var(--ease)}
 .swh svg,.swh span{transition:transform .2s var(--ease)}.swh.ready svg,.swh.ready span{transform:scale(1.15)}
 .bolt{position:fixed;inset:0;z-index:118;pointer-events:none}.bolt svg{width:100%;height:100%}
 .bolt path{fill:none;stroke:#fff;stroke-width:3;stroke-linejoin:round;filter:drop-shadow(0 0 6px #ffd60a) drop-shadow(0 0 14px #ffd60a)}
+#list{display:flex;flex-direction:column}
+.card.dn{order:2}.dvd{order:1;display:none;margin:12px 4px;font-size:13px;font-weight:600;color:var(--mu)}#list.sd .dvd{display:block}
 #mc{position:fixed;left:0;top:0;width:54px;height:54px;z-index:25;pointer-events:none;will-change:transform}
 #mc.h{display:none}
-.mci{width:54px;height:54px;pointer-events:auto;cursor:pointer;animation:mcb 3.2s ease-in-out infinite;transform-origin:50% 100%}
-@keyframes mcb{50%{transform:scaleY(.96) scaleX(1.03)}}
+.mcf{width:54px;height:54px;transition:transform .5s var(--ease)}
+.mci{width:54px;height:54px;pointer-events:auto;cursor:pointer;animation:mcb 3.4s ease-in-out infinite;transform-origin:50% 100%}
+@keyframes mcb{50%{transform:scaleY(.965) scaleX(1.025)}}
 #mc svg{width:100%;height:100%;overflow:visible;display:block}
-.eyes{transform-box:fill-box;transform-origin:center;animation:blink 4.6s infinite;transition:transform .3s}
-@keyframes blink{0%,94%,100%{transform:scaleY(1)}97%{transform:scaleY(.1)}}
-.tip{transition:fill .3s}.arm{transform-box:fill-box;transform-origin:50% 15%}
-#mc.ch .tip{fill:#ffd60a;filter:drop-shadow(0 0 5px #ffd60a)}
+.look{transform:translate(var(--lx,0px),var(--ly,0px));transition:transform .45s var(--ease)}
+.eyes{transform-box:fill-box;transform-origin:center;animation:blink 5s infinite;transition:transform .3s}
+@keyframes blink{0%,95%,100%{transform:scaleY(1)}97.5%{transform:scaleY(.1)}}
+.ear,.bolt-e{transition:fill .3s}
+.arm,.ft{transform-box:fill-box;transform-origin:50% 10%}
+#mc.walk .mci{animation:wb var(--sp,.5s) ease-in-out infinite}@keyframes wb{50%{transform:translateY(-2.5px)}}
+#mc.walk .ft.l{animation:ftk var(--sp,.5s) ease-in-out infinite}#mc.walk .ft.r{animation:ftk var(--sp,.5s) ease-in-out infinite calc(var(--sp,.5s)/2)}
+@keyframes ftk{50%{transform:translateY(-4px) rotate(10deg)}}
+#mc.walk .arm.l{animation:arm var(--sp,.5s) ease-in-out infinite}#mc.walk .arm.r{animation:arm var(--sp,.5s) ease-in-out infinite calc(var(--sp,.5s)/2)}
+@keyframes arm{50%{transform:rotate(-28deg)}}
+#mc.ch .ear{fill:#ffd60a;filter:drop-shadow(0 0 5px #ffd60a)}
+#mc.ch .bolt-e{filter:drop-shadow(0 0 5px #ffd60a)}
+#mc.ch .eyes{transform:scale(1.15);animation:none}
 #mc.ch .mci{animation:mce .5s ease-in-out infinite;filter:drop-shadow(0 0 10px rgba(255,214,10,.75))}
 @keyframes mce{50%{transform:translateY(-4px) scale(1.04)}}
 #mc.zap .mci{animation:zp .5s;filter:brightness(2.2) drop-shadow(0 0 16px #ffd60a)}
 @keyframes zp{20%{transform:translate(-3px,2px) rotate(-6deg)}40%{transform:translate(3px,-2px) rotate(6deg)}60%{transform:translate(-2px,0)}}
-#mc.wave .arm.r{animation:wv .4s ease-in-out 4}@keyframes wv{50%{transform:rotate(-70deg)}}
 .mcb{position:absolute;left:0;bottom:62px;background:#fff;color:#000;font-size:14px;font-weight:600;padding:8px 12px;border-radius:14px;white-space:nowrap;opacity:0;transform:translateY(6px) scale(.9);transform-origin:20% 100%;transition:.3s var(--ease);pointer-events:none}
 .mcb.r{left:auto;right:0;transform-origin:80% 100%}.mcb.on{opacity:1;transform:none}
 /* Tab-Leiste */
@@ -366,7 +377,7 @@ nav svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;st
   <button data-s="progress"><svg viewBox="0 0 24 24"><path d="M4 18l5-6 4 3 7-9M15 6h5v5"/></svg>Progress</button>
   <button data-s="profil"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg>Profil</button>
 </nav>
-<div id="mc" class="h"><div class="mcb" id="mcb"></div><div class="mci" id="mci"><svg viewBox="0 0 64 64"><defs><linearGradient id="mg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#dcdce1"/></linearGradient></defs><path d="M32 12V6" stroke="#d1d1d6" stroke-width="2.4" stroke-linecap="round"/><circle class="tip" cx="32" cy="4.5" r="3.4" fill="#8e8e93"/><rect x="22" y="51" width="8" height="9" rx="4" fill="#c7c7cc"/><rect x="34" y="51" width="8" height="9" rx="4" fill="#c7c7cc"/><ellipse class="arm l" cx="7" cy="36" rx="4" ry="6.5" fill="#e5e5ea"/><ellipse class="arm r" cx="57" cy="36" rx="4" ry="6.5" fill="#e5e5ea"/><rect x="8" y="12" width="48" height="44" rx="22" fill="url(#mg)"/><g class="eyes"><ellipse cx="23" cy="31" rx="4.2" ry="5.6" fill="#0a0a0a"/><ellipse cx="41" cy="31" rx="4.2" ry="5.6" fill="#0a0a0a"/><circle cx="24.4" cy="29" r="1.5" fill="#fff"/><circle cx="42.4" cy="29" r="1.5" fill="#fff"/></g><path d="M27 42q5 4.5 10 0" stroke="#0a0a0a" stroke-width="2.2" fill="none" stroke-linecap="round"/></svg></div></div>
+<div id="mc" class="h"><div class="mcb" id="mcb"></div><div class="mcf" id="mcf"><div class="mci" id="mci"><svg viewBox="0 0 64 64"><defs><linearGradient id="mg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#d9d9de"/></linearGradient></defs><rect class="ft l" x="20" y="50" width="9" height="10" rx="4.5" fill="#c7c7cc"/><rect class="ft r" x="35" y="50" width="9" height="10" rx="4.5" fill="#c7c7cc"/><ellipse class="arm l" cx="9" cy="38" rx="4" ry="7" fill="#e5e5ea"/><ellipse class="arm r" cx="55" cy="38" rx="4" ry="7" fill="#e5e5ea"/><path class="ear" d="M19 16L14 3l13 8z" fill="#e5e5ea" stroke="#e5e5ea" stroke-width="2" stroke-linejoin="round"/><path class="ear" d="M45 16l5-13-13 8z" fill="#e5e5ea" stroke="#e5e5ea" stroke-width="2" stroke-linejoin="round"/><rect x="12" y="9" width="40" height="46" rx="20" fill="url(#mg)"/><g class="look"><g class="eyes"><ellipse cx="25" cy="29" rx="3.6" ry="5" fill="#0a0a0a"/><ellipse cx="39" cy="29" rx="3.6" ry="5" fill="#0a0a0a"/><circle cx="26.2" cy="27.2" r="1.3" fill="#fff"/><circle cx="40.2" cy="27.2" r="1.3" fill="#fff"/></g></g><path d="M19 21.5l9 2.8M45 21.5l-9 2.8" stroke="#0a0a0a" stroke-width="2.2" stroke-linecap="round"/><path d="M28.5 40q3.5 3 7 0" stroke="#0a0a0a" stroke-width="2" fill="none" stroke-linecap="round"/><path class="bolt-e" d="M33 43l-4 6h3l-1.5 5 5.5-7h-3z" fill="#ffd60a"/></svg></div></div></div>
 
 <script type="module">
 /* ===== FIREBASE =====
@@ -434,9 +445,9 @@ function renderHeute(){
   $('#date').textContent=new Date().toLocaleDateString('de-DE',{weekday:'long',day:'numeric',month:'long'});
   $('#sub').textContent=busy||'Level '+S.lvl+' · '+(st.length?(d==st.length?'Alles erledigt. Stark.':d+' von '+st.length+' erledigt'):'Noch kein Plan angelegt');
   $('#bar').style.width=st.length?d/st.length*100+'%':0;
-  $('#dtog').style.display=d?'':'none';$('#dtog').textContent=showDone?'Erledigte Quests ausblenden':'Erledigte Quests anzeigen ('+d+')';
+  $('#dtog').style.display=d?'':'none';$('#dtog').textContent=showDone?'Erledigte Quests ausblenden':'Erledigte Quests anzeigen ('+d+')';L.classList.toggle('sd',showDone&&d>0);
   const k2=JSON.stringify(st.map(s=>[s.n,s.t,s.a,s.th]));
-  if(k2!==sig){sig=k2;L.innerHTML=st.map((s,i)=>`<div class="card ent t${s.th}${s.t=='w'?' tw':''}" style="animation-delay:${i*.07}s" data-i="${i}"><small>${LBL[s.t]}</small>${s.t=='w'?`<button class="q" data-q="${i}" aria-label="Übung zeigen">?</button>`:''}${s.t=='w'?`<button class="fbb" data-fb="${i}" aria-label="Feedback"><svg viewBox="0 0 24 24"><path d="M5 6h14a1 1 0 011 1v8a1 1 0 01-1 1h-8l-4 3v-3H5a1 1 0 01-1-1V7a1 1 0 011-1z"/></svg></button>`:''}${s.t!='p'?`<button class="rlb" data-rl="${i}" aria-label="Quest neu laden"><svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 11-2.6-5.9M20 4v5h-5"/></svg></button>`:''}${s.t=='p'?`<button class="sk" data-sk="${i}">Überspringen</button>`:''}<h3>${esc(s.n)}</h3><p></p><i class="ic"></i></div>`).join('')||'<p class="mu">Lege im Tab „Plan“ deinen ersten Schritt an.</p>'}
+  if(k2!==sig){sig=k2;L.innerHTML=st.map((s,i)=>`<div class="card ent t${s.th}${s.t=='w'?' tw':''}" style="animation-delay:${i*.07}s" data-i="${i}"><small>${LBL[s.t]}</small>${s.t=='w'?`<button class="q" data-q="${i}" aria-label="Übung zeigen">?</button>`:''}${s.t=='w'?`<button class="fbb" data-fb="${i}" aria-label="Feedback"><svg viewBox="0 0 24 24"><path d="M5 6h14a1 1 0 011 1v8a1 1 0 01-1 1h-8l-4 3v-3H5a1 1 0 01-1-1V7a1 1 0 011-1z"/></svg></button>`:''}${s.t!='p'?`<button class="rlb" data-rl="${i}" aria-label="Quest neu laden"><svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 11-2.6-5.9M20 4v5h-5"/></svg></button>`:''}${s.t=='p'?`<button class="sk" data-sk="${i}">Überspringen</button>`:''}<h3>${esc(s.n)}</h3><p></p><i class="ic"></i></div>`).join('')+(st.length?'<div class="dvd">Erledigt</div>':'<p class="mu">Lege im Tab „Plan“ deinen ersten Schritt an.</p>')}
   st.forEach((s,i)=>{
     const c=L.children[i],lk=isLocked(i),run=s.until>Date.now(),k=s.done?'d':lk?'l':run?'r':'o';
     c.classList.toggle('lk',lk);c.classList.toggle('dn',!!s.done&&!fxs[i]);c.classList.toggle('gone',!!s.done&&!fxs[i]&&!showDone);if(!fxs[i]){c.classList.remove('col0','elec');c.style.height=''}
@@ -749,40 +760,58 @@ function cardFx(i){
   },1000);
 }
 
-/* Maskottchen */
-const MS=54,mc=$('#mc'),mcb=$('#mcb'),mci=$('#mci');let mx=0,my=0,mcBusy=0,mcAbort=0,mcInit=0,chT=0;
+/* Maskottchen: läuft nur etwa einmal pro Minute und immer langsam, ohne Teleportieren */
+const MS=54,mc=$('#mc'),mcb=$('#mcb'),mcf=$('#mcf'),mci=$('#mci'),lkG=mc.querySelector('.look');
+let mx=0,my=0,mcBusy=0,mcAbort=0,mcInit=0,chT=0,mcRot=0,mcDir=1;
 const mcSleep=async ms=>{for(let t=0;t<ms&&!mcAbort;t+=200)await sleep(200)};
-const mcHome=()=>{const n=$('#nav').getBoundingClientRect();return[n.left+14,n.top-MS+10]};
+const mcNav=()=>$('#nav').getBoundingClientRect(),mcHomeY=()=>mcNav().top-MS+10;
 const mcSet=(x,y)=>{mx=x;my=y;mc.style.transform=`translate(${x}px,${y}px)`};
-const mcMove=(x,y,ms=700,lift=70)=>new Promise(r=>{
-  const a=mc.animate([{transform:`translate(${mx}px,${my}px)`},{transform:`translate(${(mx+x)/2}px,${Math.min(my,y)-lift}px)`,offset:.5},{transform:`translate(${x}px,${y}px)`}],{duration:ms,easing:'cubic-bezier(.3,.6,.4,1)'});
-  a.onfinish=()=>{mcSet(x,y);r()};
+const mcPose=()=>{mcf.style.transform=`rotate(${mcRot}deg) scaleX(${mcDir})`};
+const mcGo=(x,y,sp,sps)=>new Promise(r=>{
+  const d=Math.hypot(x-mx,y-my);if(d<2){r();return}
+  if(!mcRot&&x!=mx){mcDir=x>mx?1:-1;mcPose()}
+  mc.style.setProperty('--sp',sps||'.5s');mc.classList.add('walk');
+  const a=mc.animate([{transform:`translate(${mx}px,${my}px)`},{transform:`translate(${x}px,${y}px)`}],{duration:d/sp*1000,easing:'linear',fill:'forwards'});
+  a.onfinish=()=>{mcSet(x,y);a.cancel();mc.classList.remove('walk');r()};
 });
-function say(t,ms=2800){mcb.textContent=t;mcb.classList.toggle('r',mx>innerWidth/2);mcb.classList.add('on');clearTimeout(say.t);say.t=setTimeout(()=>mcb.classList.remove('on'),ms)}
+function say(t,ms=2800){const r=mc.getBoundingClientRect();mcb.textContent=t;mcb.classList.toggle('r',r.left>innerWidth/2);mcb.classList.add('on');clearTimeout(say.t);say.t=setTimeout(()=>mcb.classList.remove('on'),ms)}
 const mcLines=()=>{const n=S.steps.filter(x=>!x.done).length;return[n?'Noch '+n+(n==1?' Quest':' Quests')+' heute.':'Alles geschafft. Stark!','Disziplin schlägt Motivation.','Los, die nächste Quest wartet.','Du schaffst das.','Kleine Schritte, jeden Tag.']};
+async function mcWall(ex,rot){mcRot=rot;mcPose();await sleep(600)}
 async function mcAct(){
   if(mcBusy||document.hidden||mc.classList.contains('h'))return;
   mcBusy=1;mcAbort=0;
   try{
-    const r=Math.random();
-    if($('#s-heute').classList.contains('on')&&r<.45){
-      const p=$('#ppill').getBoundingClientRect();await mcMove(p.left+p.width/2-MS/2,p.top-MS+16);say(mcLines()[0]);await mcSleep(5500);
+    const r=Math.random(),n=mcNav(),hy=mcHomeY(),p=$('#ppill').getBoundingClientRect(),canPill=$('#s-heute').classList.contains('on')&&p.top>60&&p.top<innerHeight*.5;
+    if(canPill&&r<.25){
+      /* am rechten Rand hochklettern, auf die Punkte laufen und dort sitzen */
+      const ex=innerWidth-MS+2,py=p.top-MS+16;
+      await mcGo(ex,hy,38);await mcWall(ex,-90);
+      await mcGo(ex,py,45,'.9s');mcRot=0;mcPose();await sleep(500);
+      await mcGo(p.left+p.width/2-MS/2,py,38);say(mcLines()[0]);await mcSleep(6000);
+      await mcGo(ex,py,38);await mcWall(ex,-90);
+      await mcGo(ex,hy,45,'.9s');mcRot=0;mcPose();await sleep(500);
+    }else if(r<.6){
+      /* ein Stück am Rand hochklettern und wieder herunter */
+      const side=Math.random()<.5?-1:1,ex=side<0?-2:innerWidth-MS+2;
+      await mcGo(ex,hy,38);await mcWall(ex,side<0?90:-90);
+      await mcGo(ex,Math.max(110,hy-(140+Math.random()*160)),45,'.9s');await mcSleep(3500);
+      await mcGo(ex,hy,45,'.9s');mcRot=0;mcPose();await sleep(500);
     }else{
-      const bs=document.querySelectorAll('#nav button'),b=bs[r<.8?0:Math.floor(Math.random()*bs.length)].getBoundingClientRect();
-      await mcMove(b.left+b.width/2-MS/2,b.top-MS+10);mc.classList.add('wave');await mcSleep(1800);mc.classList.remove('wave');
+      await mcGo(n.left+10+Math.random()*(n.width-MS-20),hy,38);
     }
-    await mcMove(...mcHome());
-  }finally{mcBusy=0;mc.classList.remove('wave')}
+    await mcGo(Math.min(Math.max(mx,n.left+10),n.right-MS-10),hy,38);
+  }finally{mcBusy=0;mc.classList.remove('walk');mcRot=0;mcPose()}
 }
-setInterval(()=>{if(Math.random()<.55)mcAct()},9000);
+(function loop(){setTimeout(async()=>{await mcAct();loop()},mcInit?50000+Math.random()*25000:25000)})();
+setInterval(()=>{lkG.style.setProperty('--lx',(Math.random()*4-2)+'px');lkG.style.setProperty('--ly',(Math.random()*2-1)+'px')},3500);
 mci.onclick=()=>{const L=mcLines();say(L[Math.floor(Math.random()*L.length)]);mci.animate([{transform:'translateY(0)'},{transform:'translateY(-18px)'},{transform:'translateY(0)'}],{duration:450,easing:'ease-out'})};
 $('#nav').addEventListener('click',()=>{mcAbort=1});
 addEventListener('scroll',()=>{if(mcBusy)mcAbort=1},{passive:true});
-addEventListener('resize',()=>{if(!mcBusy)mcSet(...mcHome())});
+addEventListener('resize',()=>{if(!mcBusy){const n=mcNav();mcSet(Math.min(Math.max(mx,n.left+6),n.right-MS-6),mcHomeY())}});
 function mcZap(){
   if(mc.classList.contains('h'))return;
-  const cx=mx+MS/2,b=document.createElement('div');b.className='bolt';
-  let d='M'+cx+' 0',y=0;while(y<my){y=Math.min(my+8,y+34+Math.random()*20);d+=' L'+(y>=my+8?cx:cx+(Math.random()-.5)*46)+' '+y}
+  const r=mc.getBoundingClientRect(),cx=r.left+MS/2,ty=r.top+8,b=document.createElement('div');b.className='bolt';
+  let d='M'+cx+' 0',y=0;while(y<ty){y=Math.min(ty,y+34+Math.random()*20);d+=' L'+(y>=ty?cx:cx+(Math.random()-.5)*46)+' '+y}
   b.innerHTML=`<svg><path d="${d}"/></svg>`;document.body.append(b);
   b.animate([{opacity:0},{opacity:1},{opacity:.2},{opacity:1},{opacity:0}],{duration:520});setTimeout(()=>b.remove(),540);
   mc.classList.add('zap');setTimeout(()=>{mc.classList.remove('zap');mc.classList.add('ch');say('Energie!')},520);
@@ -950,7 +979,7 @@ function renderAI(){
   $('#aip').classList.toggle('h',!aiOn(1));
   $('#reload').classList.toggle('h',!(aiOn(1)||aiOn(2)));
   phCheck();
-  const mcOn=S.user&&S.prof;mc.classList.toggle('h',!mcOn);if(mcOn&&!mcInit){mcInit=1;mcSet(...mcHome())}
+  const mcOn=S.user&&S.prof;mc.classList.toggle('h',!mcOn);if(mcOn&&!mcInit){mcInit=1;mcSet(mcNav().left+14,mcHomeY())}
   if(aiOn(2)&&S.prof&&S.user&&S.aiDay!==TK&&!busy&&!aiFail&&(!S.user.uid||synced))gen('daily');
 }
 $('#aigo').onclick=async()=>{
