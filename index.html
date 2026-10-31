@@ -226,7 +226,7 @@ nav svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;st
     <div class="form">
       <h3>Neuer Schritt</h3>
       <div class="seg" id="seg"><button data-t="w" class="on">Aufgabe</button><button data-t="p">Pause</button><button data-t="e">Essen</button><button data-t="b">Belohnung</button></div>
-      <input class="in" id="fn" placeholder="Name, z. B. 30 Crunches">
+      <input class="in" id="fn" list="exl" placeholder="Name, z. B. 30 Crunches"><datalist id="exl"><option value="Kniebeugen"><option value="Sprungkniebeugen"><option value="Liegestütze"><option value="Crunches"><option value="Sit-ups"><option value="Fahrrad-Crunches"><option value="Ausfallschritte"><option value="Hampelmänner"><option value="Mountain Climbers"><option value="Plank"><option value="Beinheben"><option value="Scherenkicks"><option value="Hüftheben"><option value="Kniehebelauf"><option value="Trizeps-Dips"><option value="Wadenheben"><option value="Superman"><option value="Donkey Kicks"><option value="Bird Dog"><option value="Seilspringen"><option value="Vorbeuge dehnen"><option value="Schulterdrücken"><option value="Armkreisen"><option value="Wandsitzen"><option value="Schattenboxen"><option value="Burpees"></datalist>
       <div class="amt" id="amt"><input class="in" id="fa" type="number" min="1" value="30" inputmode="numeric" placeholder="Wiederholungen"></div>
       <div class="sw" id="sw"><button class="t0 on" data-th="0"></button><button class="t1" data-th="1"></button><button class="t2" data-th="2"></button><button class="t3" data-th="3"></button><button class="t4" data-th="4"></button></div>
       <label class="tg">Gesperrt, bis der Schritt davor erledigt ist<input type="checkbox" id="fl" checked></label>
@@ -481,49 +481,44 @@ const EX={
  highknees:[100,24,100,40,100,74,94,58,104,52,106,58,112,70,100,96,100,118,122,74,122,96, 100,24,100,40,100,74,106,58,112,70,94,58,104,52,122,74,122,96,100,96,100,118, 600],
  dips:[68,66,78,78,104,100,78,98,78,118,80,98,80,118,126,96,138,118,127,97,139,118, 66,82,78,92,100,112,68,104,80,118,70,104,82,118,126,106,138,118,127,107,139,118, 1600],
  calf:[100,24,100,40,100,74,100,58,100,74,103,58,103,74,100,96,100,118,103,96,103,118, 100,16,100,32,100,66,100,50,100,66,103,50,103,66,100,88,100,110,103,88,103,110, 1400],
- superman:[134,111,118,113,84,113,140,113,158,113,141,114,159,114,62,113,40,113,63,114,41,114, 132,92,116,100,84,112,138,90,156,84,139,91,157,85,62,106,40,98,63,107,41,99, 2000]
+ superman:[134,111,118,113,84,113,140,113,158,113,141,114,159,114,62,113,40,113,63,114,41,114, 132,92,116,100,84,112,138,90,156,84,139,91,157,85,62,106,40,98,63,107,41,99, 2000],
+ burpee:[100,24,100,40,100,74,100,58,100,74,103,58,103,74,100,96,100,118,103,96,103,118, 112,60,104,72,88,100,110,92,118,116,112,92,120,116,108,98,98,118,110,99,100,118, 143,72,128,80,89,98,128,98,128,116,131,98,131,116,69,107,50,116,70,107,52,116, 112,60,104,72,88,100,110,92,118,116,112,92,120,116,108,98,98,118,110,99,100,118, 100,14,100,30,100,64,92,16,90,2,108,16,110,2,100,86,100,106,103,86,103,106, 3600],
+ jumpsquat:[105,55,100,70,90,100,110,80,126,76,112,82,128,78,112,98,100,118,114,99,103,118, 100,14,100,30,100,64,104,24,106,8,106,24,108,8,100,86,100,104,103,86,103,104, 1200],
+ situp:[40,110,56,112,90,112,48,98,42,106,52,98,46,107,110,88,124,114,112,89,126,114, 86,62,86,80,90,112,98,88,108,90,100,86,110,92,110,88,124,114,112,89,126,114, 1800],
+ bicycle:[54,84,66,92,90,112,56,76,50,82,58,78,52,84,78,90,98,96,112,108,134,104, 54,84,66,92,90,112,56,76,50,82,58,78,52,84,112,108,134,104,78,90,98,96, 1100],
+ press:[100,24,100,40,100,74,84,52,88,36,116,52,112,36,96,96,94,118,104,96,106,118, 100,24,100,40,100,74,90,22,92,4,110,22,108,4,96,96,94,118,104,96,106,118, 1600],
+ armcircle:[100,24,100,40,100,74,118,40,136,40,119,41,137,41,100,96,100,118,103,96,103,118, 100,24,100,40,100,74,100,22,100,4,102,22,102,4,100,96,100,118,103,96,103,118, 100,24,100,40,100,74,82,40,64,40,83,41,65,41,100,96,100,118,103,96,103,118, 100,24,100,40,100,74,100,58,100,76,103,58,103,76,100,96,100,118,103,96,103,118, 2400],
+ wallsit:[90,46,90,62,90,96,98,80,112,92,100,81,113,93,112,96,112,118,114,97,114,118, 90,47,90,63,90,97,98,81,112,93,100,82,113,94,112,97,112,118,114,98,114,118, 2400],
+ donkey:[50,80,64,84,100,94,64,100,64,118,67,100,67,118,100,116,78,116,102,116,80,116, 50,80,64,84,100,94,64,100,64,118,67,100,67,118,122,88,144,82,102,116,80,116, 1500],
+ birddog:[50,80,64,84,100,94,64,100,64,118,67,100,67,118,100,116,78,116,102,116,80,116, 48,78,64,84,100,94,46,82,28,80,67,100,67,118,100,116,78,116,122,90,144,88, 2200],
+ rope:[100,24,100,40,100,74,90,58,84,70,110,58,116,70,100,96,100,118,103,96,103,118, 100,16,100,32,100,66,90,50,80,58,110,50,118,58,100,88,100,108,103,88,103,108, 520],
+ fold:[100,24,100,40,100,74,100,58,100,74,103,58,103,74,100,96,100,118,103,96,103,118, 142,100,128,86,96,76,134,100,140,116,136,101,142,117,98,97,98,118,101,97,101,118, 3000],
+ flutter:[40,110,56,112,90,112,72,114,88,114,72,115,88,115,112,102,134,92,112,111,134,109, 40,110,56,112,90,112,72,114,88,114,72,115,88,115,112,111,134,109,112,102,134,92, 500],
+ boxing:[100,26,100,42,100,76,116,44,134,42,104,60,112,48,108,98,112,118,92,98,88,118, 100,26,100,42,100,76,106,58,114,46,116,46,134,44,108,98,112,118,92,98,88,118, 700]
 };
-const EXT={jack:'Spring mit gegrätschten Beinen und den Armen über dem Kopf, dann zurück.',squat:'Hüfte nach hinten, Rücken gerade, bis die Oberschenkel waagerecht sind.',pushup:'Der Körper bleibt eine gerade Linie. Brust nah zum Boden, dann hochdrücken.',crunch:'Schultern vom Boden heben, Bauch anspannen, kontrolliert zurück.',lunge:'Großer Schritt nach vorn, das hintere Knie sinkt Richtung Boden.',climber:'In der Liegestütz-Position die Knie schnell abwechselnd zur Brust ziehen.',plank:'Auf den Unterarmen stützen und den Körper gerade halten.',legraise:'Beine gestreckt anheben bis senkrecht, langsam wieder absenken.',bridge:'Hüfte hochdrücken, bis Schultern, Hüfte und Knie eine Linie bilden.',highknees:'Auf der Stelle laufen und die Knie abwechselnd hoch ziehen.',dips:'Hände hinter dem Körper, Ellbogen beugen und wieder hochdrücken.',calf:'Auf die Zehenspitzen steigen, kurz halten, langsam absenken.',superman:'Bauchlage, Arme und Beine gleichzeitig anheben und kurz halten.'};
-const exOf=n=>{n=n.toLowerCase();return /hampel|jumping/.test(n)?'jack':/kniebeug|squat/.test(n)?'squat':/liegest|push/.test(n)?'pushup':/crunch|sit-?up|bauchpresse/.test(n)?'crunch':/ausfall|lunge/.test(n)?'lunge':/climber|bergsteig/.test(n)?'climber':/beinheb|leg ?raise/.test(n)?'legraise':/bridge|brücke|hüftheb|glute/.test(n)?'bridge':/high ?knee|kniehebe|joggen|laufen|sprint/.test(n)?'highknees':/dip/.test(n)?'dips':/wade|calf/.test(n)?'calf':/superman|rückenstreck|rückenheb/.test(n)?'superman':/plank|unterarmst/.test(n)?'plank':null};
+const EXT={jack:'Spring mit gegrätschten Beinen und den Armen über dem Kopf, dann zurück.',squat:'Hüfte nach hinten, Rücken gerade, bis die Oberschenkel waagerecht sind.',pushup:'Der Körper bleibt eine gerade Linie. Brust nah zum Boden, dann hochdrücken.',crunch:'Schultern vom Boden heben, Bauch anspannen, kontrolliert zurück.',lunge:'Großer Schritt nach vorn, das hintere Knie sinkt Richtung Boden.',climber:'In der Liegestütz-Position die Knie schnell abwechselnd zur Brust ziehen.',plank:'Auf den Unterarmen stützen und den Körper gerade halten.',legraise:'Beine gestreckt anheben bis senkrecht, langsam wieder absenken.',bridge:'Hüfte hochdrücken, bis Schultern, Hüfte und Knie eine Linie bilden.',highknees:'Auf der Stelle laufen und die Knie abwechselnd hoch ziehen.',dips:'Hände hinter dem Körper, Ellbogen beugen und wieder hochdrücken.',calf:'Auf die Zehenspitzen steigen, kurz halten, langsam absenken.',superman:'Bauchlage, Arme und Beine gleichzeitig anheben und kurz halten.',
+ burpee:'Hocke, Hände auf den Boden, in die Liegestütz-Position springen, zurück und hochspringen.',jumpsquat:'Tief in die Kniebeuge, dann explosiv nach oben springen und weich landen.',situp:'Aus der Rückenlage den ganzen Oberkörper aufrichten und kontrolliert zurück.',bicycle:'Schultern anheben, gegenüberliegenden Ellbogen und Knie zusammenführen, wechseln.',press:'Hände auf Schulterhöhe, Arme gestreckt über den Kopf drücken und wieder absenken.',armcircle:'Gestreckte Arme in großen Kreisen nach hinten kreisen lassen.',wallsit:'Rücken an die Wand, Oberschenkel waagerecht, Position halten.',donkey:'Im Vierfüßlerstand ein Bein angewinkelt nach hinten oben strecken.',birddog:'Im Vierfüßlerstand gegenüberliegenden Arm und Bein gestreckt anheben.',rope:'Mit kleinen Sprüngen auf den Fußballen hüpfen, die Handgelenke kreisen.',fold:'Oberkörper mit geradem Rücken nach vorn beugen und die Arme hängen lassen.',flutter:'Gestreckte Beine knapp über dem Boden abwechselnd auf und ab bewegen.',boxing:'Leichter Stand, abwechselnd Links und Rechts nach vorn schlagen.'};
+const NAMES=['Kniebeugen','Sprungkniebeugen','Liegestütze','Crunches','Sit-ups','Fahrrad-Crunches','Ausfallschritte','Hampelmänner','Mountain Climbers','Plank','Beinheben','Scherenkicks','Hüftheben','Kniehebelauf','Trizeps-Dips','Wadenheben','Superman','Donkey Kicks','Bird Dog','Seilspringen','Vorbeuge dehnen','Schulterdrücken','Armkreisen','Wandsitzen','Schattenboxen','Burpees'];
+const EXR=[[/burpee/,'burpee'],[/sprungkniebeug|jump ?squat|strecksprung/,'jumpsquat'],[/hampel|jumping/,'jack'],[/kniebeug|squat/,'squat'],[/liegest|push/,'pushup'],[/fahrrad|bicycle/,'bicycle'],[/sit-?up|aufrichten/,'situp'],[/crunch|bauchpresse/,'crunch'],[/ausfall|lunge/,'lunge'],[/climber|bergsteig/,'climber'],[/beinheb|leg ?raise/,'legraise'],[/schere|flutter/,'flutter'],[/bridge|brücke|hüftheb|glute/,'bridge'],[/high ?knee|kniehebe|joggen|laufen|sprint/,'highknees'],[/dip/,'dips'],[/wade|calf|fersenheb|zehenstand/,'calf'],[/superman|rückenstreck|rückenheb/,'superman'],[/donkey|kickback|eselkick|gesäßheb/,'donkey'],[/bird ?dog|vierfüßler/,'birddog'],[/seilspring|jump ?rope|rope/,'rope'],[/vorbeug|toe ?touch|dehn|stretch/,'fold'],[/schulterdr|shoulder ?press|überkopf|overhead|military/,'press'],[/armkreis|arm ?circle|schulterkreis/,'armcircle'],[/wandsitz|wall ?sit/,'wallsit'],[/box|punch/,'boxing'],[/plank|unterarmst/,'plank']];
+const exOf=n=>{n=n.toLowerCase();const r=EXR.find(x=>x[0].test(n));return r?r[1]:null};
 const SEG=[[0,1,0],[1,2,0],[1,3,1],[3,4,1],[1,5,0],[5,6,0],[2,7,1],[7,8,1],[2,9,0],[9,10,0]];
 let exRaf=0;
-const exKey=n=>n.toLowerCase().replace(/[^a-zäöüß0-9]+/g,'_').slice(0,40);
 let exTok=0;
-async function aiPose(name){
-  const o=await gem(`Erstelle eine Strichfiguren-Animation für die Übung "${name}" als zwei Posen (Start und Endposition).
-Raster: x 0 bis 200, y 0 bis 130, Boden bei y=118 (Liegen y ca. 112), Seitenansicht, Figur schaut nach rechts, Mitte etwa x=100.
-Jede Pose hat 22 Zahlen: Kopf(x,y), Schulter, Hüfte, linker Ellbogen, linke Hand, rechter Ellbogen, rechte Hand, linkes Knie, linker Fuß, rechtes Knie, rechter Fuß.
-Gliedlängen: Rumpf 34, Oberarm 18, Unterarm 18, Oberschenkel 22, Unterschenkel 22. Die rechte Seite ist 2 bis 3 Einheiten versetzt.
-Beispiel Kniebeuge oben: [100,24,100,40,100,74,100,58,100,74,103,58,103,74,100,96,100,118,103,96,103,118]
-Beispiel Kniebeuge unten: [105,55,100,70,90,100,110,80,126,76,112,82,128,78,112,98,100,118,114,99,103,118]
-Antworte NUR mit JSON: {"a":[22 Zahlen],"b":[22 Zahlen],"ms":Dauer 800 bis 2400}`);
-  const ok=v=>Array.isArray(v)&&v.length==22&&v.every(x=>typeof x=='number'&&x>-20&&x<220);
-  if(!ok(o.a)||!ok(o.b))throw new Error('Die KI konnte keine Animation zeichnen.');
-  return [...o.a,...o.b,Math.min(2400,Math.max(700,+o.ms||1500))];
-}
-async function showEx(i){
-  const s=S.steps[i],k=exOf(s.n),ck=exKey(s.n),tok=++exTok,o=$('#ex');
-  $('#ext').textContent=s.n;$('#exv').style.display='none';cancelAnimationFrame(exRaf);
+function showEx(i){
+  const s=S.steps[i],k=exOf(s.n),o=$('#ex');
+  $('#ext').textContent=s.n;cancelAnimationFrame(exRaf);
   o.classList.add('on');requestAnimationFrame(()=>requestAnimationFrame(()=>o.classList.add('show')));
-  let d=k?EX[k]:S.exc&&S.exc[ck];
-  if(k)$('#exp').textContent=EXT[k];
-  else if(d)$('#exp').textContent='Bewegung der Übung, von der KI gezeichnet.';
-  else if(S.ai&&S.ai.on&&getKey()){
-    $('#exp').textContent='Die KI zeichnet die Animation…';
-    try{
-      d=await aiPose(s.n);S.exc=S.exc||{};S.exc[ck]=d;const ks=Object.keys(S.exc);if(ks.length>30)delete S.exc[ks[0]];save();
-      if(tok==exTok)$('#exp').textContent='Bewegung der Übung, von der KI gezeichnet.';
-    }catch(e){if(tok==exTok)$('#exp').textContent=e.message;return}
-  }else{$('#exp').textContent='Für diese Übung gibt es keine eingebaute Animation. Aktiviere in den Einstellungen die KI-Funktionen, dann zeichnet die KI sie für dich.';return}
-  if(tok==exTok)playEx(d);
+  $('#exv').style.display=k?'':'none';
+  $('#exp').textContent=k?EXT[k]:'Für diesen Namen gibt es noch keine Animation. Tipp: Nimm im Plan einen Namen aus der Vorschlagsliste, z. B. Kniebeugen, Burpees oder Plank.';
+  if(k)playEx(EX[k]);
 }
 function playEx(d){
-  const a=d.slice(0,22),b=d.slice(22,44),T=d[44],g=$('#exg');$('#exv').style.display='';
+  const K=(d.length-1)/22,T=d[d.length-1],P=Array.from({length:K},(_,j)=>d.slice(j*22,j*22+22)),g=$('#exg');
   g.innerHTML=SEG.map(q=>`<line class="${q[2]?'far':''}"/>`).join('')+'<circle r="9"/>';
   const ls=g.querySelectorAll('line'),hd=g.querySelector('circle'),t0=performance.now();
   const f=t=>{
-    const u=(1-Math.cos((t-t0)/T*6.2832))/2,pt=a.map((v,j)=>v+(b[j]-v)*u);
-    SEG.forEach((q,j)=>{ls[j].setAttribute('x1',pt[q[0]*2]);ls[j].setAttribute('y1',pt[q[0]*2+1]);ls[j].setAttribute('x2',pt[q[1]*2]);ls[j].setAttribute('y2',pt[q[1]*2+1])});
+    const x=((t-t0)/T%1)*K,j=Math.floor(x),u=x-j,e=u*u*(3-2*u),a=P[j%K],b=P[(j+1)%K],pt=a.map((v,m)=>v+(b[m]-v)*e);
+    SEG.forEach((q,m)=>{ls[m].setAttribute('x1',pt[q[0]*2]);ls[m].setAttribute('y1',pt[q[0]*2+1]);ls[m].setAttribute('x2',pt[q[1]*2]);ls[m].setAttribute('y2',pt[q[1]*2+1])});
     hd.setAttribute('cx',pt[0]);hd.setAttribute('cy',pt[1]);
     exRaf=requestAnimationFrame(f);
   };
@@ -605,7 +600,7 @@ function aiPrompt(kind,desc){
 Nutzer: ${p.g=='f'?'Frau':'Mann'}, Intensität ${p.i}, Ziel-Muskeln: ${(p.m||[]).map(x=>LB[x]).join(', ')||'Ganzkörper'}.
 ${kind=='daily'?'Gestern: '+(h?h.steps.map(x=>x.n+(x.done?' (geschafft)':' (nicht geschafft)')).join('; '):'keine Daten')+'. Baue sinnvoll darauf auf und überlaste nicht dieselben Muskeln.':'Wunsch des Nutzers: '+desc}
 Antworte NUR mit JSON: {"steps":[{"n":"Name","t":"w|p|e|b","a":Zahl}]}
-t: w=Übung (a=Wiederholungen, der Name nennt sie, z. B. "30 Crunches"), p=Pause (a=Minuten), e=Mahlzeit (a=0), b=Belohnung (a=Bonuspunkte 10 bis 30).
+t: w=Übung (a=Wiederholungen oder Durchgänge, der Name nennt sie, z. B. "30 Crunches"; erlaubte Übungen NUR: ${NAMES.join(', ')}), p=Pause (a=Minuten), e=Mahlzeit (a=0), b=Belohnung (a=Bonuspunkte 10 bis 30).
 6 bis 12 Schritte, Pausen zwischen den Übungen, mindestens eine Mahlzeit, eine Belohnung am Ende.`;
 }
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
