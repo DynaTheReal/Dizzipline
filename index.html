@@ -470,9 +470,13 @@ const KEY='dizzipline-gem',getKey=()=>{try{return localStorage.getItem(KEY)||''}
 const aiOn=n=>!!(S.ai&&S.ai.on&&S.ai['f'+n]&&getKey());
 let busy='',aiFail=0;
 async function gem(prompt,onP){
-  for(const m of ['gemini-flash-latest','gemini-3.5-flash','gemini-2.5-flash']){
+  const ms=['gemini-flash-latest','gemini-3.5-flash','gemini-2.5-flash'];let busyCode=0;
+  /* bei 5xx (überlastet): anderes Modell probieren, dann noch eine Runde mit Pause */
+  for(let k=0;k<ms.length*2;k++){
+    const m=ms[k%ms.length];
     const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${m}:streamGenerateContent?alt=sse`,{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':getKey()},body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{responseMimeType:'application/json'}})});
     if(r.status==404)continue;
+    if(r.status>=500){busyCode=r.status;await sleep(k<ms.length?700:2500);continue}
     if(r.status==400||r.status==403)throw new Error('Der Gemini-API-Key ist ungültig.');
     if(r.status==429)throw new Error('Zu viele KI-Anfragen. Bitte warte kurz.');
     if(!r.ok)throw new Error('KI nicht erreichbar ('+r.status+').');
@@ -482,7 +486,7 @@ async function gem(prompt,onP){
     eat(buf);
     return JSON.parse(txt.replace(/```json|```/g,''));
   }
-  throw new Error('Kein Gemini-Modell verfügbar.');
+  throw new Error(busyCode?'Die KI ist gerade überlastet (Fehler '+busyCode+'). Probier es in einer Minute noch einmal.':'Kein Gemini-Modell verfügbar.');
 }
 function aiPrompt(kind,desc){
   const p=S.prof||{},h=S.hist;
