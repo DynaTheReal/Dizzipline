@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="utf-8">
-<meta name="app-version" content="1.3.0">
+<meta name="app-version" content="1.3.1">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#000000">
 <title>Dizzipline</title>
@@ -244,6 +244,8 @@ nav button.pulse svg{animation:pls .4s var(--ease)}
 #mc.rag .arm.l{animation:none!important;transform:rotate(var(--al,0deg))}#mc.rag .arm.r{animation:none!important;transform:rotate(var(--ar,0deg))}
 #mc.rag .ft.l{animation:none!important;transform:rotate(var(--fl,0deg))}#mc.rag .ft.r{animation:none!important;transform:rotate(var(--fr,0deg))}
 #mc.ouch .eyes{animation:none;transform:scaleY(.18)}
+.card .ud{display:none;position:absolute;top:16px;right:16px;height:32px;padding:0 14px;border-radius:16px;border:1px solid rgba(255,255,255,.4);background:rgba(0,0,0,.35);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font-size:14px;font-weight:600;cursor:pointer}
+.card.dn .ud{display:block}.card.dn .q,.card.dn .fbb{display:none}
 /* Tab-Leiste */
 nav{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(440px,calc(100% - 32px));display:flex;padding:6px;border-radius:30px;background:rgba(30,30,32,.7);backdrop-filter:blur(26px) saturate(180%);-webkit-backdrop-filter:blur(26px) saturate(180%);border:1px solid var(--line);z-index:20}
 nav button{flex:1;background:none;border:0;padding:9px 0 7px;border-radius:24px;display:grid;justify-items:center;gap:3px;font-size:11px;font-weight:500;color:var(--mu);cursor:pointer;transition:.3s}
@@ -430,7 +432,7 @@ const dk=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+Strin
 const gap=(a,b)=>Math.round((new Date(b+'T12:00')-new Date(a+'T12:00'))/864e5);
 /* je 2 komplett ausgelassene Tage: ein Level weg */
 function roll(){
-  if(S.day!==today){S.hist={steps:(S.pf=='ai'?S.steps:S.alt||[]).map(x=>({n:x.n,t:x.t,a:x.a,done:!!x.done}))};S.day=today;[S.steps,S.alt||[]].forEach(L=>L.forEach(s=>{if(s.t=='w'&&s.fb&&s.fb!='ok'){s.a=Math.max(1,Math.round(s.a*(s.fb=='easy'?1.15:.85)));s.n=s.n.replace(/\d+/,s.a)}delete s.fb;s.done=0;s.until=0}))}
+  if(S.day!==today){S.hist={steps:(S.pf=='ai'?S.steps:S.alt||[]).map(x=>({n:x.n,t:x.t,a:x.a,done:!!x.done}))};S.day=today;[S.steps,S.alt||[]].forEach(L=>L.forEach(s=>{if(s.t=='w'&&s.fb&&s.fb!='ok'){s.a=Math.max(1,Math.round(s.a*(s.fb=='easy'?1.15:.85)));s.n=s.n.replace(/\d+/,s.a)}delete s.fb;delete s.pa;s.done=0;s.until=0}))}
   S.lvl=S.lvl||1;S.pl=S.pl||0;S.lost=S.lost||0;
   if(S.last){const tot=Math.floor((gap(S.last,TK)-1)/2),dl=tot-S.pl;if(dl>0){const o=S.lvl;S.lvl=Math.max(1,S.lvl-dl);S.lost+=o-S.lvl}S.pl=Math.max(S.pl,tot)}
 }
@@ -467,7 +469,7 @@ function renderHeute(){
   $('#dtog').style.display=d?'':'none';$('#dtog').textContent=showDone?'Erledigte Quests ausblenden':'Erledigte Quests anzeigen ('+d+')';L.classList.toggle('sd',showDone&&d>0);
   document.querySelectorAll('#pfs button').forEach(b=>b.classList.toggle('on',b.dataset.pf==(S.pf||'std')));
   const k2=JSON.stringify(st.map(s=>[s.n,s.t,s.a,s.th]));
-  if(k2!==sig){sig=k2;L.innerHTML=st.map((s,i)=>`<div class="card ent t${s.th}${s.t=='w'?' tw':''}" style="animation-delay:${i*.07}s" data-i="${i}"><small>${LBL[s.t]}</small>${s.t=='w'?`<button class="q" data-q="${i}" aria-label="Übung zeigen">?</button>`:''}${s.t=='w'?`<button class="fbb" data-fb="${i}" aria-label="Feedback"><svg viewBox="0 0 24 24"><path d="M5 6h14a1 1 0 011 1v8a1 1 0 01-1 1h-8l-4 3v-3H5a1 1 0 01-1-1V7a1 1 0 011-1z"/></svg></button>`:''}${s.t!='p'?`<button class="rlb" data-rl="${i}" aria-label="Quest neu laden"><svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 11-2.6-5.9M20 4v5h-5"/></svg></button>`:''}${s.t=='p'?`<button class="sk" data-sk="${i}">Überspringen</button>`:''}<h3>${esc(s.n)}</h3><p></p><i class="ic"></i></div>`).join('')+(st.length?'<div class="dvd">Erledigt</div>':'<p class="mu">'+(S.pf=='ai'?'Noch kein KI-Plan. Tippe oben rechts auf den Reload-Knopf.':'Lege im Tab „Plan“ deinen ersten Schritt an.')+'</p>')}
+  if(k2!==sig){sig=k2;L.innerHTML=st.map((s,i)=>`<div class="card ent t${s.th}${s.t=='w'?' tw':''}" style="animation-delay:${i*.07}s" data-i="${i}"><small>${LBL[s.t]}</small><button class="ud" data-ud="${i}">Rückgängig</button>${s.t=='w'?`<button class="q" data-q="${i}" aria-label="Übung zeigen">?</button>`:''}${s.t=='w'?`<button class="fbb" data-fb="${i}" aria-label="Feedback"><svg viewBox="0 0 24 24"><path d="M5 6h14a1 1 0 011 1v8a1 1 0 01-1 1h-8l-4 3v-3H5a1 1 0 01-1-1V7a1 1 0 011-1z"/></svg></button>`:''}${s.t!='p'?`<button class="rlb" data-rl="${i}" aria-label="Quest neu laden"><svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 11-2.6-5.9M20 4v5h-5"/></svg></button>`:''}${s.t=='p'?`<button class="sk" data-sk="${i}">Überspringen</button>`:''}<h3>${esc(s.n)}</h3><p></p><i class="ic"></i></div>`).join('')+(st.length?'<div class="dvd">Erledigt</div>':'<p class="mu">'+(S.pf=='ai'?'Noch kein KI-Plan. Tippe oben rechts auf den Reload-Knopf.':'Lege im Tab „Plan“ deinen ersten Schritt an.')+'</p>')}
   st.forEach((s,i)=>{
     const c=L.children[i],lk=isLocked(i),run=s.until>Date.now(),k=s.done?'d':lk?'l':run?'r':'o';
     c.classList.toggle('lk',lk);c.classList.toggle('dn',!!s.done&&!fxs[i]);c.classList.toggle('gone',!!s.done&&!fxs[i]&&!showDone);if(!fxs[i]){c.classList.remove('col0','elec');c.style.height=''}
@@ -528,16 +530,17 @@ function bubbles(p,i,gold){
 }
 function finish(i,skipped){
   const s=S.steps[i];if(s.done)return;
-  s.done=1;s.until=0;const vc=$('#s-heute').classList.contains('on')&&!showDone&&!skipped&&$('#list').children[i]&&$('#list').children[i].offsetHeight>0;if(vc)fxs[i]=1;const p=skipped?0:pts(s);S.pts+=p;S.total++;
+  s.done=1;s.until=0;const vc=$('#s-heute').classList.contains('on')&&!showDone&&!skipped&&$('#list').children[i]&&$('#list').children[i].offsetHeight>0;if(vc)fxs[i]=1;const p=skipped?0:pts(s);S.pts+=p;S.total++;s.pa=p;
   const n=S.steps[i+1];if(n&&n.t=='p'&&!n.done&&!n.until)n.until=Date.now()+n.a*60000; /* Pause startet automatisch */
   let lv=null;
-  if(S.steps.every(x=>x.done)&&S.lvlDay!==TK){const miss=S.last?gap(S.last,TK)-1:0,old=S.lvl;S.lvlDay=TK;S.last=TK;S.pl=0;if(miss<1)S.lvl++;lv=[old,S.lvl]}
+  if(S.steps.every(x=>x.done)&&S.lvlDay!==TK){const miss=S.last?gap(S.last,TK)-1:0,old=S.lvl;S.lvlRev={d:TK,pf:S.pf||'std',lvl:old,last:S.last||'',pl:S.pl||0};S.lvlDay=TK;S.last=TK;S.pl=0;if(miss<1)S.lvl++;lv=[old,S.lvl]}
   save();render();if(p)bubbles(p,i,s.t=='b');
   if(fxs[i])cardFx(i);if(!skipped)mcZap();
   if(lv)setTimeout(()=>levelFx(lv[0],lv[1]),p?1600+Math.min(p,40)*45:600);
 }
 $('#list').onclick=e=>{
   if(swiped)return;
+  const ud=e.target.closest('.ud');if(ud){undo(+ud.dataset.ud);return}
   const fq=e.target.closest('.fbb');if(fq){openQ(+fq.dataset.fb,'fb');return}
   const rq=e.target.closest('.rlb');if(rq){openQ(+rq.dataset.rl,'rl');return}
   const q=e.target.closest('.q');if(q){showEx(+q.dataset.q);return}
@@ -763,6 +766,14 @@ const fxs={};let showDone=false;
 $('#dtog').onclick=()=>{showDone=!showDone;renderHeute()};
 function swapPf(pf){if((S.pf||'std')==pf)return;const t=S.steps;S.steps=S.alt||[];S.alt=t;S.pf=pf;sig='';save();render()}
 $('#pfs').onclick=e=>{const b=e.target.closest('button');if(b)swapPf(b.dataset.pf)};
+/* Aus Versehen erledigt: Quest wieder öffnen, Punkte und ggf. das Tages-Level zurücknehmen */
+function undo(i){
+  const s=S.steps[i];if(!s||!s.done)return;
+  S.pts=Math.max(0,S.pts-(s.pa||0));S.total=Math.max(0,S.total-1);delete s.pa;s.done=0;s.until=0;
+  const R=S.lvlRev;
+  if(R&&R.d===TK&&R.pf==(S.pf||'std')&&S.lvlDay===TK){S.lvl=R.lvl;S.last=R.last;S.pl=R.pl;S.lvlDay='';S.lvlRev=null}
+  save();render();toast('Die Quest ist wieder offen.');
+}
 function cardFx(i){
   const c=$('#list').children[i];if(!c){delete fxs[i];return}
   c.classList.add('elec');
@@ -856,6 +867,7 @@ function limbs(dt,t){
 function mcLoop(t){
   requestAnimationFrame(mcLoop);
   const dt=Math.min(.05,(t-mcLast)/1000)||.016;mcLast=t;
+  mc.classList.toggle('h',!(S.user&&S.prof&&$('#s-heute').classList.contains('on')));
   if(mc.classList.contains('h'))return;
   const W=innerWidth,H=innerHeight;
   if(mode=='fly')fly(dt,W,H,t);
@@ -1064,7 +1076,7 @@ function renderAI(){
   if(S.pf=='ai'&&!pfOn){swapPf('std');return}
   $('#reload').classList.toggle('h',!(S.pf=='ai'&&pfOn));
   phCheck();
-  const mcOn=S.user&&S.prof;mc.classList.toggle('h',!mcOn);if(mcOn&&!mcInit){mcInit=1;mcStart()}
+  const mcOn=S.user&&S.prof;if(mcOn&&!mcInit){mcInit=1;mcStart()}
   if(aiOn(2)&&S.prof&&S.user&&S.aiDay!==TK&&!busy&&!aiFail&&(!S.user.uid||synced))gen('daily');
 }
 $('#aigo').onclick=async()=>{
