@@ -2,6 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="utf-8">
+<meta name="app-version" content="1.0.1">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#000000">
 <title>Dizzipline</title>
@@ -139,6 +140,29 @@ nav button.pulse svg{animation:pls .4s var(--ease)}
 @keyframes pls{40%{transform:scale(1.4)}}
 #exg circle.db{fill:#fff;stroke:rgba(255,255,255,.5);stroke-width:2}
 .chips.eq .chip.on{background:#fff;border-color:#fff;color:#000}
+#intro{position:fixed;inset:0;z-index:300;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;animation:iout .45s 1s forwards}
+#intro .logo{width:88px;height:88px;margin-bottom:18px}
+#intro .logo circle{animation:ring .7s .05s var(--ease) both}
+#intro .logo path{animation:ring .4s .5s var(--ease) both}
+#intro h1{font-size:40px;font-weight:700;letter-spacing:-.035em;background:linear-gradient(#fff,#8e8e93);-webkit-background-clip:text;background-clip:text;color:transparent;animation:in .6s .25s both}
+#intro p{margin-top:8px;font-size:14px;color:var(--mu);animation:in .6s .45s both}
+@keyframes iout{to{opacity:0;visibility:hidden}}
+#upd{position:fixed;top:calc(14px + env(safe-area-inset-top));left:50%;transform:translate(-50%,-120px);z-index:250;display:flex;align-items:center;gap:12px;padding:8px 8px 8px 18px;border-radius:26px;background:rgba(40,40,42,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--line);font-size:15px;transition:transform .6s var(--ease);width:max-content;max-width:92vw}
+#upd.on{transform:translate(-50%,0)}
+#upd button{height:36px;padding:0 16px;border-radius:18px;border:0;background:#fff;color:#000;font-weight:600;cursor:pointer}
+.opg{height:4px;border-radius:2px;background:rgba(255,255,255,.12);overflow:hidden;margin-bottom:6px}
+.opg i{display:block;height:100%;width:var(--w);background:#fff;border-radius:2px;animation:opw .7s var(--ease) backwards}
+@keyframes opw{from{width:calc(var(--w) - 25%)}}
+.obw.stp{animation:in .5s var(--ease)}
+.opts{display:grid;gap:12px;margin:24px 0}.opts.two{grid-template-columns:1fr 1fr}
+.opt{position:relative;overflow:hidden;border:0;border-radius:28px;min-height:130px;padding:18px;text-align:left;color:#fff;cursor:pointer;display:flex;flex-direction:column;justify-content:flex-end;opacity:.5;transition:transform .35s var(--ease),opacity .35s,box-shadow .35s}
+.opt::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.55),transparent 70%);pointer-events:none}
+.opt>*{position:relative;z-index:1}
+.opt.on{opacity:1;transform:scale(1.02);box-shadow:0 0 0 2px #fff}
+.opt b{font-size:22px;letter-spacing:-.02em}.opt span{font-size:14px;opacity:.8;margin-top:2px}
+.opt svg{position:absolute;top:16px;right:16px;width:56px;height:56px;fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.opt.gd{min-height:250px;align-items:center;text-align:center;justify-content:flex-end}
+.opt .fg{top:16px;left:50%;right:auto;transform:translateX(-50%);width:92px;height:184px;fill:none;stroke:none}
 /* Tab-Leiste */
 nav{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(440px,calc(100% - 32px));display:flex;padding:6px;border-radius:30px;background:rgba(30,30,32,.7);backdrop-filter:blur(26px) saturate(180%);-webkit-backdrop-filter:blur(26px) saturate(180%);border:1px solid var(--line);z-index:20}
 nav button{flex:1;background:none;border:0;padding:9px 0 7px;border-radius:24px;display:grid;justify-items:center;gap:3px;font-size:11px;font-weight:500;color:var(--mu);cursor:pointer;transition:.3s}
@@ -195,6 +219,8 @@ nav svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;st
 </style>
 </head>
 <body>
+<div id="intro"><svg class="logo" viewBox="0 0 80 80"><circle cx="40" cy="40" r="30"/><path d="M28 41l8 8 16-18"/></svg><h1>Dizzipline</h1><p>Version <span id="iv"></span></p></div>
+<script>document.getElementById('iv').textContent=document.querySelector('meta[name=app-version]').content</script>
 
 <div id="login">
   <div class="orb o1"></div><div class="orb o2"></div>
@@ -263,10 +289,12 @@ nav svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;st
     </div>
     <div class="form" style="margin-top:14px"><h3>Equipment</h3><p class="mu" style="font-size:14px;margin:-6px 0 12px">Was du zur Hand hast. Die KI mischt Übungen mit und ohne Equipment ausgewogen. Ohne Auswahl gibt es nur Körpergewicht.</p><div class="chips eq" id="eq" style="justify-content:flex-start;margin:0"><button class="chip" data-e="hantel">Hanteln</button><button class="chip" data-e="stange">Klimmzugstange</button><button class="chip" data-e="seil">Springseil</button></div></div>
     <button class="ghost" id="redo" style="margin-top:20px">Einrichtung neu starten</button>
+    <p class="mu" id="sver" style="text-align:center;font-size:13px;margin-top:22px"></p>
   </section>
 </div>
 
 <div id="ob"></div><div id="toast"></div>
+<div id="upd"><span>Version <b id="uv"></b> ist da</span><button id="ub">Aktualisieren</button></div>
 <div id="ex"><div class="exs"><h3 id="ext"></h3><p class="mu" id="exp"></p><svg viewBox="0 0 200 130" id="exv"><line x1="14" x2="186" y1="120" y2="120" stroke="rgba(255,255,255,.18)" stroke-width="1.5"/><g id="exg"></g></svg><button class="btn" id="exc">Verstanden</button></div></div>
 <nav id="nav">
   <button data-s="heute" class="on"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l3 3 5-6"/></svg>Heute</button>
@@ -550,22 +578,30 @@ function bodySVG(){
    Object.entries(mu).map(([id,es])=>`<g class="mz${ob.m.has(id)?' on':''}" data-m="${id}">`+es.map(([x,y,rx,ry])=>[-1,1].map(k=>`<ellipse cx="${c+k*x}" cy="${y}" rx="${rx}" ry="${ry}"/>`).join('')).join('')+'</g>').join('')+'</svg>';
 }
 let ob={};
-function obStart(){ob={s:0,g:'m',v:'f',m:new Set(),i:'mittel'};obRender()}
+function obStart(){ob={s:0,g:'m',v:'f',m:new Set(),i:'mittel',z:'muskel'};obRender()}
+const fig=g=>{const d=g=='m'?{s:46,w:30,h:32}:{s:38,w:25,h:38},c=100,ln=(w,pts)=>[-1,1].map(k=>`<path d="M${pts.map(([x,y])=>(c+k*x)+' '+y).join('L')}" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"/>`).join('');
+  return `<svg viewBox="0 0 200 400" class="fg">${ln(14,[[d.s-2,90],[d.s+8,150],[d.s+6,208]])}${ln(22,[[d.h*.5,205],[d.h*.5+3,292],[d.h*.5+1,388]])}<path d="M${c-d.s} 82Q${c} 70 ${c+d.s} 82L${c+d.w} 160L${c+d.h} 208L${c-d.h} 208L${c-d.w} 160Z" fill="#fff" stroke="none"/><circle cx="100" cy="38" r="20" fill="#fff" stroke="none"/></svg>`};
+const IC={dumb:'<svg viewBox="0 0 24 24"><path d="M6 7v10M18 7v10M3 9.5v5M21 9.5v5M6 12h12"/></svg>',flame:'<svg viewBox="0 0 24 24"><path d="M12 3c.5 3 5.5 5 5.5 10.5a5.5 5.5 0 01-11 0C6.5 11 8 9.5 9 8.5c0 2 1 3 2 3 .5-3 0-5 1-8.5z"/></svg>'};
+const bars=n=>`<svg viewBox="0 0 24 24">${[[6,4],[12,9],[18,14]].map(([x,h],k)=>`<path d="M${x} 20v-${h}" opacity="${k<n?1:.3}"/>`).join('')}</svg>`;
 function obRender(){
-  const dots='<div class="dots">'+[0,1,2].map(k=>`<i class="${k<=ob.s?'on':''}"></i>`).join('')+'</div>',on=(a,b)=>a==b?'on':'';
-  const h=ob.s==0?`<h2>Wer trainiert?</h2><p class="mu">Dein Modell und deine Pläne passen sich an.</p><div class="pick"><button data-g="m" class="${on(ob.g,'m')}">Mann</button><button data-g="f" class="${on(ob.g,'f')}">Frau</button></div><button class="btn" data-go="1">Weiter</button>`
-   :ob.s==1?`<h2>Welche Muskeln willst du trainieren?</h2><div class="seg"><button data-v="f" class="${on(ob.v,'f')}">Vorne</button><button data-v="b" class="${on(ob.v,'b')}">Hinten</button></div><div id="bsv">${bodySVG()}</div><div class="chips">${Object.keys(LB).map(k=>`<button class="chip${ob.m.has(k)?' on':''}" data-m="${k}">${LB[k]}</button>`).join('')}</div><button class="btn" data-go="2">Weiter</button>`
-   :`<h2>Wie intensiv?</h2><div class="lvls">${[['leicht','Leicht','Lockeres Tempo, wenig Umfang'],['mittel','Mittel','Ausgewogen und fordernd'],['hart','Hart','Volle Härte, kaum Pausen']].map(([k,t,d])=>`<button data-i="${k}" class="${on(ob.i,k)}">${t}<span>${d}</span></button>`).join('')}</div><button class="btn" data-go="3">Fertig</button>`;
-  $('#ob').innerHTML=`<div class="obw">${dots}${h}</div>`;
+  const on=(a,b)=>a==b?' on':'',O=(at,v,cur,th,ic,t,d,x='')=>`<button class="opt ${th}${on(cur,v)} ${x}" data-${at}="${v}">${ic}<b>${t}</b><span>${d}</span></button>`;
+  const h=[
+   `<h2>Wer trainiert?</h2><p class="mu">Modell und Pläne passen sich an dich an.</p><div class="opts two">${O('g','m',ob.g,'t2',fig('m'),'Mann','','gd')}${O('g','f',ob.g,'t1',fig('f'),'Frau','','gd')}</div><button class="btn" data-go="1">Weiter</button>`,
+   `<h2>Was ist dein Ziel?</h2><p class="mu">Danach richten sich Übungen und Essen aus.</p><div class="opts">${O('z','muskel',ob.z,'t0',IC.dumb,'Muskelaufbau','Kraft und Masse aufbauen')}${O('z','abnehmen',ob.z,'t1',IC.flame,'Gewicht verlieren','Fett verbrennen und fitter werden')}</div><button class="btn" data-go="2">Weiter</button>`,
+   `<h2>Welche Muskeln willst du trainieren?</h2><p class="mu">Tippe auf den Körper oder die Chips.</p><div class="seg" style="margin-top:14px"><button data-v="f" class="${on(ob.v,'f').trim()}">Vorne</button><button data-v="b" class="${on(ob.v,'b').trim()}">Hinten</button></div><div id="bsv">${bodySVG()}</div><div class="chips">${Object.keys(LB).map(k=>`<button class="chip${ob.m.has(k)?' on':''}" data-m="${k}">${LB[k]}</button>`).join('')}</div><button class="btn" data-go="3">Weiter</button>`,
+   `<h2>Wie intensiv?</h2><p class="mu">Das kannst du später jederzeit ändern.</p><div class="opts">${O('i','leicht',ob.i,'t3',bars(1),'Leicht','Lockeres Tempo, wenig Umfang')}${O('i','mittel',ob.i,'t2',bars(2),'Mittel','Ausgewogen und fordernd')}${O('i','hart',ob.i,'t1',bars(3),'Hart','Volle Härte, kaum Pausen')}</div><button class="btn" data-go="4">Fertig</button>`][ob.s];
+  $('#ob').innerHTML=`<div class="obw stp"><div class="opg" style="--w:${(ob.s+1)*25}%"><i></i></div>${h}${ob.s?'<button class="lnk" data-back="1" style="margin-top:6px">Zurück</button>':''}</div>`;
 }
 const sel=b=>b.parentNode.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x==b));
 $('#ob').onclick=e=>{
-  const b=e.target.closest('[data-g],[data-v],[data-m],[data-i],[data-go]');if(!b)return;const D=b.dataset;
+  const b=e.target.closest('[data-g],[data-z],[data-v],[data-m],[data-i],[data-go],[data-back]');if(!b)return;const D=b.dataset;
   if(D.g){ob.g=D.g;sel(b)}
+  else if(D.z){ob.z=D.z;sel(b)}
   else if(D.i){ob.i=D.i;sel(b)}
   else if(D.v){ob.v=D.v;sel(b);$('#bsv').innerHTML=bodySVG()}
   else if(D.m){ob.m.has(D.m)?ob.m.delete(D.m):ob.m.add(D.m);document.querySelectorAll('#ob [data-m="'+D.m+'"]').forEach(x=>x.classList.toggle('on',ob.m.has(D.m)))}
-  else if(D.go=='3'){S.prof={g:ob.g,m:[...ob.m],i:ob.i};save();render()}
+  else if(D.back){ob.s--;obRender()}
+  else if(D.go=='4'){S.prof={g:ob.g,goal:ob.z,m:[...ob.m],i:ob.i};save();render()}
   else{ob.s=+D.go;obRender();$('#ob').scrollTo(0,0)}
 };
 
@@ -611,6 +647,7 @@ function aiPrompt(kind,desc){
   const p=S.prof||{},h=S.hist,eq=S.eq||[];
   return `Du bist ein Trainingscoach in einer Disziplin-App. Erstelle einen Tagesplan auf Deutsch.
 Nutzer: ${p.g=='f'?'Frau':'Mann'}, Intensität ${p.i}, Ziel-Muskeln: ${(p.m||[]).map(x=>LB[x]).join(', ')||'Ganzkörper'}.
+Ziel: ${p.goal=='abnehmen'?'Gewicht verlieren. Mehr Cardio und Ganzkörper-Intervalle, kurze Pausen, kalorienbewusste Mahlzeit.':'Muskelaufbau. Fokus auf Kraftübungen mit sauberer Ausführung, eiweißreiche Mahlzeit.'}
 Equipment: ${eq.length?eq.map(k=>EQL[k]).join(', ')+'. Mische Übungen mit Equipment und Körpergewichtsübungen ausgewogen: höchstens die Hälfte der Übungen nutzt Equipment.':'keines, nur Körpergewichtsübungen.'}
 ${kind=='daily'?'Gestern: '+(h?h.steps.map(x=>x.n+(x.done?' (geschafft)':' (nicht geschafft)')).join('; '):'keine Daten')+'. Baue sinnvoll darauf auf und überlaste nicht dieselben Muskeln.':'Wunsch des Nutzers: '+desc}
 Antworte NUR mit JSON: {"steps":[{"n":"Name","t":"w|p|e|b","a":Zahl}]}
@@ -658,7 +695,7 @@ $('#aigo').onclick=async()=>{
 
 /* Einstellungen */
 const A=()=>S.ai||(S.ai={}),show=id=>{document.querySelectorAll('.screen').forEach(x=>x.classList.toggle('on',x.id=='s-'+id));scrollTo(0,0)};
-function renderSet(){const a=S.ai||{};$('#ai0').checked=!!a.on;$('#ai1').checked=!!a.f1;$('#ai2').checked=!!a.f2;$('#aibox').classList.toggle('h',!a.on);$('#key').value=getKey();document.querySelectorAll('#eq .chip').forEach(x=>x.classList.toggle('on',(S.eq||[]).includes(x.dataset.e)))}
+function renderSet(){const a=S.ai||{};$('#ai0').checked=!!a.on;$('#ai1').checked=!!a.f1;$('#ai2').checked=!!a.f2;$('#aibox').classList.toggle('h',!a.on);$('#key').value=getKey();document.querySelectorAll('#eq .chip').forEach(x=>x.classList.toggle('on',(S.eq||[]).includes(x.dataset.e)));$('#sver').textContent='Dizzipline Version '+APP_VERSION}
 $('#setb').onclick=()=>{renderSet();show('set')};
 $('#sback').onclick=()=>show('profil');
 $('#ai0').onchange=e=>{A().on=e.target.checked;aiFail=0;save();$('#aibox').classList.toggle('h',!A().on);render()};
@@ -686,6 +723,21 @@ $('#go').onclick=async()=>{
   try{S.user=await(reg?authRegister:authLogin)(e,p);save();render()}
   catch(x){$('#msg').textContent=ERR[x.code]||'Anmeldung fehlgeschlagen. Bitte erneut versuchen.'}};
 $('#skip').onclick=()=>{S.user={name:'Gast',guest:1};save();render()};
+
+/* Update-Check: alle 5 Sekunden liest die App die Version aus dem Anfang der eigenen HTML-Datei auf GitHub. Kein Firebase. */
+const APP_VERSION=document.querySelector('meta[name=app-version]').content;
+const newer=(a,b)=>{const x=String(a).split('.').map(Number),y=String(b).split('.').map(Number);for(let i=0;i<3;i++){const p=x[i]||0,q=y[i]||0;if(p!=q)return p>q}return false};
+let updV='';
+async function chkUpd(){
+  if(document.hidden||updV)return;
+  try{
+    const r=await fetch(location.pathname+'?t='+Date.now(),{cache:'no-store',headers:{Range:'bytes=0-1500'}});if(!r.ok)return;
+    const m=(await r.text()).match(/name="app-version" content="([\d.]+)"/);
+    if(m&&newer(m[1],APP_VERSION)){updV=m[1];$('#uv').textContent=m[1];$('#upd').classList.add('on')}
+  }catch(e){}
+}
+$('#ub').onclick=()=>{location.href=location.pathname+'?v='+encodeURIComponent(updV)};
+setInterval(chkUpd,5000);document.addEventListener('visibilitychange',chkUpd);
 
 async function pull(uid){
   try{
