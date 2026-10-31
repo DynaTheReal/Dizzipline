@@ -108,7 +108,7 @@ textarea.in{height:auto;padding:14px 18px;resize:none;display:block}
 #toast.on{transform:translate(-50%,0)}
 .card.vanish,.row.vanish{transition:opacity .35s,transform .35s var(--ease)}
 .vanish{opacity:0!important;transform:translateY(-16px) scale(.95)!important}
-#gen{position:fixed;inset:0;z-index:150;background:#000;display:none;align-items:center;justify-content:center;padding:30px;opacity:0;transition:opacity .4s}
+#gen{display:none;min-height:55vh;align-items:center;justify-content:center;opacity:0;transition:opacity .4s}
 #gen.on{display:flex}#gen.show{opacity:1}
 .gw{width:100%;max-width:320px;text-align:center}
 .gw h2{font-size:28px;letter-spacing:-.03em;margin-bottom:8px}
@@ -198,6 +198,7 @@ nav svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;st
     <p class="mu" id="sub"></p>
     <div class="bar"><i id="bar"></i></div>
     <div id="list"></div>
+    <div id="gen"><div class="gw"><h2>Plan wird erstellt</h2><p class="mu" id="gp">Die KI plant deinen Tag</p><div class="gbar"><i id="gb"></i></div><span id="gpct">0 %</span></div></div>
   </section>
 
   <section class="screen" id="s-plan">
@@ -246,7 +247,6 @@ nav svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;st
 </div>
 
 <div id="ob"></div><div id="toast"></div>
-<div id="gen"><div class="gw"><h2>Plan wird erstellt</h2><p class="mu" id="gp">Die KI plant deinen Tag</p><div class="gbar"><i id="gb"></i></div><span id="gpct">0 %</span></div></div>
 <nav id="nav">
   <button data-s="heute" class="on"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l3 3 5-6"/></svg>Heute</button>
   <button data-s="plan"><svg viewBox="0 0 24 24"><path d="M8 7h12M8 12h12M8 17h12M4 7h.01M4 12h.01M4 17h.01"/></svg>Plan</button>
@@ -470,23 +470,33 @@ const KEY='dizzipline-gem',getKey=()=>{try{return localStorage.getItem(KEY)||''}
 const aiOn=n=>!!(S.ai&&S.ai.on&&S.ai['f'+n]&&getKey());
 let busy='',aiFail=0;
 async function gem(prompt,onP){
-  const ms=['gemini-flash-latest','gemini-3.5-flash','gemini-2.5-flash'];let busyCode=0;
-  /* bei 5xx (überlastet): anderes Modell probieren, dann noch eine Runde mit Pause */
-  for(let k=0;k<ms.length*2;k++){
-    const m=ms[k%ms.length];
-    const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${m}:streamGenerateContent?alt=sse`,{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':getKey()},body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{responseMimeType:'application/json'}})});
-    if(r.status==404)continue;
-    if(r.status>=500){busyCode=r.status;await sleep(k<ms.length?700:2500);continue}
-    if(r.status==400||r.status==403)throw new Error('Der Gemini-API-Key ist ungültig.');
-    if(r.status==429)throw new Error('Zu viele KI-Anfragen. Bitte warte kurz.');
-    if(!r.ok)throw new Error('KI nicht erreichbar ('+r.status+').');
-    const rd=r.body.getReader(),dec=new TextDecoder();let buf='',txt='';
-    const eat=l=>{if(!l.startsWith('data:'))return;try{const j=JSON.parse(l.slice(5));txt+=(j.candidates?.[0]?.content?.parts||[]).map(p=>p.text||'').join('');onP&&onP(txt.length)}catch(e){}};
-    for(;;){const{done,value}=await rd.read();if(done)break;buf+=dec.decode(value,{stream:true});const ls=buf.split('\n');buf=ls.pop();ls.forEach(eat)}
-    eat(buf);
-    return JSON.parse(txt.replace(/```json|```/g,''));
+  const ms=['gemini-flash-latest','gemini-3.5-flash','gemini-2.5-flash'],K=getKey(),B=JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{responseMimeType:'application/json'}});
+  /* fb=false: Stream mit Header-Key. fb=true: normaler Aufruf mit Key in der URL (zweite Runde). */
+  const call=async(m,fb)=>{
+    const ctl=new AbortController(),to=setTimeout(()=>ctl.abort(),35000),base='https://generativelanguage.googleapis.com/v1beta/models/'+m+':';
+    try{
+      const r=await fetch(fb?base+'generateContent?key='+encodeURIComponent(K):base+'streamGenerateContent?alt=sse',{method:'POST',signal:ctl.signal,headers:fb?{'Content-Type':'application/json'}:{'Content-Type':'application/json','x-goog-api-key':K},body:B});
+      if(!r.ok)return{code:r.status};
+      const add=j=>(j.candidates?.[0]?.content?.parts||[]).map(p=>p.text||'').join('');
+      if(fb)return{txt:add(await r.json())};
+      const rd=r.body.getReader(),dec=new TextDecoder();let buf='',txt='';
+      const eat=l=>{if(!l.startsWith('data:'))return;try{txt+=add(JSON.parse(l.slice(5)));onP&&onP(txt.length)}catch(e){}};
+      for(;;){const{done,value}=await rd.read();if(done)break;buf+=dec.decode(value,{stream:true});const ls=buf.split('\n');buf=ls.pop();ls.forEach(eat)}
+      eat(buf);return{txt};
+    }finally{clearTimeout(to)}
+  };
+  let code=0,net=0;
+  for(let k=0;k<6;k++){
+    let o;try{o=await call(ms[k%3],k>2)}catch(e){net=1;await sleep(500);continue}
+    if(o.code){
+      if(o.code==404)continue;
+      if(o.code>=500){code=o.code;await sleep(700);continue}
+      if(o.code==429)throw new Error('Zu viele KI-Anfragen. Bitte warte kurz.');
+      throw new Error(o.code==400||o.code==403?'Der Gemini-API-Key wurde abgelehnt ('+o.code+').':'KI nicht erreichbar ('+o.code+').');
+    }
+    try{return JSON.parse(o.txt.slice(o.txt.indexOf('{'),o.txt.lastIndexOf('}')+1))}catch(e){}
   }
-  throw new Error(busyCode?'Die KI ist gerade überlastet (Fehler '+busyCode+'). Probier es in einer Minute noch einmal.':'Kein Gemini-Modell verfügbar.');
+  throw new Error(code?'Die KI ist gerade überlastet (Fehler '+code+'). Probier es in einer Minute noch einmal.':net?'Keine Verbindung zur KI. Prüfe Internet und API-Key.':'Die KI hat keinen gültigen Plan geliefert.');
 }
 function aiPrompt(kind,desc){
   const p=S.prof||{},h=S.hist;
@@ -500,29 +510,28 @@ t: w=Übung (a=Wiederholungen, der Name nennt sie, z. B. "30 Crunches"), p=Pause
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 async function gen(kind,desc){
   busy='KI erstellt deinen Plan…';
-  /* 1) Aufgaben blenden nacheinander aus */
-  document.querySelectorAll('#list .card,#plist .row').forEach((c,i)=>{c.style.transitionDelay=i*35+'ms';c.classList.add('vanish')});
+  /* Ladeansicht nur im Heute-Tab. Andere Tabs bleiben bedienbar. */
+  if(kind=='desc')document.querySelector('nav [data-s=heute]').click();
+  document.querySelectorAll('#list .card').forEach((c,i)=>{c.style.transitionDelay=i*35+'ms';c.classList.add('vanish')});
   await sleep(550);
-  /* 2) schwarze Seite mit Fortschrittsbalken */
-  const g=$('#gen'),gb=$('#gb');let p=0;
+  const L=$('#list'),g=$('#gen'),gb=$('#gb');let p=0;
   const set=x=>{if(x<=p)return;p=x;gb.style.width=p*100+'%';$('#gpct').textContent=Math.round(p*100)+' %';$('#gp').textContent=p<.25?'Die KI plant deinen Tag':p<.7?'Übungen werden zusammengestellt':'Letzter Feinschliff'};
+  L.style.display='none';
   gb.style.transition='none';gb.style.width='0';void gb.offsetWidth;gb.style.transition='';
   $('#gpct').textContent='0 %';$('#gp').textContent='Die KI plant deinen Tag';
   g.classList.add('on');requestAnimationFrame(()=>requestAnimationFrame(()=>g.classList.add('show')));
-  const t0=Date.now(),tm=setInterval(()=>set(Math.min(.25,.03+(Date.now()-t0)/40000)),400);
+  const t0=Date.now(),tm=setInterval(()=>set(.03+.55*(1-Math.exp(-(Date.now()-t0)/20000))),400);
   let st=null,err='';
   try{
-    const o=await gem(aiPrompt(kind,desc),n=>set(Math.min(.92,n/700)));
+    const o=await gem(aiPrompt(kind,desc),n=>set(Math.min(.95,n/700)));
     st=(o.steps||[]).slice(0,14).map((x,i)=>{const t='wpeb'.includes(x.t)?x.t:'w';return{n:String(x.n||'Schritt').slice(0,60),t,a:t=='e'?0:Math.min(999,Math.max(1,Math.round(+x.a||1))),th:t=='w'?i%2:DEF[t],lk:i>0}});
     if(!st.length)throw new Error('Die KI hat keinen Plan geliefert.');
     set(1);await sleep(600);
   }catch(e){st=null;aiFail=1;err=e.message||'KI-Fehler.'}
   clearInterval(tm);
-  /* 3) Überblenden zum neuen Plan */
-  g.classList.remove('show');await sleep(250);
-  if(st){S.steps=st;if(kind=='daily')S.aiDay=TK;save();toast('Dein Plan ist bereit.');if(kind=='desc')document.querySelector('nav [data-s=heute]').click()}else toast(err);
+  g.classList.remove('show');await sleep(300);g.classList.remove('on');L.style.display='';
+  if(st){S.steps=st;if(kind=='daily')S.aiDay=TK;save();toast('Dein Plan ist bereit.')}else toast(err);
   sig='';busy='';render();
-  await sleep(200);g.classList.remove('on');
 }
 function renderAI(){
   const need=S.user&&!S.prof&&(!S.user.uid||synced),o=$('#ob');
