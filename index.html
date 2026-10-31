@@ -130,6 +130,13 @@ textarea.in{height:auto;padding:14px 18px;resize:none;display:block}
 .exs svg{width:100%;height:auto;margin:16px 0 18px;background:rgba(255,255,255,.05);border-radius:22px;display:block}
 #exg line{stroke:#fff;stroke-width:4.5;stroke-linecap:round}#exg line.far{stroke:rgba(255,255,255,.4)}
 #exg circle{fill:none;stroke:#fff;stroke-width:4}
+.card .sk{position:absolute;top:16px;right:16px;height:32px;padding:0 14px;border-radius:16px;border:1px solid rgba(255,255,255,.4);background:rgba(0,0,0,.35);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font-size:14px;font-weight:600;cursor:pointer;transition:transform .25s var(--ease),background .25s}
+.card .sk:active{transform:scale(.92);background:rgba(255,255,255,.25)}
+.card .sk.h{display:none}
+.bb{position:fixed;z-index:120;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;pointer-events:none;background:radial-gradient(circle at 35% 30%,#fff,#d8d8de 60%,#8e8e93);box-shadow:0 0 10px rgba(255,255,255,.7)}
+.bb.g{background:radial-gradient(circle at 35% 30%,#fff3b0,#ffd60a 60%,#c97a00);box-shadow:0 0 10px rgba(255,214,10,.8)}
+nav button.pulse svg{animation:pls .4s var(--ease)}
+@keyframes pls{40%{transform:scale(1.4)}}
 /* Tab-Leiste */
 nav{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(440px,calc(100% - 32px));display:flex;padding:6px;border-radius:30px;background:rgba(30,30,32,.7);backdrop-filter:blur(26px) saturate(180%);-webkit-backdrop-filter:blur(26px) saturate(180%);border:1px solid var(--line);z-index:20}
 nav button{flex:1;background:none;border:0;padding:9px 0 7px;border-radius:24px;display:grid;justify-items:center;gap:3px;font-size:11px;font-weight:500;color:var(--mu);cursor:pointer;transition:.3s}
@@ -331,10 +338,11 @@ function renderHeute(){
   $('#sub').textContent=busy||'Level '+S.lvl+' · '+(st.length?(d==st.length?'Alles erledigt. Stark.':d+' von '+st.length+' erledigt'):'Noch kein Plan angelegt');
   $('#bar').style.width=st.length?d/st.length*100+'%':0;
   const k2=JSON.stringify(st.map(s=>[s.n,s.t,s.a,s.th]));
-  if(k2!==sig){sig=k2;L.innerHTML=st.map((s,i)=>`<div class="card ent t${s.th}" style="animation-delay:${i*.07}s" data-i="${i}"><small>${LBL[s.t]}</small>${s.t=='w'?`<button class="q" data-q="${i}" aria-label="Übung zeigen">?</button>`:''}<h3>${esc(s.n)}</h3><p></p><i class="ic"></i></div>`).join('')||'<p class="mu">Lege im Tab „Plan“ deinen ersten Schritt an.</p>'}
+  if(k2!==sig){sig=k2;L.innerHTML=st.map((s,i)=>`<div class="card ent t${s.th}" style="animation-delay:${i*.07}s" data-i="${i}"><small>${LBL[s.t]}</small>${s.t=='w'?`<button class="q" data-q="${i}" aria-label="Übung zeigen">?</button>`:''}${s.t=='p'?`<button class="sk" data-sk="${i}">Überspringen</button>`:''}<h3>${esc(s.n)}</h3><p></p><i class="ic"></i></div>`).join('')||'<p class="mu">Lege im Tab „Plan“ deinen ersten Schritt an.</p>'}
   st.forEach((s,i)=>{
     const c=L.children[i],lk=isLocked(i),run=s.until>Date.now(),k=s.done?'d':lk?'l':run?'r':'o';
     c.classList.toggle('lk',lk);c.classList.toggle('dn',!!s.done);
+    const sk=c.querySelector('.sk');if(sk)sk.classList.toggle('h',!!s.done||lk);
     c.querySelector('p').textContent=ctext(s,i,lk,run);
     if(c.dataset.k!=k){c.dataset.k=k;c.querySelector('.ic').innerHTML=s.done?CHK:lk?LOCK:s.t=='p'?PLAY:s.t=='b'?STAR:''}
     let pr=c.querySelector('.pr');
@@ -372,17 +380,32 @@ function levelFx(old,now){
     (up?Array.from({length:22},(_,k)=>{const a=k/22*6.283,r=140+Math.random()*100;return `<u style="--x:${Math.cos(a)*r}px;--y:${Math.sin(a)*r}px"></u>`}).join(''):'');
   document.body.append(b);setTimeout(()=>b.remove(),3900);
 }
-function finish(i){
+/* Punkte-Bubbles: poppen aus der Karte und fliegen zum Profil */
+function bubbles(p,i,gold){
+  const c=$('#list').children[i],ic=c&&c.querySelector('.ic'),pr=document.querySelector('nav [data-s=profil]'),pp=$('#pp'),a=ic&&ic.getBoundingClientRect();
+  if(!a||!a.width){pp.textContent=S.pts;return}
+  const b=pr.getBoundingClientRect(),ox=a.left+a.width/2,oy=a.top+a.height/2,tx=b.left+b.width/2-ox,ty=b.top+b.height/2-oy,n=Math.min(p,40),per=Math.ceil(p/n);
+  let shown=S.pts-p;pp.textContent=shown;
+  for(let k=0;k<n;k++){
+    const e=document.createElement('i');e.className='bb'+(gold?' g':'');e.style.left=ox+'px';e.style.top=oy+'px';document.body.append(e);
+    const ang=Math.random()*6.283,r=50+Math.random()*70,dx=Math.cos(ang)*r,dy=Math.sin(ang)*r-30;
+    e.animate([{transform:'translate(0,0) scale(0)',opacity:0,easing:'cubic-bezier(.2,.9,.3,1.2)'},{transform:`translate(${dx}px,${dy}px) scale(1.15)`,opacity:1,offset:.32,easing:'cubic-bezier(.5,0,.9,.5)'},{transform:`translate(${tx}px,${ty}px) scale(.35)`,opacity:.95}],{duration:1150,delay:k*45,fill:'both'}).onfinish=()=>{
+      e.remove();shown=Math.min(S.pts,shown+per);pp.textContent=shown;pr.classList.remove('pulse');void pr.offsetWidth;pr.classList.add('pulse')};
+  }
+  setTimeout(()=>{pp.textContent=S.pts},1150+n*45+80);
+}
+function finish(i,skipped){
   const s=S.steps[i];if(s.done)return;
-  s.done=1;s.until=0;const p=pts(s);S.pts+=p;S.total++;
+  s.done=1;s.until=0;const p=skipped?0:pts(s);S.pts+=p;S.total++;
   const n=S.steps[i+1];if(n&&n.t=='p'&&!n.done&&!n.until)n.until=Date.now()+n.a*60000; /* Pause startet automatisch */
   let lv=null;
   if(S.steps.every(x=>x.done)&&S.lvlDay!==TK){const miss=S.last?gap(S.last,TK)-1:0,old=S.lvl;S.lvlDay=TK;S.last=TK;S.pl=0;if(miss<1)S.lvl++;lv=[old,S.lvl]}
-  save();render();burst(p,s.t=='b');
-  if(lv)setTimeout(()=>levelFx(lv[0],lv[1]),2000);
+  save();render();if(p)bubbles(p,i,s.t=='b');
+  if(lv)setTimeout(()=>levelFx(lv[0],lv[1]),p?1600+Math.min(p,40)*45:600);
 }
 $('#list').onclick=e=>{
   const q=e.target.closest('.q');if(q){showEx(+q.dataset.q);return}
+  const sk=e.target.closest('.sk');if(sk){finish(+sk.dataset.sk,true);return}
   const c=e.target.closest('.card');if(!c)return;
   const i=+c.dataset.i,s=S.steps[i];
   if(s.done)return;
@@ -452,20 +475,50 @@ const EX={
  crunch:[40,110,56,112,90,112,48,98,42,106,52,98,46,107,110,88,124,114,112,89,126,114, 58,84,68,92,90,112,64,78,56,82,66,80,58,84,110,88,124,114,112,89,126,114, 1500],
  lunge:[100,24,100,40,100,74,100,58,100,74,103,58,103,74,100,96,100,118,103,96,103,118, 108,46,108,62,108,96,106,78,106,94,110,78,110,94,130,96,130,118,88,112,66,112, 1900],
  climber:[143,72,128,80,89,98,128,98,128,116,131,98,131,116,112,102,100,116,70,107,50,116, 143,72,128,80,89,98,128,98,128,116,131,98,131,116,70,107,50,116,112,102,100,116, 700],
- plank:[133,82,118,90,84,103,118,114,136,114,120,114,138,114,67,110,50,116,68,110,52,116, 133,81,118,89,84,101,118,114,136,114,120,114,138,114,67,109,50,116,68,109,52,116, 2400]
+ plank:[133,82,118,90,84,103,118,114,136,114,120,114,138,114,67,110,50,116,68,110,52,116, 133,81,118,89,84,101,118,114,136,114,120,114,138,114,67,109,50,116,68,109,52,116, 2400],
+ legraise:[40,110,56,112,90,112,72,114,88,114,72,115,88,115,112,112,134,112,113,113,135,113, 40,110,56,112,90,112,72,114,88,114,72,115,88,115,90,90,90,68,92,90,92,68, 1800],
+ bridge:[40,110,56,112,88,112,66,114,82,114,68,115,84,115,104,92,118,114,105,93,119,114, 40,110,56,110,88,90,66,113,82,113,68,114,84,114,110,92,118,114,111,93,119,114, 1700],
+ highknees:[100,24,100,40,100,74,94,58,104,52,106,58,112,70,100,96,100,118,122,74,122,96, 100,24,100,40,100,74,106,58,112,70,94,58,104,52,122,74,122,96,100,96,100,118, 600],
+ dips:[68,66,78,78,104,100,78,98,78,118,80,98,80,118,126,96,138,118,127,97,139,118, 66,82,78,92,100,112,68,104,80,118,70,104,82,118,126,106,138,118,127,107,139,118, 1600],
+ calf:[100,24,100,40,100,74,100,58,100,74,103,58,103,74,100,96,100,118,103,96,103,118, 100,16,100,32,100,66,100,50,100,66,103,50,103,66,100,88,100,110,103,88,103,110, 1400],
+ superman:[134,111,118,113,84,113,140,113,158,113,141,114,159,114,62,113,40,113,63,114,41,114, 132,92,116,100,84,112,138,90,156,84,139,91,157,85,62,106,40,98,63,107,41,99, 2000]
 };
-const EXT={jack:'Spring mit gegrätschten Beinen und den Armen über dem Kopf, dann zurück.',squat:'Hüfte nach hinten, Rücken gerade, bis die Oberschenkel waagerecht sind.',pushup:'Der Körper bleibt eine gerade Linie. Brust nah zum Boden, dann hochdrücken.',crunch:'Schultern vom Boden heben, Bauch anspannen, kontrolliert zurück.',lunge:'Großer Schritt nach vorn, das hintere Knie sinkt Richtung Boden.',climber:'In der Liegestütz-Position die Knie schnell abwechselnd zur Brust ziehen.',plank:'Auf den Unterarmen stützen und den Körper gerade halten.'};
-const exOf=n=>{n=n.toLowerCase();return /hampel|jumping/.test(n)?'jack':/kniebeug|squat/.test(n)?'squat':/liegest|push/.test(n)?'pushup':/crunch|sit-?up|bauchpresse/.test(n)?'crunch':/ausfall|lunge/.test(n)?'lunge':/climber|bergsteig/.test(n)?'climber':/plank|unterarmst/.test(n)?'plank':null};
+const EXT={jack:'Spring mit gegrätschten Beinen und den Armen über dem Kopf, dann zurück.',squat:'Hüfte nach hinten, Rücken gerade, bis die Oberschenkel waagerecht sind.',pushup:'Der Körper bleibt eine gerade Linie. Brust nah zum Boden, dann hochdrücken.',crunch:'Schultern vom Boden heben, Bauch anspannen, kontrolliert zurück.',lunge:'Großer Schritt nach vorn, das hintere Knie sinkt Richtung Boden.',climber:'In der Liegestütz-Position die Knie schnell abwechselnd zur Brust ziehen.',plank:'Auf den Unterarmen stützen und den Körper gerade halten.',legraise:'Beine gestreckt anheben bis senkrecht, langsam wieder absenken.',bridge:'Hüfte hochdrücken, bis Schultern, Hüfte und Knie eine Linie bilden.',highknees:'Auf der Stelle laufen und die Knie abwechselnd hoch ziehen.',dips:'Hände hinter dem Körper, Ellbogen beugen und wieder hochdrücken.',calf:'Auf die Zehenspitzen steigen, kurz halten, langsam absenken.',superman:'Bauchlage, Arme und Beine gleichzeitig anheben und kurz halten.'};
+const exOf=n=>{n=n.toLowerCase();return /hampel|jumping/.test(n)?'jack':/kniebeug|squat/.test(n)?'squat':/liegest|push/.test(n)?'pushup':/crunch|sit-?up|bauchpresse/.test(n)?'crunch':/ausfall|lunge/.test(n)?'lunge':/climber|bergsteig/.test(n)?'climber':/beinheb|leg ?raise/.test(n)?'legraise':/bridge|brücke|hüftheb|glute/.test(n)?'bridge':/high ?knee|kniehebe|joggen|laufen|sprint/.test(n)?'highknees':/dip/.test(n)?'dips':/wade|calf/.test(n)?'calf':/superman|rückenstreck|rückenheb/.test(n)?'superman':/plank|unterarmst/.test(n)?'plank':null};
 const SEG=[[0,1,0],[1,2,0],[1,3,1],[3,4,1],[1,5,0],[5,6,0],[2,7,1],[7,8,1],[2,9,0],[9,10,0]];
 let exRaf=0;
-function showEx(i){
-  const s=S.steps[i],k=exOf(s.n),o=$('#ex');
-  $('#ext').textContent=s.n;
-  $('#exp').textContent=k?EXT[k]:'Für diese Übung gibt es noch keine Animation. Probiere Namen wie Kniebeugen, Liegestütze, Crunches, Hampelmänner, Ausfallschritte, Mountain Climbers oder Plank.';
-  $('#exv').style.display=k?'':'none';
+const exKey=n=>n.toLowerCase().replace(/[^a-zäöüß0-9]+/g,'_').slice(0,40);
+let exTok=0;
+async function aiPose(name){
+  const o=await gem(`Erstelle eine Strichfiguren-Animation für die Übung "${name}" als zwei Posen (Start und Endposition).
+Raster: x 0 bis 200, y 0 bis 130, Boden bei y=118 (Liegen y ca. 112), Seitenansicht, Figur schaut nach rechts, Mitte etwa x=100.
+Jede Pose hat 22 Zahlen: Kopf(x,y), Schulter, Hüfte, linker Ellbogen, linke Hand, rechter Ellbogen, rechte Hand, linkes Knie, linker Fuß, rechtes Knie, rechter Fuß.
+Gliedlängen: Rumpf 34, Oberarm 18, Unterarm 18, Oberschenkel 22, Unterschenkel 22. Die rechte Seite ist 2 bis 3 Einheiten versetzt.
+Beispiel Kniebeuge oben: [100,24,100,40,100,74,100,58,100,74,103,58,103,74,100,96,100,118,103,96,103,118]
+Beispiel Kniebeuge unten: [105,55,100,70,90,100,110,80,126,76,112,82,128,78,112,98,100,118,114,99,103,118]
+Antworte NUR mit JSON: {"a":[22 Zahlen],"b":[22 Zahlen],"ms":Dauer 800 bis 2400}`);
+  const ok=v=>Array.isArray(v)&&v.length==22&&v.every(x=>typeof x=='number'&&x>-20&&x<220);
+  if(!ok(o.a)||!ok(o.b))throw new Error('Die KI konnte keine Animation zeichnen.');
+  return [...o.a,...o.b,Math.min(2400,Math.max(700,+o.ms||1500))];
+}
+async function showEx(i){
+  const s=S.steps[i],k=exOf(s.n),ck=exKey(s.n),tok=++exTok,o=$('#ex');
+  $('#ext').textContent=s.n;$('#exv').style.display='none';cancelAnimationFrame(exRaf);
   o.classList.add('on');requestAnimationFrame(()=>requestAnimationFrame(()=>o.classList.add('show')));
-  cancelAnimationFrame(exRaf);if(!k)return;
-  const a=EX[k].slice(0,22),b=EX[k].slice(22,44),T=EX[k][44],g=$('#exg');
+  let d=k?EX[k]:S.exc&&S.exc[ck];
+  if(k)$('#exp').textContent=EXT[k];
+  else if(d)$('#exp').textContent='Bewegung der Übung, von der KI gezeichnet.';
+  else if(S.ai&&S.ai.on&&getKey()){
+    $('#exp').textContent='Die KI zeichnet die Animation…';
+    try{
+      d=await aiPose(s.n);S.exc=S.exc||{};S.exc[ck]=d;const ks=Object.keys(S.exc);if(ks.length>30)delete S.exc[ks[0]];save();
+      if(tok==exTok)$('#exp').textContent='Bewegung der Übung, von der KI gezeichnet.';
+    }catch(e){if(tok==exTok)$('#exp').textContent=e.message;return}
+  }else{$('#exp').textContent='Für diese Übung gibt es keine eingebaute Animation. Aktiviere in den Einstellungen die KI-Funktionen, dann zeichnet die KI sie für dich.';return}
+  if(tok==exTok)playEx(d);
+}
+function playEx(d){
+  const a=d.slice(0,22),b=d.slice(22,44),T=d[44],g=$('#exg');$('#exv').style.display='';
   g.innerHTML=SEG.map(q=>`<line class="${q[2]?'far':''}"/>`).join('')+'<circle r="9"/>';
   const ls=g.querySelectorAll('line'),hd=g.querySelector('circle'),t0=performance.now();
   const f=t=>{
@@ -476,7 +529,7 @@ function showEx(i){
   };
   exRaf=requestAnimationFrame(f);
 }
-function exClose(){$('#ex').classList.remove('show');setTimeout(()=>{$('#ex').classList.remove('on');cancelAnimationFrame(exRaf)},350)}
+function exClose(){exTok++;$('#ex').classList.remove('show');setTimeout(()=>{$('#ex').classList.remove('on');cancelAnimationFrame(exRaf)},350)}
 $('#exc').onclick=exClose;
 $('#ex').onclick=e=>{if(e.target.id=='ex')exClose()};
 
