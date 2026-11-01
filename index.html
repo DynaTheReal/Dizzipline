@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="utf-8">
-<meta name="app-version" content="1.4.1">
+<meta name="app-version" content="1.5.0">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#000000">
 <title>Dizzipline</title>
@@ -175,8 +175,8 @@ nav button.pulse svg{animation:pls .4s var(--ease)}
 .fbb[data-r=easy]::after{background:#0a84ff}.fbb[data-r=ok]::after{background:#30d158}.fbb[data-r=hard]::after{background:#ff453a}
 .card{touch-action:pan-y}.card.swp{transition:none}
 .card.ld{animation:pls2 1s ease-in-out infinite}@keyframes pls2{50%{opacity:.45}}
-#ph,#qs{position:fixed;inset:0;z-index:85;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.6);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);opacity:0;transition:opacity .35s}
-#ph.on,#qs.on{display:flex}#ph.show,#qs.show{opacity:1}#ph.show .exs,#qs.show .exs{transform:none}
+#ph,#qs,#fd{position:fixed;inset:0;z-index:85;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.6);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);opacity:0;transition:opacity .35s}
+#ph.on,#qs.on,#fd.on{display:flex}#ph.show,#qs.show,#fd.show{opacity:1}#ph.show .exs,#qs.show .exs,#fd.show .exs{transform:none}
 #qp{white-space:pre-line}
 .fbr{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:16px 0}
 .fbr button{height:52px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.07);font-weight:600;font-size:15px;cursor:pointer;transition:.25s}
@@ -266,6 +266,15 @@ nav button.pulse svg{animation:pls .4s var(--ease)}
 .wpr{position:absolute;left:0;bottom:0;height:4px;background:#fff;transition:width .5s linear;z-index:3}
 .card.wk .ic,.card.wk .q,.card.wk .fbb,.card.wk .rlb,.card.wk .sk,.card.wk .ud{display:none}
 .card.wk h3,.card.wk p{max-width:52%}
+.sh{font-size:20px;letter-spacing:-.02em;margin:28px 0 12px}
+.wrow{display:flex;gap:10px}.wrow .in{margin:0;flex:1}.wrow .btn{width:auto;padding:0 22px}
+.wch{width:100%;height:auto;display:block;margin-top:14px}
+.wch line{stroke:rgba(255,255,255,.12)}.wch polyline{fill:none;stroke:#fff;stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round}
+.wch circle{fill:#fff}.wch text{fill:#fff;font-size:11px;font-weight:600}
+.qb{display:flex;gap:8px;align-items:flex-end;height:120px}
+.qb div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;font-size:12px;color:var(--mu);gap:4px}
+.qb i{width:100%;border-radius:6px;background:#fff}
+#ph,#qs,#fd{z-index:85}
 /* Tab-Leiste */
 nav{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(440px,calc(100% - 32px));display:flex;padding:6px;border-radius:30px;background:rgba(30,30,32,.7);backdrop-filter:blur(26px) saturate(180%);-webkit-backdrop-filter:blur(26px) saturate(180%);border:1px solid var(--line);z-index:20}
 nav button{flex:1;background:none;border:0;padding:9px 0 7px;border-radius:24px;display:grid;justify-items:center;gap:3px;font-size:11px;font-weight:500;color:var(--mu);cursor:pointer;transition:.3s}
@@ -348,6 +357,7 @@ nav svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;st
     <div class="bar"><i id="bar"></i></div>
     <div id="list"></div>
     <div id="gen"><div class="gw"><h2>Plan wird erstellt</h2><p class="mu" id="gp">Die KI plant deinen Tag</p><div class="gbar"><i id="gb"></i></div><span id="gpct">0 %</span></div></div>
+    <button class="ghost" id="fdb" style="margin-top:6px;display:none">Essen und Belohnung hinzufügen</button>
     <button class="ghost" id="dtog" style="margin-top:6px;display:none"></button>
   </section>
 
@@ -360,6 +370,7 @@ nav svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;st
       <h3>Neuer Schritt</h3>
       <div class="seg" id="seg"><button data-t="w" class="on">Aufgabe</button><button data-t="p">Pause</button><button data-t="e">Essen</button><button data-t="b">Belohnung</button></div>
       <input class="in" id="fn" list="exl" placeholder="Name, z. B. 30 Crunches"><datalist id="exl"><option value="Kniebeugen"><option value="Sprungkniebeugen"><option value="Liegestütze"><option value="Crunches"><option value="Sit-ups"><option value="Fahrrad-Crunches"><option value="Ausfallschritte"><option value="Mountain Climbers"><option value="Plank"><option value="Beinheben"><option value="Scherenkicks"><option value="Hüftheben"><option value="Kniehebelauf"><option value="Trizeps-Dips"><option value="Wadenheben"><option value="Superman"><option value="Donkey Kicks"><option value="Bird Dog"><option value="Seilspringen"><option value="Schulterdrücken"><option value="Wandsitzen"><option value="Schattenboxen"><option value="Burpees"><option value="Seilspringen"><option value="Laufen"><option value="Zügiges Gehen"><option value="Treppensteigen"><option value="Radfahren"><option value="Klimmzüge"><option value="Hantel-Kniebeugen"><option value="Hantel-Ausfallschritte"><option value="Hantel-Schulterdrücken"><option value="Hantel-Bizepscurls"><option value="Hantel-Rudern"></datalist>
+      <div class="amt" id="amts"><input class="in" id="fs" type="number" min="1" max="10" value="1" inputmode="numeric" placeholder="Sätze (1 = einmal)"></div>
       <div class="amt" id="amt"><input class="in" id="fa" type="number" min="1" value="30" inputmode="numeric" placeholder="Wiederholungen"></div>
       <div class="sw" id="sw"><button class="t0 on" data-th="0"></button><button class="t1" data-th="1"></button><button class="t2" data-th="2"></button><button class="t3" data-th="3"></button><button class="t4" data-th="4"></button></div>
       <label class="tg">Gesperrt, bis der Schritt davor erledigt ist<input type="checkbox" id="fl" checked></label>
@@ -381,7 +392,13 @@ nav svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;st
   </section>
 <section class="screen" id="s-progress">
     <div class="top"><h2>Progress</h2></div>
-    <p class="mu" style="margin-bottom:18px">Deine Fotos bleiben privat auf diesem Gerät. Nichts wird hochgeladen.</p>
+    <h3 class="sh" style="margin-top:6px">Gewicht</h3>
+    <div class="wrow"><input class="in" id="wti" type="number" step="0.1" min="20" max="400" inputmode="decimal" placeholder="Gewicht in kg"><button class="btn" id="wtb">Speichern</button></div>
+    <div id="wtc"></div><div class="stats" id="wst"></div>
+    <p class="mu" id="wlh" style="font-size:13px;margin:0 0 8px;display:none">Tippe auf einen Eintrag, um ihn zu löschen.</p><div class="chips eq" id="wlst" style="justify-content:flex-start;margin:0"></div>
+    <h3 class="sh">Quests pro Tag</h3><div id="qbar"></div>
+    <h3 class="sh">Fotos</h3>
+    <p class="mu" style="margin-bottom:14px">Deine Fotos bleiben privat auf diesem Gerät. Nichts wird hochgeladen.</p>
     <button class="btn" id="phadd">Foto aufnehmen</button><input type="file" id="phin" accept="image/*" hidden>
     <div class="pgrid" id="pgrid"></div>
   </section>
@@ -400,6 +417,7 @@ nav svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;st
       </div>
     </div>
     <div class="form" style="margin-top:14px"><label class="tg" style="margin:0">Timer direkt in der Karte<input type="checkbox" id="inl"></label><p class="mu" style="font-size:14px;margin-top:10px">An: Countdown und Zähler laufen in der Karte, die anderen Quests bleiben sichtbar. Aus: Training im Vollbild.</p></div>
+    <div class="form" style="margin-top:14px"><label class="tg" style="margin:0">Alle Quests freischalten<input type="checkbox" id="free"></label><p class="mu" style="font-size:14px;margin-top:10px">An: Du kannst jede Quest in beliebiger Reihenfolge starten oder abhaken. Aus: Die nächste Quest schaltet sich erst frei, wenn die davor erledigt ist.</p></div>
     <div class="form" style="margin-top:14px"><h3>Seltener vorschlagen</h3><p class="mu" style="font-size:14px;margin:-6px 0 12px">Diese Übungen schlägt die App nicht mehr vor. Tippe auf eine, um sie wieder zuzulassen.</p><div class="chips eq" id="avl" style="justify-content:flex-start;margin:0"></div></div>
     <div class="form" style="margin-top:14px"><h3>Equipment</h3><p class="mu" style="font-size:14px;margin:-6px 0 12px">Was du zur Hand hast. Die KI mischt Übungen mit und ohne Equipment ausgewogen. Ohne Auswahl gibt es nur Körpergewicht.</p><div class="chips eq" id="eq" style="justify-content:flex-start;margin:0"><button class="chip" data-e="hantel">Hanteln</button><button class="chip" data-e="stange">Klimmzugstange</button><button class="chip" data-e="seil">Springseil</button><button class="chip" data-e="rad">Fahrrad</button></div></div>
     <button class="ghost" id="redo" style="margin-top:20px">Einrichtung neu starten</button>
@@ -410,7 +428,8 @@ nav svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;st
 <div id="ob"></div><div id="toast"></div>
 <div id="wo"><div class="wow"><h2 id="wot"></h2><p class="mu" id="wos"></p><div class="wom" id="wov"><svg viewBox="0 0 200 130"><line x1="14" x2="186" y1="120" y2="120" stroke="rgba(255,255,255,.18)" stroke-width="1.5"/><g id="wog"></g></svg></div><div class="won" id="won"></div><div class="wob"><i id="wobi"></i></div><div class="wol"><button class="lnk" id="woc">Abbrechen</button><button class="lnk" id="wod">Schon gemacht</button></div></div></div>
 <div id="upd"><span>Version <b id="uv"></b> ist da</span><button id="ub">Aktualisieren</button></div>
-<div id="ph"><div class="exs"><h3>Progress-Foto</h3><p class="mu">Es ist Samstag. Mach ein Foto von dir, zum Beispiel von Bauch oder Oberkörper. Es bleibt privat auf deinem Gerät.</p><div style="height:18px"></div><button class="btn" id="ph1">Foto aufnehmen</button><button class="lnk" id="ph0" style="width:100%">Später</button></div></div>
+<div id="ph"><div class="exs"><h3>Wochen-Check</h3><p class="mu">Es ist Samstag. Trage dein Gewicht ein und mach ein Foto. Beides bleibt privat.</p><input class="in" id="phw" type="number" step="0.1" inputmode="decimal" placeholder="Gewicht in kg" style="margin-top:14px"><button class="btn" id="ph1">Foto aufnehmen</button><button class="ghost" id="ph2" style="margin-top:10px">Nur Gewicht speichern</button><button class="lnk" id="ph0" style="width:100%">Später</button></div></div>
+<div id="fd"><div class="exs"><h3>Essen und Belohnung</h3><p class="mu">Trage ein, was du essen willst und womit du dich belohnst. Die KI legt daraus Quests an.</p><input class="in" id="fdf" placeholder="Essen, z. B. Reis mit Hähnchen" style="margin-top:14px"><input class="in" id="fdr" placeholder="Belohnung, z. B. Eine Folge Serie"><button class="btn" id="fdgo">Quests hinzufügen</button><button class="lnk" id="fdc" style="width:100%">Abbrechen</button></div></div>
 <div id="pv"><img id="pvi" alt=""><div class="pvb"><span id="pvd"></span><button class="lnk" id="pvx">Löschen</button><button class="lnk" id="pvc">Schließen</button></div></div>
 <div id="qs"><div class="exs"><h3 id="qt"></h3><p class="mu" id="qp"></p><div class="fbr" id="fbr"><button data-r="easy">Zu leicht</button><button data-r="ok">Gut</button><button data-r="hard">Zu schwer</button></div><button class="ghost" id="fbav" style="margin-bottom:10px"></button><button class="btn" id="qgo">Quest neu laden</button><button class="lnk" id="qc" style="width:100%">Schließen</button></div></div>
 <div id="ex"><div class="exs"><h3 id="ext"></h3><p class="mu" id="exp"></p><svg viewBox="0 0 200 130" id="exv"><line x1="14" x2="186" y1="120" y2="120" stroke="rgba(255,255,255,.18)" stroke-width="1.5"/><g id="exg"></g></svg><button class="btn" id="exc">Verstanden</button></div></div>
@@ -466,15 +485,15 @@ const save=()=>{
 };
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const LBL={w:'Aufgabe',p:'Pause',e:'Essen',b:'Belohnung'};
-const pts=s=>s.t=='w'?10+Math.floor(s.a/10):s.t=='b'?s.a:5;
-const meta=s=>({w:s.a+(HOLD.test(s.n)?' Sek.':MINS.test(s.n)?' Min.':' Wdh.'),p:s.a+' Min.',e:'+5 Punkte',b:'+'+s.a+' Punkte'})[s.t];
-const ctext=(s,i,lk,run)=>lk?'Gesperrt, erst „'+S.steps[i-1].n+'“ erledigen':s.done?(s.t=='b'?'Eingelöst':'Erledigt'):({w:s.a+' '+unit(s)+' · Tippen zum Starten',p:run?fmt(s.until-Date.now())+' verbleibend':s.a+' Minuten · Tippen zum Starten',e:'Tippen, wenn du gegessen hast',b:'+'+s.a+' Bonuspunkte · Tippen zum Einlösen'})[s.t];
+const pts=s=>s.t=='w'?10+Math.floor(s.a*(s.sets||1)/10):s.t=='b'?s.a:5;
+const meta=s=>({w:(s.sets>1?s.sets+'× ':'')+s.a+(HOLD.test(s.n)?' Sek.':MINS.test(s.n)?' Min.':' Wdh.'),p:s.a+' Min.',e:'+5 Punkte',b:'+'+s.a+' Punkte'})[s.t];
+const ctext=(s,i,lk,run)=>lk?'Gesperrt, erst „'+S.steps[i-1].n+'“ erledigen':s.done?(s.t=='b'?'Eingelöst':'Erledigt'):({w:(s.sets>1?s.sets+' Sätze × ':'')+s.a+' '+unit(s)+' · Tippen zum Starten',p:run?fmt(s.until-Date.now())+' verbleibend':s.a+' Minuten · Tippen zum Starten',e:'Tippen, wenn du gegessen hast',b:'+'+s.a+' Bonuspunkte · Tippen zum Einlösen'})[s.t];
 const fmt=ms=>{const s=Math.ceil(ms/1000);return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};
 const CHK='<svg viewBox="0 0 24 24"><path d="M6 12.5l4 4 8-9"/></svg>',
 LOCK='<svg viewBox="0 0 24 24"><rect x="6" y="11" width="12" height="9" rx="2"/><path d="M9 11V8a3 3 0 016 0v3"/></svg>',
 PLAY='<svg viewBox="0 0 24 24"><path d="M9 7l8 5-8 5z"/></svg>',
 STAR='<svg viewBox="0 0 24 24"><path d="M12 4l2.5 5.2 5.5.8-4 4 1 5.6-5-2.7-5 2.7 1-5.6-4-4 5.5-.8z"/></svg>';
-const isLocked=(i)=>{const s=S.steps[i];return s.lk&&i>0&&!s.done&&!S.steps[i-1].done};
+const isLocked=(i)=>{const s=S.steps[i];return !S.free&&s.lk&&i>0&&!s.done&&!S.steps[i-1].done};
 
 function render(){
   $('#login').classList.toggle('on',!S.user);
@@ -488,7 +507,7 @@ function renderHeute(){
   $('#date').textContent=new Date().toLocaleDateString('de-DE',{weekday:'long',day:'numeric',month:'long'});
   $('#sub').textContent=busy||'Level '+S.lvl+' · '+(st.length?(d==st.length?'Alles erledigt. Stark.':d+' von '+st.length+' erledigt'):(S.pf=='ai'?'Noch kein KI-Plan':'Noch kein Plan angelegt'));
   $('#bar').style.width=st.length?d/st.length*100+'%':0;
-  $('#dtog').style.display=d?'':'none';$('#dtog').textContent=showDone?'Erledigte Quests ausblenden':'Erledigte Quests anzeigen ('+d+')';L.classList.toggle('sd',showDone&&d>0);
+  $('#dtog').style.display=d?'':'none';$('#dtog').textContent=showDone?'Erledigte Quests ausblenden':'Erledigte Quests anzeigen ('+d+')';L.classList.toggle('sd',showDone&&d>0);$('#fdb').style.display=S.pf=='ai'?'':'none';
   document.querySelectorAll('#pfs button').forEach(b=>b.classList.toggle('on',b.dataset.pf==(S.pf||'std')));
   const k2=JSON.stringify(st.map(s=>[s.n,s.t,s.a,s.th]));
   if(k2!==sig){sig=k2;L.innerHTML=st.map((s,i)=>`<div class="card ent t${s.th}${s.t=='w'?' tw':''}" style="animation-delay:${i*.07}s" data-i="${i}"><small>${LBL[s.t]}</small><button class="ud" data-ud="${i}">Rückgängig</button>${s.t=='w'?`<button class="q" data-q="${i}" aria-label="Übung zeigen">?</button>`:''}${s.t=='w'?`<button class="fbb" data-fb="${i}" aria-label="Feedback"><svg viewBox="0 0 24 24"><path d="M5 6h14a1 1 0 011 1v8a1 1 0 01-1 1h-8l-4 3v-3H5a1 1 0 01-1-1V7a1 1 0 011-1z"/></svg></button>`:''}${s.t!='p'?`<button class="rlb" data-rl="${i}" aria-label="Quest neu laden"><svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 11-2.6-5.9M20 4v5h-5"/></svg></button>`:''}${s.t=='p'?`<button class="sk" data-sk="${i}">Überspringen</button>`:''}<h3>${esc(s.n)}</h3><p></p><i class="ic"></i></div>`).join('')+(st.length?'<div class="dvd">Erledigt</div>':'<p class="mu">'+(S.pf=='ai'?'Noch kein KI-Plan. Tippe oben rechts auf den Reload-Knopf.':'Lege im Tab „Plan“ deinen ersten Schritt an.')+'</p>')}
@@ -552,7 +571,7 @@ function bubbles(p,i,gold){
 }
 function finish(i,skipped){
   const s=S.steps[i];if(s.done)return;
-  s.done=1;s.until=0;const vc=$('#s-heute').classList.contains('on')&&!showDone&&!skipped&&$('#list').children[i]&&$('#list').children[i].offsetHeight>0;if(vc)fxs[i]=1;const p=skipped?0:pts(s);S.pts+=p;S.total++;s.pa=p;
+  s.done=1;s.until=0;const vc=$('#s-heute').classList.contains('on')&&!showDone&&!skipped&&$('#list').children[i]&&$('#list').children[i].offsetHeight>0;if(vc)fxs[i]=1;const p=skipped?0:pts(s);S.pts+=p;S.total++;s.pa=p;if(!skipped)(S.log=S.log||{})[TK]=((S.log||{})[TK]||0)+1;
   const n=S.steps[i+1];if(n&&n.t=='p'&&!n.done&&!n.until)n.until=Date.now()+n.a*60000; /* Pause startet automatisch */
   let lv=null;
   if(S.steps.every(x=>x.done)&&S.lvlDay!==TK){const miss=S.last?gap(S.last,TK)-1:0,old=S.lvl;S.lvlRev={d:TK,pf:S.pf||'std',lvl:old,last:S.last||'',pl:S.pl||0};S.lvlDay=TK;S.last=TK;S.pl=0;if(miss<1)S.lvl++;lv=[old,S.lvl]}
@@ -593,13 +612,13 @@ const ed={t:'w',th:0},DEF={w:0,p:2,e:3,b:4};
 const pick=(q,el)=>document.querySelectorAll(q+' button').forEach(x=>x.classList.toggle('on',x==el));
 $('#seg').onclick=e=>{const b=e.target.closest('button');if(!b)return;
   ed.t=b.dataset.t;ed.th=DEF[ed.t];pick('#seg',b);pick('#sw',$('#sw').children[ed.th]);
-  $('#amt').classList.toggle('h',ed.t=='e');
+  $('#amt').classList.toggle('h',ed.t=='e');$('#amts').classList.toggle('h',ed.t!='w');
   $('#fa').placeholder={w:'Wiederholungen',p:'Minuten',b:'Bonuspunkte'}[ed.t]||'';
   $('#fa').value={w:30,p:5,b:20}[ed.t]||0;
   $('#fn').placeholder={w:'Name, z. B. 30 Crunches',p:'Name, z. B. Pause',e:'Name, z. B. Proteinshake',b:'Name, z. B. Eine Folge Serie'}[ed.t]};
 $('#sw').onclick=e=>{const b=e.target.closest('button');if(!b)return;ed.th=+b.dataset.th;pick('#sw',b)};
 $('#add').onclick=()=>{
-  S.steps.push({n:$('#fn').value.trim()||LBL[ed.t],t:ed.t,a:ed.t=='e'?0:Math.max(1,+$('#fa').value||1),th:ed.th,lk:$('#fl').checked});
+  S.steps.push({n:$('#fn').value.trim()||LBL[ed.t],t:ed.t,a:ed.t=='e'?0:Math.max(1,+$('#fa').value||1),th:ed.th,lk:$('#fl').checked,...(ed.t=='w'&&+$('#fs').value>1?{sets:Math.min(10,Math.round(+$('#fs').value)),rest:60}:{})});
   $('#fn').value='';save();fresh=S.steps.length-1;render()};
 /* Plan: sanft löschen, per Griff ziehen */
 function kill(r,i){
@@ -668,7 +687,8 @@ const EX={
 const EXT={jack:'Spring mit gegrätschten Beinen und den Armen über dem Kopf, dann zurück.',squat:'Hüfte nach hinten, Rücken gerade, bis die Oberschenkel waagerecht sind.',pushup:'Der Körper bleibt eine gerade Linie. Brust nah zum Boden, dann hochdrücken.',crunch:'Schultern vom Boden heben, Bauch anspannen, kontrolliert zurück.',lunge:'Großer Schritt nach vorn, das hintere Knie sinkt Richtung Boden.',climber:'In der Liegestütz-Position die Knie schnell abwechselnd zur Brust ziehen.',plank:'Auf den Unterarmen stützen und den Körper gerade halten.',legraise:'Beine gestreckt anheben bis senkrecht, langsam wieder absenken.',bridge:'Hüfte hochdrücken, bis Schultern, Hüfte und Knie eine Linie bilden.',highknees:'Auf der Stelle laufen und die Knie abwechselnd hoch ziehen.',dips:'Hände hinter dem Körper, Ellbogen beugen und wieder hochdrücken.',calf:'Auf die Zehenspitzen steigen, kurz halten, langsam absenken.',superman:'Bauchlage, Arme und Beine gleichzeitig anheben und kurz halten.',
  burpee:'Hocke, Hände auf den Boden, in die Liegestütz-Position springen, zurück und hochspringen.',jumpsquat:'Tief in die Kniebeuge, dann explosiv nach oben springen und weich landen.',situp:'Aus der Rückenlage den ganzen Oberkörper aufrichten und kontrolliert zurück.',bicycle:'Schultern anheben, gegenüberliegenden Ellbogen und Knie zusammenführen, wechseln.',press:'Hände auf Schulterhöhe, Arme gestreckt über den Kopf drücken und wieder absenken.',armcircle:'Gestreckte Arme in großen Kreisen nach hinten kreisen lassen.',wallsit:'Rücken an die Wand, Oberschenkel waagerecht, Position halten.',donkey:'Im Vierfüßlerstand ein Bein angewinkelt nach hinten oben strecken.',birddog:'Im Vierfüßlerstand gegenüberliegenden Arm und Bein gestreckt anheben.',rope:'Mit kleinen Sprüngen auf den Fußballen hüpfen, die Handgelenke kreisen.',fold:'Oberkörper mit geradem Rücken nach vorn beugen und die Arme hängen lassen.',flutter:'Gestreckte Beine knapp über dem Boden abwechselnd auf und ab bewegen.',boxing:'Leichter Stand, abwechselnd Links und Rechts nach vorn schlagen.',curl:'Ellbogen am Körper, Hanteln kontrolliert hochführen und langsam absenken.',row:'Oberkörper nach vorn gebeugt, Rücken gerade, Hanteln zur Hüfte ziehen.',pullup:'Am Griff hängen und den Körper hochziehen, bis das Kinn über der Stange ist.',run:'Locker laufen, die Arme schwingen mit. Wähle ein Tempo, bei dem du dich noch unterhalten kannst.',walk:'Zügig gehen, Schultern locker, die Arme schwingen mit.',bike:'Gleichmäßig in die Pedale treten, Rücken gerade, Tempo halten.'};
 const NAMES=['Kniebeugen','Sprungkniebeugen','Liegestütze','Crunches','Sit-ups','Fahrrad-Crunches','Ausfallschritte','Mountain Climbers','Plank','Beinheben','Scherenkicks','Hüftheben','Kniehebelauf','Trizeps-Dips','Wadenheben','Superman','Donkey Kicks','Bird Dog','Schulterdrücken','Wandsitzen','Schattenboxen','Burpees'];
-const LOSE=['Laufen','Zügiges Gehen','Treppensteigen','Kniehebelauf','Mountain Climbers','Burpees','Sprungkniebeugen','Kniebeugen','Ausfallschritte','Wadenheben','Plank','Schattenboxen','Hüftheben','Bird Dog','Wandsitzen'];
+const LOSE=['Laufen','Zügiges Gehen','Treppensteigen','Kniehebelauf','Mountain Climbers','Burpees','Sprungkniebeugen','Ausfallschritte','Plank'];
+const HARD=['Liegestütze','Trizeps-Dips','Crunches','Sit-ups','Beinheben','Ausfallschritte','Sprungkniebeugen','Burpees','Mountain Climbers','Plank'];
 const EQN={hantel:['Hantel-Kniebeugen','Hantel-Ausfallschritte','Hantel-Schulterdrücken','Hantel-Bizepscurls','Hantel-Rudern'],stange:['Klimmzüge'],seil:['Seilspringen'],rad:['Radfahren']},EQL={hantel:'Kurzhanteln',stange:'Klimmzugstange',seil:'Springseil',rad:'Fahrrad'};
 const EXR=[[/burpee/,'burpee'],[/sprungkniebeug|jump ?squat|strecksprung/,'jumpsquat'],[/hampel|jumping/,'jack'],[/kniebeug|squat/,'squat'],[/liegest|push/,'pushup'],[/fahrrad|bicycle/,'bicycle'],[/sit-?up|aufrichten/,'situp'],[/crunch|bauchpresse/,'crunch'],[/ausfall|lunge/,'lunge'],[/climber|bergsteig/,'climber'],[/beinheb|leg ?raise/,'legraise'],[/schere|flutter/,'flutter'],[/bridge|brücke|hüftheb|glute/,'bridge'],[/high ?knee|kniehebe|treppe|stairs/,'highknees'],[/lauf|jogg|sprint/,'run'],[/gehen|spazier|walking|marsch/,'walk'],[/radfahr|radeln|cycling/,'bike'],[/dip/,'dips'],[/wade|calf|fersenheb|zehenstand/,'calf'],[/superman|rückenstreck|rückenheb/,'superman'],[/donkey|kickback|eselkick|gesäßheb/,'donkey'],[/bird ?dog|vierfüßler/,'birddog'],[/seilspring|jump ?rope|rope/,'rope'],[/vorbeug|toe ?touch|dehn|stretch/,'fold'],[/schulterdr|shoulder ?press|überkopf|overhead|military/,'press'],[/armkreis|arm ?circle|schulterkreis/,'armcircle'],[/wandsitz|wall ?sit/,'wallsit'],[/box|punch/,'boxing'],[/curl|bizeps/,'curl'],[/rudern|\brow\b/,'row'],[/klimmzug|pull-?up|chin-?up/,'pullup'],[/plank|unterarmst/,'plank']];
 const exOf=n=>{n=n.toLowerCase();const r=EXR.find(x=>x[0].test(n));return r?r[1]:null};
@@ -702,7 +722,7 @@ $('#ex').onclick=e=>{if(e.target.id=='ex')exClose()};
 
 /* Auswahl, Feedback, Neu laden */
 const ABS=/crunch|sit-?up|fahrrad|bicycle|schere|flutter|beinheb|bauchpresse/i,HOLD=/plank|wandsitz|wall ?sit/i,MINS=/lauf|jogg|sprint|gehen|spazier|walking|radfahr|radeln|treppe|schwimm|wandern|marsch|cycling/i,unit=s=>HOLD.test(s.n)?'Sekunden':MINS.test(s.n)?'Minuten':'Wiederholungen';
-function allowed(){const ab=S.prof&&S.prof.goal=='abnehmen',L=[...(ab?LOSE:NAMES),...(S.eq||[]).filter(k=>!(ab&&k=='stange')).flatMap(k=>EQN[k]||[])];return L.filter(n=>!(S.avoid||{})[fbKey(n)])}
+function allowed(){const ab=S.prof&&S.prof.goal=='abnehmen',L=[...(ab?LOSE:HARD),...(S.eq||[]).filter(k=>!(ab&&k=='stange')).flatMap(k=>EQN[k]||[])];return L.filter(n=>!(S.avoid||{})[fbKey(n)])}
 const fbKey=n=>n.toLowerCase().replace(/\d+\s*(sekunden|sek\.?|minuten|min\.?)?/g,'').replace(/[^a-zäöüß]+/g,'_').replace(/^_|_$/g,'').slice(0,40)||'x';
 const fbText=()=>{const e=Object.entries(S.fb||{}).slice(-12);return e.length?'Feedback des Nutzers (passe die Schwierigkeit an: bei "zu leicht" mehr Wiederholungen oder schwerere Variante, bei "zu schwer" weniger oder leichtere): '+e.map(([k,v])=>k.replace(/_/g,' ')+': '+({easy:'zu leicht',ok:'gut',hard:'zu schwer'})[v]).join('; ')+'.':''};
 let qi=-1,swiped=0,sw=null;
@@ -743,7 +763,7 @@ function localStep(s){
   const f=s.fb=='easy'?1.25:s.fb=='hard'?.75:1,hold=HOLD.test(s.n),mins=MINS.test(s.n),used=usedKeys(),pool=allowed().filter(x=>HOLD.test(x)==hold&&MINS.test(x)==mins&&!used.has(fbKey(x)));
   if(!pool.length)return null;
   const a=hold?Math.min(120,Math.max(15,Math.round(s.a*f/5)*5)):mins?Math.min(60,Math.max(5,Math.round(s.a*f/5)*5)):Math.min(30,Math.max(5,Math.round(s.a*f))),nm=pool[Math.floor(Math.random()*pool.length)];
-  return{n:hold?nm+' '+a+' Sekunden':mins?nm+' '+a+' Minuten':a+' '+nm,t:'w',a,th:s.th,lk:s.lk};
+  const num=!(s.sets>1);return{n:num?(hold?nm+' '+a+' Sekunden':mins?nm+' '+a+' Minuten':a+' '+nm):nm,t:'w',a,th:s.th,lk:s.lk,sets:s.sets,rest:s.rest};
 }
 function stepPrompt(s){
   const p=S.prof||{},fb={easy:'war zu leicht, mach sie anspruchsvoller',ok:'war genau richtig, ersetze sie durch eine ähnlich schwere andere',hard:'war zu schwer, mach sie leichter'}[s.fb||'ok'];
@@ -751,9 +771,9 @@ function stepPrompt(s){
 Nutzer: ${p.g=='f'?'Frau':'Mann'}, Intensität ${p.i}, Ziel: ${p.goal=='abnehmen'?'Gewicht verlieren (keine Crunches oder isolierten Bauchübungen)':'Muskelaufbau'}.
 Aufgabe: "${s.n}" (Typ ${s.t}, a=${s.a}). Feedback dazu: ${fb}.
 Heute schon verwendet, NICHT noch einmal nehmen: ${[...usedKeys()].map(k=>k.replace(/_/g,' ')).join(', ')}.
-Typ t: w=Übung (a=Wiederholungen, bei Plank und Wandsitzen Sekunden; bei Laufen, Gehen, Radfahren und Treppensteigen Minuten; der Name nennt sie, z. B. "12 Kniebeugen" oder "Laufen 20 Minuten"), e=Mahlzeit (a=0), b=Belohnung (a=Bonuspunkte).
+Typ t: w=Übung (n ist nur der Übungsname ohne Zahl; a=Wiederholungen pro Satz, bei Plank und Wandsitzen Sekunden, bei Laufen, Gehen, Radfahren und Treppensteigen Minuten; sets=Anzahl Sätze), e=Mahlzeit (a=0), b=Belohnung (a=Bonuspunkte).
 Bei t=w erlaubte Übungen NUR: ${allowed().join(', ')}. Behalte den Typ ${s.t}.
-Antworte NUR mit JSON: {"n":"Name","t":"${s.t}","a":Zahl}`;
+Antworte NUR mit JSON: {"n":"Name","t":"${s.t}","a":Zahl,"sets":Zahl}`;
 }
 async function reloadStep(i){
   const s=S.steps[i];if(!s||s.done)return;
@@ -762,7 +782,7 @@ async function reloadStep(i){
     addSeen(s.n);let n;
     if(S.ai&&S.ai.on&&getKey()){
       const o=await gem(stepPrompt(s)),t='wpeb'.includes(o.t)?o.t:s.t;
-      n={n:String(o.n||s.n).slice(0,60),t,a:t=='e'?0:Math.min(999,Math.max(1,Math.round(+o.a||s.a))),th:s.th,lk:s.lk};
+      n={n:String(o.n||s.n).slice(0,60),t,a:t=='e'?0:Math.min(999,Math.max(1,Math.round(+o.a||s.a))),th:s.th,lk:s.lk,sets:t=='w'?Math.max(1,Math.min(6,Math.round(+o.sets||s.sets||1))):undefined,rest:s.rest};
       if(!(S.eq||[]).includes('hantel'))n.n=n.n.replace(/hantel-?\s*/i,'');
       if(t=='w'&&((S.prof&&S.prof.goal=='abnehmen'&&ABS.test(n.n))||usedKeys().has(fbKey(n.n))))n=localStep(s)||n;
     }else n=localStep(s);
@@ -797,7 +817,7 @@ $('#pfs').onclick=e=>{const b=e.target.closest('button');if(b)swapPf(b.dataset.p
 /* Aus Versehen erledigt: Quest wieder öffnen, Punkte und ggf. das Tages-Level zurücknehmen */
 function undo(i){
   const s=S.steps[i];if(!s||!s.done)return;
-  S.pts=Math.max(0,S.pts-(s.pa||0));S.total=Math.max(0,S.total-1);delete s.pa;s.done=0;s.until=0;
+  if(s.pa>0&&S.log&&S.log[TK]>0)S.log[TK]--;S.pts=Math.max(0,S.pts-(s.pa||0));S.total=Math.max(0,S.total-1);delete s.pa;s.done=0;s.until=0;
   const R=S.lvlRev;
   if(R&&R.d===TK&&R.pf==(S.pf||'std')&&S.lvlDay===TK){S.lvl=R.lvl;S.last=R.last;S.pl=R.pl;S.lvlDay='';S.lvlRev=null}
   save();render();toast('Die Quest ist wieder offen.');
@@ -967,13 +987,14 @@ $('#phin').onchange=async e=>{
   try{const b=await phShrink(f);await phTx('readwrite',o=>o.put({id:Date.now(),t:Date.now(),b}));S.phDay=TK;save();document.querySelector('nav [data-s=progress]').click();toast('Foto gespeichert. Es bleibt privat auf diesem Gerät.')}
   catch(x){toast('Das Foto konnte nicht gespeichert werden.')}
 };
-$('#nav').addEventListener('click',e=>{const b=e.target.closest('button');if(b&&b.dataset.s=='progress')renderPh()});
+$('#nav').addEventListener('click',e=>{const b=e.target.closest('button');if(b&&b.dataset.s=='progress'){renderPh();renderWt()}});
 const phClose=()=>{$('#ph').classList.remove('show');setTimeout(()=>$('#ph').classList.remove('on'),350)};
 function phCheck(){
   if(phShown||new Date().getDay()!=6||!S.user||!S.prof||S.phDay===TK)return;
   phShown=1;setTimeout(()=>{const o=$('#ph');o.classList.add('on');requestAnimationFrame(()=>requestAnimationFrame(()=>o.classList.add('show')))},1800);
 }
-$('#ph1').onclick=()=>{phClose();$('#phin').click()};
+$('#ph1').onclick=()=>{const w=+$('#phw').value;if(w)saveWt(w);phClose();$('#phin').click()};
+$('#ph2').onclick=()=>{if(saveWt(+$('#phw').value)){S.phDay=TK;save();phClose()}};
 $('#ph0').onclick=()=>{S.phDay=TK;save();phClose()};
 $('#ph').onclick=e=>{if(e.target.id=='ph'){S.phDay=TK;save();phClose()}};
 
@@ -1014,15 +1035,27 @@ function startWo(i){
   at(()=>{ui.num('2');buzz()},1000);
   at(()=>{ui.num('1');buzz()},2000);
   at(()=>{
-    buzz(60);ui.fig(k,/hantel|dumbbell/i.test(s.n),timed?undefined:tempo);
-    if(timed){
-      let left=total;const f=v=>hold&&total<=90?String(v):Math.floor(v/60)+':'+String(v%60).padStart(2,'0');
-      ui.num(f(left));ui.sub(hold?'Sekunden halten':'Minuten');
-      wo.iv=setInterval(()=>{left--;ui.num(f(Math.max(0,left)),false);ui.prog((total-left)/total*100);if(left<=0)woDone()},1000);
-    }else{
-      let c=0;ui.num('Los!');ui.sub('von '+total+' Wiederholungen');
-      wo.iv=setInterval(()=>{c++;ui.num(c);buzz();ui.prog(c/total*100);if(c>=total)woDone()},tempo);
-    }
+    buzz(60);
+    const sets=Math.max(1,s.sets||1),rest=s.rest||60;let setNo=0;
+    const runSet=()=>{
+      setNo++;ui.fig(k,/hantel|dumbbell/i.test(s.n),timed?undefined:tempo);
+      const lab=sets>1?'Satz '+setNo+' von '+sets+' · ':'';
+      if(timed){
+        let left=total;const f=v=>hold&&total<=90?String(v):Math.floor(v/60)+':'+String(v%60).padStart(2,'0');
+        ui.num(f(left));ui.sub(lab+(hold?'Sekunden halten':'Minuten'));
+        wo.iv=setInterval(()=>{left--;ui.num(f(Math.max(0,left)),false);ui.prog(((setNo-1)*total+(total-left))/(sets*total)*100);if(left<=0)endSet()},1000);
+      }else{
+        let c=0;ui.num('Los!');ui.sub(lab+'von '+total+' Wiederholungen');
+        wo.iv=setInterval(()=>{c++;ui.num(c);buzz();ui.prog(((setNo-1)*total+c)/(sets*total)*100);if(c>=total)endSet()},tempo);
+      }
+    };
+    const endSet=()=>{
+      clearInterval(wo.iv);
+      if(setNo>=sets){woDone();return}
+      cancelAnimationFrame(exRaf);buzz([40,30,40]);let r=rest;ui.num(r);ui.sub('Pause · gleich Satz '+(setNo+1)+' von '+sets);
+      wo.iv=setInterval(()=>{r--;ui.num(Math.max(0,r),false);if(r<=0){clearInterval(wo.iv);ui.num('Los!');wo.T.push(setTimeout(runSet,700))}},1000);
+    };
+    runSet();
   },3000);
 }
 function woStop(){
@@ -1036,6 +1069,47 @@ function woDone(){
 }
 function woQuick(){if(!wo)return;const i=wo.i;woStop();setTimeout(()=>finish(i),380)}
 $('#woc').onclick=woStop;$('#wod').onclick=woQuick;
+
+/* Gewicht, Verlauf und Quests pro Tag */
+const wts=()=>(S.wt||[]).slice().sort((a,b)=>a.d<b.d?-1:1),fmtD=d=>new Date(d+'T12:00').toLocaleDateString('de-DE',{day:'numeric',month:'short'}),kgf=v=>String(Math.round(v*10)/10).replace('.',',');
+function saveWt(kg){
+  kg=Math.round(kg*10)/10;if(!(kg>=20&&kg<=400)){toast('Bitte ein gültiges Gewicht eintragen.');return false}
+  S.wt=(S.wt||[]).filter(x=>x.d!==TK);S.wt.push({d:TK,kg});save();renderWt();toast('Gewicht gespeichert.');return true;
+}
+$('#wtb').onclick=()=>{if(saveWt(+$('#wti').value))$('#wti').value=''};
+$('#wlst').onclick=e=>{const b=e.target.closest('[data-wd]');if(!b||!confirm('Diesen Eintrag löschen?'))return;S.wt=(S.wt||[]).filter(x=>x.d!==b.dataset.wd);save();renderWt()};
+function renderWt(){
+  const a=wts(),W=320,H=150,P=26;let h='';
+  if(a.length<2)h='<p class="mu" style="font-size:14px;margin-top:12px">Trage mindestens zwei Gewichte ein, dann siehst du den Verlauf.</p>';
+  else{
+    const lo=Math.min(...a.map(x=>x.kg))-.6,hi=Math.max(...a.map(x=>x.kg))+.6,t0=new Date(a[0].d+'T12:00').getTime(),t1=new Date(a[a.length-1].d+'T12:00').getTime();
+    const X=d=>P+(new Date(d+'T12:00').getTime()-t0)/Math.max(1,t1-t0)*(W-2*P),Y=k=>H-P-(k-lo)/(hi-lo)*(H-2*P),pts=a.map(x=>X(x.d).toFixed(1)+','+Y(x.kg).toFixed(1)),la=a[a.length-1];
+    h=`<svg viewBox="0 0 ${W} ${H}" class="wch"><defs><linearGradient id="wg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".22"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient></defs><line x1="${P}" x2="${W-P}" y1="${H-P}" y2="${H-P}"/><polygon points="${pts.join(' ')} ${X(la.d).toFixed(1)},${H-P} ${X(a[0].d).toFixed(1)},${H-P}" fill="url(#wg)"/><polyline points="${pts.join(' ')}"/>${a.map(x=>`<circle cx="${X(x.d).toFixed(1)}" cy="${Y(x.kg).toFixed(1)}" r="3.2"/>`).join('')}<text x="${P}" y="${H-8}">${fmtD(a[0].d)}</text><text x="${W-P}" y="${H-8}" text-anchor="end">${fmtD(la.d)}</text><text x="${X(la.d).toFixed(1)}" y="${(Y(la.kg)-10).toFixed(1)}" text-anchor="end">${kgf(la.kg)} kg</text></svg>`;
+  }
+  $('#wtc').innerHTML=h;
+  const cur=a.length?a[a.length-1].kg:0,days=a.length>1?(new Date(a[a.length-1].d)-new Date(a[0].d))/864e5:0,diff=a.length>1?cur-a[0].kg:0,sg=v=>(v>0?'+':'')+kgf(v)+' kg';
+  $('#wst').innerHTML=a.length?`<div><b>${kgf(cur)} kg</b><span>Aktuell</span></div><div><b>${a.length>1?sg(diff):'–'}</b><span>Seit dem Start</span></div><div><b>${days>=7?sg(diff/days*7):'–'}</b><span>Pro Woche</span></div><div><b>${kgf(Math.min(...a.map(x=>x.kg)))} kg</b><span>Tiefster Wert</span></div>`:'';
+  $('#wlst').innerHTML=a.slice(-8).reverse().map(x=>`<button class="chip" data-wd="${x.d}">${fmtD(x.d)}: ${kgf(x.kg)} kg ✕</button>`).join('');
+  $('#wlh').style.display=a.length?'':'none';
+  const L=S.log||{},ds=[];for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);ds.push(dk(d))}
+  const m=Math.max(1,...ds.map(d=>L[d]||0));
+  $('#qbar').innerHTML='<div class="qb">'+ds.map(d=>`<div><span>${L[d]||0}</span><i style="height:${Math.max(3,(L[d]||0)/m*70)}px"></i>${new Date(d+'T12:00').toLocaleDateString('de-DE',{weekday:'short'})}</div>`).join('')+'</div>';
+}
+
+/* KI-Profil: Essen und Belohnung selbst eintragen, die KI legt die Quests an */
+const fdShow=on=>{const o=$('#fd');if(on){o.classList.add('on');requestAnimationFrame(()=>requestAnimationFrame(()=>o.classList.add('show')))}else{o.classList.remove('show');setTimeout(()=>o.classList.remove('on'),350)}};
+$('#fdb').onclick=()=>fdShow(1);$('#fdc').onclick=()=>fdShow(0);$('#fd').onclick=e=>{if(e.target.id=='fd')fdShow(0)};
+$('#fdgo').onclick=async()=>{
+  const f=$('#fdf').value.trim(),r=$('#fdr').value.trim();if(!f&&!r){toast('Trage Essen oder Belohnung ein.');return}
+  fdShow(0);toast('Quests werden hinzugefügt…');let o={food:f,reward:r,pts:20};
+  try{if(S.ai&&S.ai.on&&getKey())o=await gem(`Erstelle für einen Tagesplan (Deutsch) eine Essens-Quest und eine Belohnungs-Quest aus den Wünschen des Nutzers. Essen: "${f}". Belohnung: "${r}". Formuliere beide kurz und klar (höchstens 5 Wörter). Lass einen Namen leer, wenn der Wunsch leer ist. pts sind die Bonuspunkte der Belohnung (10 bis 30).
+Antworte NUR mit JSON: {"food":"...","reward":"...","pts":Zahl}`)}catch(e){o={food:f,reward:r,pts:20}}
+  const add=[];
+  if(String(o.food||'').trim())add.push({n:String(o.food).slice(0,60),t:'e',a:0,th:3,lk:true});
+  if(String(o.reward||'').trim())add.push({n:String(o.reward).slice(0,60),t:'b',a:Math.min(30,Math.max(10,Math.round(+o.pts||20))),th:4,lk:true});
+  if(!add.length)return;
+  S.steps.push(...add);$('#fdf').value=$('#fdr').value='';sig='';save();render();toast('Quests hinzugefügt.');
+};
 
 /* Toast */
 const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove('on'),3500)};
@@ -1132,9 +1206,9 @@ Ziel: ${p.goal=='abnehmen'?'Gewicht verlieren. Das ist Ausdauer und Kalorienverb
 Equipment: ${eq.length?eq.map(k=>EQL[k]).join(', ')+'. Mische Übungen mit Equipment und Körpergewichtsübungen ausgewogen: höchstens die Hälfte der Übungen nutzt Equipment.':'keines, nur Körpergewichtsübungen.'}
 ${kind=='daily'?'Gestern: '+(h?h.steps.map(x=>x.n+(x.done?' (geschafft)':' (nicht geschafft)')).join('; '):'keine Daten')+'. Baue sinnvoll darauf auf und überlaste nicht dieselben Muskeln.':'Wunsch des Nutzers: '+desc}
 ${fbText()}
-Antworte NUR mit JSON: {"steps":[{"n":"Name","t":"w|p|e|b","a":Zahl}]}
-t: w=Übung (a=Wiederholungen, bei Plank und Wandsitzen Sekunden; bei Laufen, Gehen, Radfahren und Treppensteigen Minuten; der Name nennt sie, z. B. "12 Kniebeugen", "Plank 30 Sekunden" oder "Laufen 20 Minuten"; erlaubte Übungen NUR: ${allowed().join(', ')}), p=Pause (a=Minuten), e=Mahlzeit (a=0), b=Belohnung (a=Bonuspunkte 10 bis 30).
-6 bis 12 Schritte, Pausen zwischen den Übungen, mindestens eine Mahlzeit, eine Belohnung am Ende. Keine Aufwärm-, Dehn- oder Mobilitätsübungen, nur echte Kraft- und Konditionsübungen. Die Zahlen müssen für Anfänger realistisch sein: bei Intensität leicht 8 bis 12 Wiederholungen, mittel 10 bis 15, hart 15 bis 20; Liegestütze, Klimmzüge und Dips höchstens die Hälfte davon; Ausdauer in Minuten.`;
+Antworte NUR mit JSON: {"steps":[{"n":"Name","t":"w|p","a":Zahl,"sets":Zahl,"rest":Sekunden}]}
+t=w ist eine Übung. n ist NUR der Übungsname ohne Zahl, z. B. "Liegestütze" oder "Laufen". a=Wiederholungen pro Satz (bei Plank Sekunden, bei Laufen, Gehen, Radfahren und Treppensteigen Minuten). sets=Anzahl Sätze. rest=Pause zwischen den Sätzen in Sekunden (30 bis 120). Erlaubte Übungen NUR: ${allowed().join(', ')}. t=p ist eine Pause zwischen zwei verschiedenen Übungen (a=Minuten, 1 bis 3).
+Wähle genau 4 bis 5 verschiedene Übungen, nicht mehr. Jede Übung wird in mehreren Sätzen wiederholt (Intensität leicht 3 Sätze, mittel 4, hart 5; Ausdauer immer sets=1). Nur intensive, echte Übungen. Kein Essen, keine Belohnung, keine Aufwärm-, Dehn- oder Mobilitätsübungen. Wiederholungen pro Satz: leicht 8 bis 12, mittel 10 bis 15, hart 12 bis 20; Liegestütze, Klimmzüge und Dips etwa 5 bis 12.`;
 }
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 async function gen(kind,desc){
@@ -1154,8 +1228,15 @@ async function gen(kind,desc){
   let st=null,err='';
   try{
     const o=await gem(aiPrompt(kind,desc),n=>set(Math.min(.95,n/700)));
-    st=(o.steps||[]).slice(0,14).map((x,i)=>{const t='wpeb'.includes(x.t)?x.t:'w';return{n:String(x.n||'Schritt').slice(0,60).replace((S.eq||[]).includes('hantel')?/$^/:/hantel-?\s*/i,''),t,a:t=='e'?0:Math.min(999,Math.max(1,Math.round(+x.a||1))),th:t=='w'?i%2:DEF[t],lk:i>0}});
-    if(S.prof&&S.prof.goal=='abnehmen')st=st.filter(x=>!ABS.test(x.n));st.forEach((x,i)=>x.lk=i>0);if(!st.length)throw new Error('Die KI hat keinen Plan geliefert.');
+    const eqh=(S.eq||[]).includes('hantel'),dist=new Set();
+    st=(o.steps||[]).filter(x=>x.t=='w'||x.t=='p').map(x=>{const t=x.t,nm=String(x.n||'Übung').slice(0,60).replace(eqh?/$^/:/hantel-?\s*/i,'');
+      return{n:t=='p'?'Pause':nm,t,a:t=='p'?Math.min(5,Math.max(1,Math.round(+x.a||2))):Math.min(999,Math.max(1,Math.round(+x.a||1))),...(t=='w'&&x.sets>1?{sets:Math.min(6,Math.round(x.sets)),rest:Math.min(180,Math.max(20,Math.round(+x.rest||60)))}:{}),th:0,lk:true}})
+      .filter(x=>{if(x.t!='w')return true;const k=fbKey(x.n);if(dist.has(k)||dist.size>=5)return false;dist.add(k);return true});
+    if(S.prof&&S.prof.goal=='abnehmen')st=st.filter(x=>!ABS.test(x.n));
+    st=st.filter((x,i)=>!(x.t=='p'&&(i==0||st[i-1].t=='p')));while(st.length&&st[st.length-1].t=='p')st.pop();
+    st.forEach((x,i)=>{x.th=x.t=='w'?i%2:2;x.lk=i>0});
+    if(kind=='daily'&&S.aiDay===TK)st=st.concat((S.pf=='ai'?S.steps:S.alt||[]).filter(x=>x.t=='e'||x.t=='b').map(x=>({n:x.n,t:x.t,a:x.a,th:x.th,lk:true})));
+    if(!st.length)throw new Error('Die KI hat keinen Plan geliefert.');
     set(1);await sleep(600);
   }catch(e){st=null;aiFail=1;err=e.message||'KI-Fehler.'}
   clearInterval(tm);
@@ -1182,7 +1263,7 @@ $('#aigo').onclick=async()=>{
 
 /* Einstellungen */
 const A=()=>S.ai||(S.ai={}),show=id=>{document.querySelectorAll('.screen').forEach(x=>x.classList.toggle('on',x.id=='s-'+id));scrollTo(0,0)};
-function renderSet(){const a=S.ai||{};$('#ai0').checked=!!a.on;$('#ai1').checked=!!a.f1;$('#ai2').checked=!!a.f2;$('#aibox').classList.toggle('h',!a.on);$('#key').value=getKey();document.querySelectorAll('#eq .chip').forEach(x=>x.classList.toggle('on',(S.eq||[]).includes(x.dataset.e)));$('#sver').textContent='Dizzipline Version '+APP_VERSION;$('#inl').checked=!!S.inl;$('#avl').innerHTML=Object.keys(S.avoid||{}).map(k=>`<button class="chip on" data-a="${k}">${k.replace(/_/g,' ')}</button>`).join('')||'<span class="mu" style="font-size:14px">Noch keine.</span>'}
+function renderSet(){const a=S.ai||{};$('#ai0').checked=!!a.on;$('#ai1').checked=!!a.f1;$('#ai2').checked=!!a.f2;$('#aibox').classList.toggle('h',!a.on);$('#key').value=getKey();document.querySelectorAll('#eq .chip').forEach(x=>x.classList.toggle('on',(S.eq||[]).includes(x.dataset.e)));$('#sver').textContent='Dizzipline Version '+APP_VERSION;$('#inl').checked=!!S.inl;$('#free').checked=!!S.free;$('#avl').innerHTML=Object.keys(S.avoid||{}).map(k=>`<button class="chip on" data-a="${k}">${k.replace(/_/g,' ')}</button>`).join('')||'<span class="mu" style="font-size:14px">Noch keine.</span>'}
 $('#setb').onclick=()=>{renderSet();show('set')};
 $('#sback').onclick=()=>show('profil');
 $('#ai0').onchange=e=>{A().on=e.target.checked;aiFail=0;save();$('#aibox').classList.toggle('h',!A().on);render()};
@@ -1193,6 +1274,7 @@ $('#reload').onclick=()=>{if(busy)return;if(S.steps.some(x=>x.done)&&!confirm('P
 $('#eq').onclick=e=>{const b=e.target.closest('[data-e]');if(!b)return;const a=S.eq||(S.eq=[]),i=a.indexOf(b.dataset.e);i<0?a.push(b.dataset.e):a.splice(i,1);b.classList.toggle('on',i<0);save()};
 $('#avl').onclick=e=>{const b=e.target.closest('[data-a]');if(!b)return;delete S.avoid[b.dataset.a];save();renderSet()};
 $('#inl').onchange=e=>{S.inl=e.target.checked;save()};
+$('#free').onchange=e=>{S.free=e.target.checked;save();renderHeute()};
 $('#redo').onclick=()=>{S.prof=null;save();show('profil');render()};
 
 /* Profil */
