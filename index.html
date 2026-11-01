@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="utf-8">
-<meta name="app-version" content="1.4.0">
+<meta name="app-version" content="1.4.1">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#000000">
 <title>Dizzipline</title>
@@ -258,6 +258,14 @@ nav button.pulse svg{animation:pls .4s var(--ease)}
 .wob{height:6px;border-radius:3px;background:rgba(255,255,255,.12);overflow:hidden;margin:20px 0 10px}
 .wob i{display:block;height:100%;width:0;background:#fff;border-radius:3px;transition:width .5s linear}
 .wol{display:flex;justify-content:center;gap:10px;margin-top:8px}
+.wob{display:none}
+.card .cn{position:absolute;right:20px;top:46px;font-size:60px;font-weight:700;letter-spacing:-.04em;line-height:1.1;font-variant-numeric:tabular-nums;z-index:3;text-shadow:0 2px 14px rgba(0,0,0,.55)}
+.cn.pop{animation:wpop .45s var(--ease)}
+.wbt{position:absolute;top:14px;right:14px;display:flex;gap:8px;z-index:4}
+.wbt button{height:32px;padding:0 13px;border-radius:16px;border:1px solid rgba(255,255,255,.4);background:rgba(0,0,0,.4);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font-size:14px;font-weight:600;cursor:pointer}
+.wpr{position:absolute;left:0;bottom:0;height:4px;background:#fff;transition:width .5s linear;z-index:3}
+.card.wk .ic,.card.wk .q,.card.wk .fbb,.card.wk .rlb,.card.wk .sk,.card.wk .ud{display:none}
+.card.wk h3,.card.wk p{max-width:52%}
 /* Tab-Leiste */
 nav{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(440px,calc(100% - 32px));display:flex;padding:6px;border-radius:30px;background:rgba(30,30,32,.7);backdrop-filter:blur(26px) saturate(180%);-webkit-backdrop-filter:blur(26px) saturate(180%);border:1px solid var(--line);z-index:20}
 nav button{flex:1;background:none;border:0;padding:9px 0 7px;border-radius:24px;display:grid;justify-items:center;gap:3px;font-size:11px;font-weight:500;color:var(--mu);cursor:pointer;transition:.3s}
@@ -391,6 +399,7 @@ nav svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;st
         <p class="mu" style="font-size:14px;margin-top:10px">Der tägliche Plan baut auf gestern und deinen Angaben auf.</p>
       </div>
     </div>
+    <div class="form" style="margin-top:14px"><label class="tg" style="margin:0">Timer direkt in der Karte<input type="checkbox" id="inl"></label><p class="mu" style="font-size:14px;margin-top:10px">An: Countdown und Zähler laufen in der Karte, die anderen Quests bleiben sichtbar. Aus: Training im Vollbild.</p></div>
     <div class="form" style="margin-top:14px"><h3>Seltener vorschlagen</h3><p class="mu" style="font-size:14px;margin:-6px 0 12px">Diese Übungen schlägt die App nicht mehr vor. Tippe auf eine, um sie wieder zuzulassen.</p><div class="chips eq" id="avl" style="justify-content:flex-start;margin:0"></div></div>
     <div class="form" style="margin-top:14px"><h3>Equipment</h3><p class="mu" style="font-size:14px;margin:-6px 0 12px">Was du zur Hand hast. Die KI mischt Übungen mit und ohne Equipment ausgewogen. Ohne Auswahl gibt es nur Körpergewicht.</p><div class="chips eq" id="eq" style="justify-content:flex-start;margin:0"><button class="chip" data-e="hantel">Hanteln</button><button class="chip" data-e="stange">Klimmzugstange</button><button class="chip" data-e="seil">Springseil</button><button class="chip" data-e="rad">Fahrrad</button></div></div>
     <button class="ghost" id="redo" style="margin-top:20px">Einrichtung neu starten</button>
@@ -489,7 +498,7 @@ function renderHeute(){
     const sk=c.querySelector('.sk');if(sk)sk.classList.toggle('h',!!s.done||lk);
     const fbn=c.querySelector('.fbb');if(fbn)fbn.dataset.r=s.fb||'';
     const rlb=c.querySelector('.rlb');if(rlb)rlb.classList.toggle('h',!!s.done);
-    c.querySelector('p').textContent=ctext(s,i,lk,run);
+    if(!c.classList.contains('wk'))c.querySelector('p').textContent=ctext(s,i,lk,run);
     if(c.dataset.k!=k){c.dataset.k=k;c.querySelector('.ic').innerHTML=s.done?CHK:lk?LOCK:s.t=='p'?PLAY:s.t=='b'?STAR:''}
     let pr=c.querySelector('.pr');
     if(run){if(!pr){pr=document.createElement('b');pr.className='pr';c.append(pr)}pr.style.width=(1-(s.until-Date.now())/(s.a*60000))*100+'%'}
@@ -553,12 +562,13 @@ function finish(i,skipped){
 }
 $('#list').onclick=e=>{
   if(swiped)return;
+  const wb=e.target.closest('.wbt button');if(wb){wb.dataset.x=='1'?woStop():woQuick();return}
   const ud=e.target.closest('.ud');if(ud){undo(+ud.dataset.ud);return}
   const fq=e.target.closest('.fbb');if(fq){openQ(+fq.dataset.fb,'fb');return}
   const rq=e.target.closest('.rlb');if(rq){openQ(+rq.dataset.rl,'rl');return}
   const q=e.target.closest('.q');if(q){showEx(+q.dataset.q);return}
   const sk=e.target.closest('.sk');if(sk){finish(+sk.dataset.sk,true);return}
-  const c=e.target.closest('.card');if(!c)return;
+  const c=e.target.closest('.card');if(!c||c.classList.contains('wk'))return;
   const i=+c.dataset.i,s=S.steps[i];
   if(s.done)return;
   if(isLocked(i)){c.classList.remove('shake');void c.offsetWidth;c.classList.add('shake');return}
@@ -762,7 +772,7 @@ async function reloadStep(i){
 }
 /* Wischen: links = Feedback, rechts = neu laden. Beim Wischen steht schon, was passiert. */
 const ICF='<svg viewBox="0 0 24 24"><path d="M5 6h14a1 1 0 011 1v8a1 1 0 01-1 1h-8l-4 3v-3H5a1 1 0 01-1-1V7a1 1 0 011-1z"/></svg>',ICR='<svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 11-2.6-5.9M20 4v5h-5"/></svg>';
-$('#list').addEventListener('pointerdown',e=>{const c=e.target.closest('.card');if(!c||e.target.closest('button'))return;sw={c,x:e.clientX,y:e.clientY,dx:0,on:0,i:+c.dataset.i}});
+$('#list').addEventListener('pointerdown',e=>{const c=e.target.closest('.card');if(!c||c.classList.contains('wk')||e.target.closest('button'))return;sw={c,x:e.clientX,y:e.clientY,dx:0,on:0,i:+c.dataset.i}});
 addEventListener('pointermove',e=>{
   if(!sw)return;const dx=e.clientX-sw.x,dy=e.clientY-sw.y;
   if(!sw.on){if(Math.abs(dx)>12&&Math.abs(dx)>Math.abs(dy)*1.5){sw.on=1;sw.c.classList.add('swp')}else return}
@@ -967,45 +977,65 @@ $('#ph1').onclick=()=>{phClose();$('#phin').click()};
 $('#ph0').onclick=()=>{S.phDay=TK;save();phClose()};
 $('#ph').onclick=e=>{if(e.target.id=='ph'){S.phDay=TK;save();phClose()}};
 
-/* Geführtes Training: 3, 2, 1, dann zählt die App mit. Am Ende wird die Quest automatisch erledigt. */
+/* Geführtes Training: 3, 2, 1, dann zählt die App mit. Am Ende wird die Quest automatisch erledigt.
+   Je nach Einstellung im Vollbild oder direkt in der Karte. */
 const TEMPO={squat:2600,pushup:2600,crunch:2200,situp:2600,lunge:3200,burpee:4200,jumpsquat:2400,climber:1200,legraise:3000,bridge:2800,dips:2600,calf:2000,superman:3200,donkey:2400,birddog:3600,flutter:1200,bicycle:1800,press:2600,curl:2400,row:2400,pullup:3200,boxing:900,rope:600,highknees:700,jack:1000};
 let wo=null,wLock=null;
 const buzz=p=>{try{navigator.vibrate&&navigator.vibrate(p||25)}catch(e){}};
-const woPop=()=>{const n=$('#won');n.classList.remove('pop');void n.offsetWidth;n.classList.add('pop')};
-function woStop(){
-  if(wo){wo.T.forEach(clearTimeout);clearInterval(wo.iv)}
-  cancelAnimationFrame(exRaf);try{wLock&&wLock.release()}catch(e){}wLock=null;wo=null;
-  const o=$('#wo');o.classList.remove('show');setTimeout(()=>{if(!wo)o.classList.remove('on')},350);
+const popEl=n=>{n.classList.remove('pop');void n.offsetWidth;n.classList.add('pop')};
+const ov={
+  open(s,k){$('#wot').textContent=s.n;$('#wov').style.display=k?'':'none';cancelAnimationFrame(exRaf);const o=$('#wo');o.classList.add('on');requestAnimationFrame(()=>requestAnimationFrame(()=>o.classList.add('show')))},
+  num(t,pop=true){const n=$('#won');n.textContent=t;if(pop)popEl(n)},
+  sub(t){$('#wos').textContent=t},
+  prog(){},
+  fig(k,db,T){if(k)playEx(EX[k],db,T,'#wog')},
+  close(){cancelAnimationFrame(exRaf);const o=$('#wo');o.classList.remove('show');setTimeout(()=>{if(!wo)o.classList.remove('on')},350)}
+};
+function inlUI(i){
+  const c=$('#list').children[i],p=c.querySelector('p'),n=document.createElement('div'),b=document.createElement('div'),pr=document.createElement('b');
+  n.className='cn';b.className='wbt';b.innerHTML='<button data-x="1">Abbrechen</button><button data-x="2">Fertig</button>';pr.className='wpr';
+  c.classList.add('wk');c.append(n,b,pr);
+  return{
+    open(){},
+    num(t,pop=true){n.textContent=t;n.style.fontSize=/^[\d:]+$/.test(String(t))?'':'32px';if(pop)popEl(n)},
+    sub(t){p.textContent=t},
+    prog(v){pr.style.width=v+'%'},
+    fig(){},
+    close(){c.classList.remove('wk');n.remove();b.remove();pr.remove();renderHeute()}
+  };
 }
 function startWo(i){
-  const s=S.steps[i],k=exOf(s.n),hold=HOLD.test(s.n),mins=MINS.test(s.n),timed=hold||mins,total=mins?s.a*60:s.a;
-  const tempo=Math.round((TEMPO[k]||2500)*({leicht:1.15,hart:.9}[(S.prof||{}).i]||1)),n=$('#won');
-  wo={i,T:[],iv:0};const at=(f,ms)=>wo.T.push(setTimeout(f,ms));
-  $('#wot').textContent=s.n;$('#wos').textContent='Mach dich bereit';$('#wobi').style.width='0';n.textContent='3';woPop();buzz();
-  $('#wov').style.display=k?'':'none';cancelAnimationFrame(exRaf);
-  const o=$('#wo');o.classList.add('on');requestAnimationFrame(()=>requestAnimationFrame(()=>o.classList.add('show')));
+  if(wo)return;
+  const s=S.steps[i],k=exOf(s.n),hold=HOLD.test(s.n),mins=MINS.test(s.n),timed=hold||mins,total=mins?s.a*60:s.a,card=$('#list').children[i];
+  const tempo=Math.round((TEMPO[k]||2500)*({leicht:1.15,hart:.9}[(S.prof||{}).i]||1)),ui=S.inl&&card&&card.offsetHeight?inlUI(i):ov;
+  wo={i,T:[],iv:0,ui};const at=(f,ms)=>wo.T.push(setTimeout(f,ms));
+  ui.open(s,k);ui.sub('Mach dich bereit');ui.prog(0);ui.num('3');buzz();
   try{navigator.wakeLock&&navigator.wakeLock.request('screen').then(l=>{wLock=l}).catch(()=>{})}catch(e){}
-  at(()=>{n.textContent='2';woPop();buzz()},1000);
-  at(()=>{n.textContent='1';woPop();buzz()},2000);
+  at(()=>{ui.num('2');buzz()},1000);
+  at(()=>{ui.num('1');buzz()},2000);
   at(()=>{
-    buzz(60);if(k)playEx(EX[k],/hantel|dumbbell/i.test(s.n),timed?undefined:tempo,'#wog');
+    buzz(60);ui.fig(k,/hantel|dumbbell/i.test(s.n),timed?undefined:tempo);
     if(timed){
       let left=total;const f=v=>hold&&total<=90?String(v):Math.floor(v/60)+':'+String(v%60).padStart(2,'0');
-      n.textContent=f(left);woPop();$('#wos').textContent=hold?'Sekunden halten':'Minuten';
-      wo.iv=setInterval(()=>{left--;n.textContent=f(Math.max(0,left));$('#wobi').style.width=(total-left)/total*100+'%';if(left<=0)woDone()},1000);
+      ui.num(f(left));ui.sub(hold?'Sekunden halten':'Minuten');
+      wo.iv=setInterval(()=>{left--;ui.num(f(Math.max(0,left)),false);ui.prog((total-left)/total*100);if(left<=0)woDone()},1000);
     }else{
-      let c=0;n.textContent='Los!';woPop();$('#wos').textContent='von '+total+' Wiederholungen';
-      wo.iv=setInterval(()=>{c++;n.textContent=c;woPop();buzz();$('#wobi').style.width=c/total*100+'%';if(c>=total)woDone()},tempo);
+      let c=0;ui.num('Los!');ui.sub('von '+total+' Wiederholungen');
+      wo.iv=setInterval(()=>{c++;ui.num(c);buzz();ui.prog(c/total*100);if(c>=total)woDone()},tempo);
     }
   },3000);
 }
+function woStop(){
+  if(!wo)return;const u=wo.ui;wo.T.forEach(clearTimeout);clearInterval(wo.iv);wo=null;
+  try{wLock&&wLock.release()}catch(e){}wLock=null;u.close();
+}
 function woDone(){
-  if(!wo)return;const i=wo.i;clearInterval(wo.iv);
-  $('#wobi').style.width='100%';$('#won').textContent='Geschafft';woPop();$('#wos').textContent='';buzz([60,40,60]);
+  if(!wo)return;const i=wo.i,u=wo.ui;clearInterval(wo.iv);
+  u.prog(100);u.num('Geschafft');u.sub('');buzz([60,40,60]);
   wo.T.push(setTimeout(()=>{woStop();setTimeout(()=>finish(i),380)},900));
 }
-$('#woc').onclick=woStop;
-$('#wod').onclick=()=>{if(!wo)return;const i=wo.i;woStop();setTimeout(()=>finish(i),380)};
+function woQuick(){if(!wo)return;const i=wo.i;woStop();setTimeout(()=>finish(i),380)}
+$('#woc').onclick=woStop;$('#wod').onclick=woQuick;
 
 /* Toast */
 const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove('on'),3500)};
@@ -1152,7 +1182,7 @@ $('#aigo').onclick=async()=>{
 
 /* Einstellungen */
 const A=()=>S.ai||(S.ai={}),show=id=>{document.querySelectorAll('.screen').forEach(x=>x.classList.toggle('on',x.id=='s-'+id));scrollTo(0,0)};
-function renderSet(){const a=S.ai||{};$('#ai0').checked=!!a.on;$('#ai1').checked=!!a.f1;$('#ai2').checked=!!a.f2;$('#aibox').classList.toggle('h',!a.on);$('#key').value=getKey();document.querySelectorAll('#eq .chip').forEach(x=>x.classList.toggle('on',(S.eq||[]).includes(x.dataset.e)));$('#sver').textContent='Dizzipline Version '+APP_VERSION;$('#avl').innerHTML=Object.keys(S.avoid||{}).map(k=>`<button class="chip on" data-a="${k}">${k.replace(/_/g,' ')}</button>`).join('')||'<span class="mu" style="font-size:14px">Noch keine.</span>'}
+function renderSet(){const a=S.ai||{};$('#ai0').checked=!!a.on;$('#ai1').checked=!!a.f1;$('#ai2').checked=!!a.f2;$('#aibox').classList.toggle('h',!a.on);$('#key').value=getKey();document.querySelectorAll('#eq .chip').forEach(x=>x.classList.toggle('on',(S.eq||[]).includes(x.dataset.e)));$('#sver').textContent='Dizzipline Version '+APP_VERSION;$('#inl').checked=!!S.inl;$('#avl').innerHTML=Object.keys(S.avoid||{}).map(k=>`<button class="chip on" data-a="${k}">${k.replace(/_/g,' ')}</button>`).join('')||'<span class="mu" style="font-size:14px">Noch keine.</span>'}
 $('#setb').onclick=()=>{renderSet();show('set')};
 $('#sback').onclick=()=>show('profil');
 $('#ai0').onchange=e=>{A().on=e.target.checked;aiFail=0;save();$('#aibox').classList.toggle('h',!A().on);render()};
@@ -1162,6 +1192,7 @@ $('#key').onchange=e=>{try{localStorage.setItem(KEY,e.target.value.trim())}catch
 $('#reload').onclick=()=>{if(busy)return;if(S.steps.some(x=>x.done)&&!confirm('Plan neu erstellen? Dein Fortschritt von heute geht dabei verloren.'))return;aiFail=0;gen('daily')};
 $('#eq').onclick=e=>{const b=e.target.closest('[data-e]');if(!b)return;const a=S.eq||(S.eq=[]),i=a.indexOf(b.dataset.e);i<0?a.push(b.dataset.e):a.splice(i,1);b.classList.toggle('on',i<0);save()};
 $('#avl').onclick=e=>{const b=e.target.closest('[data-a]');if(!b)return;delete S.avoid[b.dataset.a];save();renderSet()};
+$('#inl').onchange=e=>{S.inl=e.target.checked;save()};
 $('#redo').onclick=()=>{S.prof=null;save();show('profil');render()};
 
 /* Profil */
