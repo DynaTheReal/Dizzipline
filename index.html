@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="utf-8">
-<meta name="app-version" content="1.3.2">
+<meta name="app-version" content="1.4.0">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#000000">
 <title>Dizzipline</title>
@@ -246,6 +246,18 @@ nav button.pulse svg{animation:pls .4s var(--ease)}
 #mc.ouch .eyes{animation:none;transform:scaleY(.18)}
 .card .ud{display:none;position:absolute;top:16px;right:16px;height:32px;padding:0 14px;border-radius:16px;border:1px solid rgba(255,255,255,.4);background:rgba(0,0,0,.35);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font-size:14px;font-weight:600;cursor:pointer}
 .card.dn .ud{display:block}.card.dn .q,.card.dn .fbb{display:none}
+#wo{position:fixed;inset:0;z-index:95;background:#000;display:none;align-items:center;justify-content:center;padding:24px;opacity:0;transition:opacity .35s}
+#wo.on{display:flex}#wo.show{opacity:1}
+.wow{width:100%;max-width:380px;text-align:center}
+.wow h2{font-size:26px;letter-spacing:-.025em;margin-bottom:4px}
+.wom svg{width:100%;max-width:280px;height:auto;display:block;margin:14px auto 0}
+#wog line{stroke:#fff;stroke-width:4.5;stroke-linecap:round}#wog line.far{stroke:rgba(255,255,255,.4)}
+#wog circle{fill:none;stroke:#fff;stroke-width:4}#wog circle.db{fill:#fff;stroke:rgba(255,255,255,.5);stroke-width:2}
+.won{font-size:112px;font-weight:700;letter-spacing:-.05em;line-height:1.1;margin-top:6px;font-variant-numeric:tabular-nums}
+.won.pop{animation:wpop .45s var(--ease)}@keyframes wpop{from{transform:scale(1.22);opacity:.35}}
+.wob{height:6px;border-radius:3px;background:rgba(255,255,255,.12);overflow:hidden;margin:20px 0 10px}
+.wob i{display:block;height:100%;width:0;background:#fff;border-radius:3px;transition:width .5s linear}
+.wol{display:flex;justify-content:center;gap:10px;margin-top:8px}
 /* Tab-Leiste */
 nav{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(440px,calc(100% - 32px));display:flex;padding:6px;border-radius:30px;background:rgba(30,30,32,.7);backdrop-filter:blur(26px) saturate(180%);-webkit-backdrop-filter:blur(26px) saturate(180%);border:1px solid var(--line);z-index:20}
 nav button{flex:1;background:none;border:0;padding:9px 0 7px;border-radius:24px;display:grid;justify-items:center;gap:3px;font-size:11px;font-weight:500;color:var(--mu);cursor:pointer;transition:.3s}
@@ -387,6 +399,7 @@ nav svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;st
 </div>
 
 <div id="ob"></div><div id="toast"></div>
+<div id="wo"><div class="wow"><h2 id="wot"></h2><p class="mu" id="wos"></p><div class="wom" id="wov"><svg viewBox="0 0 200 130"><line x1="14" x2="186" y1="120" y2="120" stroke="rgba(255,255,255,.18)" stroke-width="1.5"/><g id="wog"></g></svg></div><div class="won" id="won"></div><div class="wob"><i id="wobi"></i></div><div class="wol"><button class="lnk" id="woc">Abbrechen</button><button class="lnk" id="wod">Schon gemacht</button></div></div></div>
 <div id="upd"><span>Version <b id="uv"></b> ist da</span><button id="ub">Aktualisieren</button></div>
 <div id="ph"><div class="exs"><h3>Progress-Foto</h3><p class="mu">Es ist Samstag. Mach ein Foto von dir, zum Beispiel von Bauch oder Oberkörper. Es bleibt privat auf deinem Gerät.</p><div style="height:18px"></div><button class="btn" id="ph1">Foto aufnehmen</button><button class="lnk" id="ph0" style="width:100%">Später</button></div></div>
 <div id="pv"><img id="pvi" alt=""><div class="pvb"><span id="pvd"></span><button class="lnk" id="pvx">Löschen</button><button class="lnk" id="pvc">Schließen</button></div></div>
@@ -446,7 +459,7 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',
 const LBL={w:'Aufgabe',p:'Pause',e:'Essen',b:'Belohnung'};
 const pts=s=>s.t=='w'?10+Math.floor(s.a/10):s.t=='b'?s.a:5;
 const meta=s=>({w:s.a+(HOLD.test(s.n)?' Sek.':MINS.test(s.n)?' Min.':' Wdh.'),p:s.a+' Min.',e:'+5 Punkte',b:'+'+s.a+' Punkte'})[s.t];
-const ctext=(s,i,lk,run)=>lk?'Gesperrt, erst „'+S.steps[i-1].n+'“ erledigen':s.done?(s.t=='b'?'Eingelöst':'Erledigt'):({w:s.a+' '+unit(s)+' · Tippen zum Abhaken',p:run?fmt(s.until-Date.now())+' verbleibend':s.a+' Minuten · Tippen zum Starten',e:'Tippen, wenn du gegessen hast',b:'+'+s.a+' Bonuspunkte · Tippen zum Einlösen'})[s.t];
+const ctext=(s,i,lk,run)=>lk?'Gesperrt, erst „'+S.steps[i-1].n+'“ erledigen':s.done?(s.t=='b'?'Eingelöst':'Erledigt'):({w:s.a+' '+unit(s)+' · Tippen zum Starten',p:run?fmt(s.until-Date.now())+' verbleibend':s.a+' Minuten · Tippen zum Starten',e:'Tippen, wenn du gegessen hast',b:'+'+s.a+' Bonuspunkte · Tippen zum Einlösen'})[s.t];
 const fmt=ms=>{const s=Math.ceil(ms/1000);return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};
 const CHK='<svg viewBox="0 0 24 24"><path d="M6 12.5l4 4 8-9"/></svg>',
 LOCK='<svg viewBox="0 0 24 24"><rect x="6" y="11" width="12" height="9" rx="2"/><path d="M9 11V8a3 3 0 016 0v3"/></svg>',
@@ -550,6 +563,7 @@ $('#list').onclick=e=>{
   if(s.done)return;
   if(isLocked(i)){c.classList.remove('shake');void c.offsetWidth;c.classList.add('shake');return}
   if(s.t=='p'){if(s.until<Date.now()){s.until=Date.now()+s.a*60000;save();renderHeute()}return}
+  if(s.t=='w'){startWo(i);return}
   finish(i);
 };
 setInterval(()=>{
@@ -659,8 +673,8 @@ function showEx(i){
   $('#exp').textContent=k?EXT[k]:'Für diesen Namen gibt es noch keine Animation. Tipp: Nimm im Plan einen Namen aus der Vorschlagsliste, z. B. Kniebeugen, Burpees oder Plank.';
   if(k)playEx(EX[k],/hantel|dumbbell/i.test(s.n));
 }
-function playEx(d,db){
-  const K=(d.length-1)/22,T=d[d.length-1],P=Array.from({length:K},(_,j)=>d.slice(j*22,j*22+22)),g=$('#exg');
+function playEx(d,db,T2,gid){
+  const K=(d.length-1)/22,T=T2||d[d.length-1],P=Array.from({length:K},(_,j)=>d.slice(j*22,j*22+22)),g=$(gid||'#exg');
   g.innerHTML=SEG.map(q=>`<line class="${q[2]?'far':''}"/>`).join('')+'<circle r="9"/>'+(db?'<circle class="db" r="5"/><circle class="db" r="5"/>':'');
   const ls=g.querySelectorAll('line'),hd=g.querySelector('circle'),dbs=g.querySelectorAll('.db'),t0=performance.now();
   const f=t=>{
@@ -952,6 +966,46 @@ function phCheck(){
 $('#ph1').onclick=()=>{phClose();$('#phin').click()};
 $('#ph0').onclick=()=>{S.phDay=TK;save();phClose()};
 $('#ph').onclick=e=>{if(e.target.id=='ph'){S.phDay=TK;save();phClose()}};
+
+/* Geführtes Training: 3, 2, 1, dann zählt die App mit. Am Ende wird die Quest automatisch erledigt. */
+const TEMPO={squat:2600,pushup:2600,crunch:2200,situp:2600,lunge:3200,burpee:4200,jumpsquat:2400,climber:1200,legraise:3000,bridge:2800,dips:2600,calf:2000,superman:3200,donkey:2400,birddog:3600,flutter:1200,bicycle:1800,press:2600,curl:2400,row:2400,pullup:3200,boxing:900,rope:600,highknees:700,jack:1000};
+let wo=null,wLock=null;
+const buzz=p=>{try{navigator.vibrate&&navigator.vibrate(p||25)}catch(e){}};
+const woPop=()=>{const n=$('#won');n.classList.remove('pop');void n.offsetWidth;n.classList.add('pop')};
+function woStop(){
+  if(wo){wo.T.forEach(clearTimeout);clearInterval(wo.iv)}
+  cancelAnimationFrame(exRaf);try{wLock&&wLock.release()}catch(e){}wLock=null;wo=null;
+  const o=$('#wo');o.classList.remove('show');setTimeout(()=>{if(!wo)o.classList.remove('on')},350);
+}
+function startWo(i){
+  const s=S.steps[i],k=exOf(s.n),hold=HOLD.test(s.n),mins=MINS.test(s.n),timed=hold||mins,total=mins?s.a*60:s.a;
+  const tempo=Math.round((TEMPO[k]||2500)*({leicht:1.15,hart:.9}[(S.prof||{}).i]||1)),n=$('#won');
+  wo={i,T:[],iv:0};const at=(f,ms)=>wo.T.push(setTimeout(f,ms));
+  $('#wot').textContent=s.n;$('#wos').textContent='Mach dich bereit';$('#wobi').style.width='0';n.textContent='3';woPop();buzz();
+  $('#wov').style.display=k?'':'none';cancelAnimationFrame(exRaf);
+  const o=$('#wo');o.classList.add('on');requestAnimationFrame(()=>requestAnimationFrame(()=>o.classList.add('show')));
+  try{navigator.wakeLock&&navigator.wakeLock.request('screen').then(l=>{wLock=l}).catch(()=>{})}catch(e){}
+  at(()=>{n.textContent='2';woPop();buzz()},1000);
+  at(()=>{n.textContent='1';woPop();buzz()},2000);
+  at(()=>{
+    buzz(60);if(k)playEx(EX[k],/hantel|dumbbell/i.test(s.n),timed?undefined:tempo,'#wog');
+    if(timed){
+      let left=total;const f=v=>hold&&total<=90?String(v):Math.floor(v/60)+':'+String(v%60).padStart(2,'0');
+      n.textContent=f(left);woPop();$('#wos').textContent=hold?'Sekunden halten':'Minuten';
+      wo.iv=setInterval(()=>{left--;n.textContent=f(Math.max(0,left));$('#wobi').style.width=(total-left)/total*100+'%';if(left<=0)woDone()},1000);
+    }else{
+      let c=0;n.textContent='Los!';woPop();$('#wos').textContent='von '+total+' Wiederholungen';
+      wo.iv=setInterval(()=>{c++;n.textContent=c;woPop();buzz();$('#wobi').style.width=c/total*100+'%';if(c>=total)woDone()},tempo);
+    }
+  },3000);
+}
+function woDone(){
+  if(!wo)return;const i=wo.i;clearInterval(wo.iv);
+  $('#wobi').style.width='100%';$('#won').textContent='Geschafft';woPop();$('#wos').textContent='';buzz([60,40,60]);
+  wo.T.push(setTimeout(()=>{woStop();setTimeout(()=>finish(i),380)},900));
+}
+$('#woc').onclick=woStop;
+$('#wod').onclick=()=>{if(!wo)return;const i=wo.i;woStop();setTimeout(()=>finish(i),380)};
 
 /* Toast */
 const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove('on'),3500)};
