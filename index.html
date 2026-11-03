@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="utf-8">
-<meta name="app-version" content="1.5.0">
+<meta name="app-version" content="1.5.1">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#000000">
 <title>Dizzipline</title>
@@ -175,8 +175,8 @@ nav button.pulse svg{animation:pls .4s var(--ease)}
 .fbb[data-r=easy]::after{background:#0a84ff}.fbb[data-r=ok]::after{background:#30d158}.fbb[data-r=hard]::after{background:#ff453a}
 .card{touch-action:pan-y}.card.swp{transition:none}
 .card.ld{animation:pls2 1s ease-in-out infinite}@keyframes pls2{50%{opacity:.45}}
-#ph,#qs,#fd{position:fixed;inset:0;z-index:85;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.6);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);opacity:0;transition:opacity .35s}
-#ph.on,#qs.on,#fd.on{display:flex}#ph.show,#qs.show,#fd.show{opacity:1}#ph.show .exs,#qs.show .exs,#fd.show .exs{transform:none}
+#ph,#qs,#fd,#lk{position:fixed;inset:0;z-index:85;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.6);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);opacity:0;transition:opacity .35s}
+#ph.on,#qs.on,#fd.on,#lk.on{display:flex}#ph.show,#qs.show,#fd.show,#lk.show{opacity:1}#ph.show .exs,#qs.show .exs,#fd.show .exs,#lk.show .exs{transform:none}
 #qp{white-space:pre-line}
 .fbr{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:16px 0}
 .fbr button{height:52px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.07);font-weight:600;font-size:15px;cursor:pointer;transition:.25s}
@@ -275,6 +275,9 @@ nav button.pulse svg{animation:pls .4s var(--ease)}
 .qb div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;font-size:12px;color:var(--mu);gap:4px}
 .qb i{width:100%;border-radius:6px;background:#fff}
 #ph,#qs,#fd{z-index:85}
+.plock{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;padding:34px 20px;border-radius:26px;background:rgba(255,255,255,.06);margin-top:14px}
+.plock svg{width:44px;height:44px;fill:none;stroke:#fff;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;margin-bottom:6px}
+.plock b{font-size:19px}.plock span{color:var(--mu);font-size:14px;margin-bottom:12px}.plock .btn{width:auto;padding:0 28px}
 /* Tab-Leiste */
 nav{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(440px,calc(100% - 32px));display:flex;padding:6px;border-radius:30px;background:rgba(30,30,32,.7);backdrop-filter:blur(26px) saturate(180%);-webkit-backdrop-filter:blur(26px) saturate(180%);border:1px solid var(--line);z-index:20}
 nav button{flex:1;background:none;border:0;padding:9px 0 7px;border-radius:24px;display:grid;justify-items:center;gap:3px;font-size:11px;font-weight:500;color:var(--mu);cursor:pointer;transition:.3s}
@@ -400,6 +403,7 @@ nav svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;st
     <h3 class="sh">Fotos</h3>
     <p class="mu" style="margin-bottom:14px">Deine Fotos bleiben privat auf diesem Gerät. Nichts wird hochgeladen.</p>
     <button class="btn" id="phadd">Foto aufnehmen</button><input type="file" id="phin" accept="image/*" hidden>
+    <div class="plock" id="plock" style="display:none"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg><b>Fotos gesperrt</b><span>Entsperre sie mit deinem Passwort.</span><button class="btn" id="plu">Entsperren</button></div>
     <div class="pgrid" id="pgrid"></div>
   </section>
 
@@ -418,6 +422,7 @@ nav svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;st
     </div>
     <div class="form" style="margin-top:14px"><label class="tg" style="margin:0">Timer direkt in der Karte<input type="checkbox" id="inl"></label><p class="mu" style="font-size:14px;margin-top:10px">An: Countdown und Zähler laufen in der Karte, die anderen Quests bleiben sichtbar. Aus: Training im Vollbild.</p></div>
     <div class="form" style="margin-top:14px"><label class="tg" style="margin:0">Alle Quests freischalten<input type="checkbox" id="free"></label><p class="mu" style="font-size:14px;margin-top:10px">An: Du kannst jede Quest in beliebiger Reihenfolge starten oder abhaken. Aus: Die nächste Quest schaltet sich erst frei, wenn die davor erledigt ist.</p></div>
+    <div class="form" style="margin-top:14px"><label class="tg" style="margin:0">Fotos mit Passwort sperren<input type="checkbox" id="plk"></label><p class="mu" style="font-size:14px;margin-top:10px">Im Tab Progress liegen die Fotos hinter einem Schloss, bis du dein Passwort eingibst. Die Fotos selbst sind nicht verschlüsselt.</p></div>
     <div class="form" style="margin-top:14px"><h3>Seltener vorschlagen</h3><p class="mu" style="font-size:14px;margin:-6px 0 12px">Diese Übungen schlägt die App nicht mehr vor. Tippe auf eine, um sie wieder zuzulassen.</p><div class="chips eq" id="avl" style="justify-content:flex-start;margin:0"></div></div>
     <div class="form" style="margin-top:14px"><h3>Equipment</h3><p class="mu" style="font-size:14px;margin:-6px 0 12px">Was du zur Hand hast. Die KI mischt Übungen mit und ohne Equipment ausgewogen. Ohne Auswahl gibt es nur Körpergewicht.</p><div class="chips eq" id="eq" style="justify-content:flex-start;margin:0"><button class="chip" data-e="hantel">Hanteln</button><button class="chip" data-e="stange">Klimmzugstange</button><button class="chip" data-e="seil">Springseil</button><button class="chip" data-e="rad">Fahrrad</button></div></div>
     <button class="ghost" id="redo" style="margin-top:20px">Einrichtung neu starten</button>
@@ -430,6 +435,7 @@ nav svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;st
 <div id="upd"><span>Version <b id="uv"></b> ist da</span><button id="ub">Aktualisieren</button></div>
 <div id="ph"><div class="exs"><h3>Wochen-Check</h3><p class="mu">Es ist Samstag. Trage dein Gewicht ein und mach ein Foto. Beides bleibt privat.</p><input class="in" id="phw" type="number" step="0.1" inputmode="decimal" placeholder="Gewicht in kg" style="margin-top:14px"><button class="btn" id="ph1">Foto aufnehmen</button><button class="ghost" id="ph2" style="margin-top:10px">Nur Gewicht speichern</button><button class="lnk" id="ph0" style="width:100%">Später</button></div></div>
 <div id="fd"><div class="exs"><h3>Essen und Belohnung</h3><p class="mu">Trage ein, was du essen willst und womit du dich belohnst. Die KI legt daraus Quests an.</p><input class="in" id="fdf" placeholder="Essen, z. B. Reis mit Hähnchen" style="margin-top:14px"><input class="in" id="fdr" placeholder="Belohnung, z. B. Eine Folge Serie"><button class="btn" id="fdgo">Quests hinzufügen</button><button class="lnk" id="fdc" style="width:100%">Abbrechen</button></div></div>
+<div id="lk"><div class="exs"><h3 id="lkt"></h3><p class="mu" id="lkp"></p><input class="in" id="lk1" type="password" autocomplete="off" placeholder="Passwort" style="margin-top:14px"><input class="in" id="lk2" type="password" autocomplete="off" placeholder="Passwort wiederholen"><button class="btn" id="lkgo"></button><button class="lnk" id="lkf" style="width:100%">Passwort vergessen</button><button class="lnk" id="lkc" style="width:100%">Abbrechen</button></div></div>
 <div id="pv"><img id="pvi" alt=""><div class="pvb"><span id="pvd"></span><button class="lnk" id="pvx">Löschen</button><button class="lnk" id="pvc">Schließen</button></div></div>
 <div id="qs"><div class="exs"><h3 id="qt"></h3><p class="mu" id="qp"></p><div class="fbr" id="fbr"><button data-r="easy">Zu leicht</button><button data-r="ok">Gut</button><button data-r="hard">Zu schwer</button></div><button class="ghost" id="fbav" style="margin-bottom:10px"></button><button class="btn" id="qgo">Quest neu laden</button><button class="lnk" id="qc" style="width:100%">Schließen</button></div></div>
 <div id="ex"><div class="exs"><h3 id="ext"></h3><p class="mu" id="exp"></p><svg viewBox="0 0 200 130" id="exv"><line x1="14" x2="186" y1="120" y2="120" stroke="rgba(255,255,255,.18)" stroke-width="1.5"/><g id="exg"></g></svg><button class="btn" id="exc">Verstanden</button></div></div>
@@ -475,6 +481,7 @@ const gap=(a,b)=>Math.round((new Date(b+'T12:00')-new Date(a+'T12:00'))/864e5);
 function roll(){
   if(S.day!==today){S.hist={steps:(S.pf=='ai'?S.steps:S.alt||[]).map(x=>({n:x.n,t:x.t,a:x.a,done:!!x.done}))};S.day=today;[S.steps,S.alt||[]].forEach(L=>L.forEach(s=>{if(s.t=='w'&&s.fb&&s.fb!='ok'){s.a=Math.max(1,Math.round(s.a*(s.fb=='easy'?1.15:.85)));s.n=s.n.replace(/\d+/,s.a)}delete s.fb;delete s.pa;s.done=0;s.until=0}))}
   S.lvl=S.lvl||1;S.pl=S.pl||0;S.lost=S.lost||0;
+  if(!S.cl2){S.cl2=1;const cl=l=>(l||[]).filter(x=>!(x.t=='e'||x.t=='b')||x.u);if(S.pf=='ai')S.steps=cl(S.steps);else if(S.alt)S.alt=cl(S.alt)}
   if(S.last){const tot=Math.floor((gap(S.last,TK)-1)/2),dl=tot-S.pl;if(dl>0){const o=S.lvl;S.lvl=Math.max(1,S.lvl-dl);S.lost+=o-S.lvl}S.pl=Math.max(S.pl,tot)}
 }
 roll();
@@ -973,6 +980,8 @@ async function phShrink(file){
 let phUrls=[],pvId=0,phShown=0;
 async function renderPh(){
   phUrls.forEach(u=>URL.revokeObjectURL(u));phUrls=[];
+  const locked=lkOn()&&!phOpen;$('#plock').style.display=locked?'':'none';$('#pgrid').style.display=locked?'none':'';
+  if(locked){$('#pgrid').innerHTML='';return}
   let a=[];try{a=await phAll()}catch(e){}
   const g=$('#pgrid');g.innerHTML=a.length?'':'<p class="mu" style="grid-column:1/-1">Noch keine Fotos. Das erste machst du am Samstag oder gleich jetzt.</p>';
   a.forEach(o=>{const u=URL.createObjectURL(o.b);phUrls.push(u);const f=document.createElement('figure');f.innerHTML=`<img src="${u}" alt=""><figcaption>${new Date(o.t).toLocaleDateString('de-DE',{day:'numeric',month:'short'})}</figcaption>`;f.onclick=()=>openPv(o,u);g.append(f)});
@@ -987,7 +996,7 @@ $('#phin').onchange=async e=>{
   try{const b=await phShrink(f);await phTx('readwrite',o=>o.put({id:Date.now(),t:Date.now(),b}));S.phDay=TK;save();document.querySelector('nav [data-s=progress]').click();toast('Foto gespeichert. Es bleibt privat auf diesem Gerät.')}
   catch(x){toast('Das Foto konnte nicht gespeichert werden.')}
 };
-$('#nav').addEventListener('click',e=>{const b=e.target.closest('button');if(b&&b.dataset.s=='progress'){renderPh();renderWt()}});
+$('#nav').addEventListener('click',e=>{const b=e.target.closest('button');if(b){if(b.dataset.s=='progress'){renderPh();renderWt()}else phOpen=false}});
 const phClose=()=>{$('#ph').classList.remove('show');setTimeout(()=>$('#ph').classList.remove('on'),350)};
 function phCheck(){
   if(phShown||new Date().getDay()!=6||!S.user||!S.prof||S.phDay===TK)return;
@@ -1105,11 +1114,51 @@ $('#fdgo').onclick=async()=>{
   try{if(S.ai&&S.ai.on&&getKey())o=await gem(`Erstelle für einen Tagesplan (Deutsch) eine Essens-Quest und eine Belohnungs-Quest aus den Wünschen des Nutzers. Essen: "${f}". Belohnung: "${r}". Formuliere beide kurz und klar (höchstens 5 Wörter). Lass einen Namen leer, wenn der Wunsch leer ist. pts sind die Bonuspunkte der Belohnung (10 bis 30).
 Antworte NUR mit JSON: {"food":"...","reward":"...","pts":Zahl}`)}catch(e){o={food:f,reward:r,pts:20}}
   const add=[];
-  if(String(o.food||'').trim())add.push({n:String(o.food).slice(0,60),t:'e',a:0,th:3,lk:true});
-  if(String(o.reward||'').trim())add.push({n:String(o.reward).slice(0,60),t:'b',a:Math.min(30,Math.max(10,Math.round(+o.pts||20))),th:4,lk:true});
+  if(String(o.food||'').trim())add.push({n:String(o.food).slice(0,60),t:'e',a:0,th:3,lk:true,u:1});
+  if(String(o.reward||'').trim())add.push({n:String(o.reward).slice(0,60),t:'b',a:Math.min(30,Math.max(10,Math.round(+o.pts||20))),th:4,lk:true,u:1});
   if(!add.length)return;
   S.steps.push(...add);$('#fdf').value=$('#fdr').value='';sig='';save();render();toast('Quests hinzugefügt.');
 };
+
+/* Foto-Sperre: Passwort wird nur als Hash auf diesem Gerät gespeichert */
+const LKK='dizzipline-lock';let phOpen=false,lkMode='';
+const lkGet=()=>{try{return JSON.parse(localStorage.getItem(LKK))}catch(e){return null}},lkOn=()=>!!lkGet();
+const b64=b=>btoa(String.fromCharCode(...new Uint8Array(b))),unb64=t=>Uint8Array.from(atob(t),c=>c.charCodeAt(0));
+async function pwHash(pw,salt){const k=await crypto.subtle.importKey('raw',new TextEncoder().encode(pw),'PBKDF2',false,['deriveBits']);return b64(await crypto.subtle.deriveBits({name:'PBKDF2',salt,iterations:150000,hash:'SHA-256'},k,256))}
+function lkShow(mode){
+  lkMode=mode;const set=mode=='set';
+  $('#lkt').textContent=set?'Passwort festlegen':mode=='unlock'?'Fotos entsperren':'Sperre ausschalten';
+  $('#lkp').textContent=set?'Mit diesem Passwort entsperrst du deine Fotos. Es gibt keine Wiederherstellung.':'Gib dein Passwort ein.';
+  $('#lk2').style.display=set?'':'none';$('#lkf').style.display=set?'none':'';
+  $('#lkgo').textContent=set?'Sperre aktivieren':mode=='unlock'?'Entsperren':'Ausschalten';
+  $('#lk1').value=$('#lk2').value='';
+  const o=$('#lk');o.classList.add('on');requestAnimationFrame(()=>requestAnimationFrame(()=>o.classList.add('show')));
+}
+const lkClose=()=>{const o=$('#lk');o.classList.remove('show');setTimeout(()=>o.classList.remove('on'),350);$('#lk1').value=$('#lk2').value=''};
+$('#lkc').onclick=lkClose;$('#lk').onclick=e=>{if(e.target.id=='lk')lkClose()};
+$('#plu').onclick=()=>lkShow('unlock');
+$('#plk').onchange=e=>{const want=e.target.checked;e.target.checked=lkOn();lkShow(want?'set':'off')};
+$('#lkgo').onclick=async()=>{
+  if(!window.crypto||!crypto.subtle){toast('Dafür braucht die App eine sichere Verbindung (https).');return}
+  const a=$('#lk1').value,b=$('#lk2').value;
+  if(lkMode=='set'){
+    if(a.length<4){toast('Mindestens 4 Zeichen.');return}
+    if(a!==b){toast('Die Passwörter stimmen nicht überein.');return}
+    const salt=crypto.getRandomValues(new Uint8Array(16));
+    try{localStorage.setItem(LKK,JSON.stringify({s:b64(salt),h:await pwHash(a,salt)}))}catch(e){toast('Das konnte nicht gespeichert werden.');return}
+    phOpen=false;lkClose();renderSet();renderPh();toast('Foto-Sperre ist aktiv.');return;
+  }
+  const o=lkGet();if(!o){lkClose();return}
+  if(await pwHash(a,unb64(o.s))!==o.h){toast('Falsches Passwort.');return}
+  if(lkMode=='unlock'){phOpen=true;lkClose();renderPh()}
+  else{try{localStorage.removeItem(LKK)}catch(e){}phOpen=false;lkClose();renderSet();renderPh();toast('Foto-Sperre ist aus.')}
+};
+$('#lkf').onclick=async()=>{
+  if(!confirm('Alle Fotos werden gelöscht und die Sperre wird entfernt. Fortfahren?'))return;
+  try{await phTx('readwrite',o=>o.clear())}catch(e){}
+  try{localStorage.removeItem(LKK)}catch(e){}phOpen=false;lkClose();renderSet();renderPh();toast('Fotos gelöscht, Sperre entfernt.');
+};
+document.addEventListener('visibilitychange',()=>{if(document.hidden){phOpen=false;if(lkOn())renderPh()}});
 
 /* Toast */
 const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove('on'),3500)};
@@ -1235,7 +1284,7 @@ async function gen(kind,desc){
     if(S.prof&&S.prof.goal=='abnehmen')st=st.filter(x=>!ABS.test(x.n));
     st=st.filter((x,i)=>!(x.t=='p'&&(i==0||st[i-1].t=='p')));while(st.length&&st[st.length-1].t=='p')st.pop();
     st.forEach((x,i)=>{x.th=x.t=='w'?i%2:2;x.lk=i>0});
-    if(kind=='daily'&&S.aiDay===TK)st=st.concat((S.pf=='ai'?S.steps:S.alt||[]).filter(x=>x.t=='e'||x.t=='b').map(x=>({n:x.n,t:x.t,a:x.a,th:x.th,lk:true})));
+    if(kind=='daily'&&S.aiDay===TK)st=st.concat((S.pf=='ai'?S.steps:S.alt||[]).filter(x=>x.u).map(x=>({n:x.n,t:x.t,a:x.a,th:x.th,lk:true,u:1})));
     if(!st.length)throw new Error('Die KI hat keinen Plan geliefert.');
     set(1);await sleep(600);
   }catch(e){st=null;aiFail=1;err=e.message||'KI-Fehler.'}
@@ -1263,7 +1312,7 @@ $('#aigo').onclick=async()=>{
 
 /* Einstellungen */
 const A=()=>S.ai||(S.ai={}),show=id=>{document.querySelectorAll('.screen').forEach(x=>x.classList.toggle('on',x.id=='s-'+id));scrollTo(0,0)};
-function renderSet(){const a=S.ai||{};$('#ai0').checked=!!a.on;$('#ai1').checked=!!a.f1;$('#ai2').checked=!!a.f2;$('#aibox').classList.toggle('h',!a.on);$('#key').value=getKey();document.querySelectorAll('#eq .chip').forEach(x=>x.classList.toggle('on',(S.eq||[]).includes(x.dataset.e)));$('#sver').textContent='Dizzipline Version '+APP_VERSION;$('#inl').checked=!!S.inl;$('#free').checked=!!S.free;$('#avl').innerHTML=Object.keys(S.avoid||{}).map(k=>`<button class="chip on" data-a="${k}">${k.replace(/_/g,' ')}</button>`).join('')||'<span class="mu" style="font-size:14px">Noch keine.</span>'}
+function renderSet(){const a=S.ai||{};$('#ai0').checked=!!a.on;$('#ai1').checked=!!a.f1;$('#ai2').checked=!!a.f2;$('#aibox').classList.toggle('h',!a.on);$('#key').value=getKey();document.querySelectorAll('#eq .chip').forEach(x=>x.classList.toggle('on',(S.eq||[]).includes(x.dataset.e)));$('#sver').textContent='Dizzipline Version '+APP_VERSION;$('#inl').checked=!!S.inl;$('#free').checked=!!S.free;$('#plk').checked=lkOn();$('#avl').innerHTML=Object.keys(S.avoid||{}).map(k=>`<button class="chip on" data-a="${k}">${k.replace(/_/g,' ')}</button>`).join('')||'<span class="mu" style="font-size:14px">Noch keine.</span>'}
 $('#setb').onclick=()=>{renderSet();show('set')};
 $('#sback').onclick=()=>show('profil');
 $('#ai0').onchange=e=>{A().on=e.target.checked;aiFail=0;save();$('#aibox').classList.toggle('h',!A().on);render()};
