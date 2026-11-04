@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="utf-8">
-<meta name="app-version" content="1.6.0">
+<meta name="app-version" content="1.6.1">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#000000">
 <title>Dizzipline</title>
@@ -284,9 +284,10 @@ nav button.pulse svg{animation:pls .4s var(--ease)}
 .pad{display:grid;grid-template-columns:repeat(3,64px);gap:12px;justify-content:center;margin:0 auto 10px}
 .pad button{height:64px;width:64px;border-radius:50%;border:0;background:rgba(255,255,255,.1);font-size:26px;font-weight:500;cursor:pointer;transition:background .15s,transform .15s}
 .pad button:active{background:rgba(255,255,255,.28);transform:scale(.94)}.pad .z{visibility:hidden}
-#wtc{display:none;align-items:center;justify-content:center;gap:12px;margin-top:6px;color:var(--mu);font-size:14px;font-variant-numeric:tabular-nums}
+#wtp{display:none;align-items:center;justify-content:center;gap:12px;margin-top:6px;color:var(--mu);font-size:14px;font-variant-numeric:tabular-nums}
 .wtc{position:absolute;right:14px;bottom:14px;display:flex;align-items:center;gap:8px;z-index:4;font-size:13px;color:rgba(255,255,255,.85);font-variant-numeric:tabular-nums}
-#wtc button,.wtc button{width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,255,255,.4);background:rgba(0,0,0,.4);font-size:20px;line-height:1;cursor:pointer;padding:0}
+#wtp button,.wtc button{width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,255,255,.4);background:rgba(0,0,0,.4);font-size:20px;line-height:1;cursor:pointer;padding:0}
+#exg line.prop,#wog line.prop{stroke:rgba(255,255,255,.75);stroke-width:5}
 /* Tab-Leiste */
 nav{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(440px,calc(100% - 32px));display:flex;padding:6px;border-radius:30px;background:rgba(30,30,32,.7);backdrop-filter:blur(26px) saturate(180%);-webkit-backdrop-filter:blur(26px) saturate(180%);border:1px solid var(--line);z-index:20}
 nav button{flex:1;background:none;border:0;padding:9px 0 7px;border-radius:24px;display:grid;justify-items:center;gap:3px;font-size:11px;font-weight:500;color:var(--mu);cursor:pointer;transition:.3s}
@@ -440,7 +441,7 @@ nav svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;st
 </div>
 
 <div id="ob"></div><div id="toast"></div>
-<div id="wo"><div class="wow"><h2 id="wot"></h2><p class="mu" id="wos"></p><div class="wom" id="wov"><svg viewBox="0 0 200 130"><line x1="14" x2="186" y1="120" y2="120" stroke="rgba(255,255,255,.18)" stroke-width="1.5"/><g id="wog"></g></svg></div><div class="won" id="won"></div><div class="wob"><i id="wobi"></i></div><div id="wtc"><button data-t="-1" aria-label="Langsamer">−</button><span id="wtv"></span><button data-t="1" aria-label="Schneller">+</button></div><div class="wol"><button class="lnk" id="woc">Abbrechen</button><button class="lnk" id="wod">Schon gemacht</button></div></div></div>
+<div id="wo"><div class="wow"><h2 id="wot"></h2><p class="mu" id="wos"></p><div class="wom" id="wov"><svg viewBox="0 0 200 130"><line x1="14" x2="186" y1="120" y2="120" stroke="rgba(255,255,255,.18)" stroke-width="1.5"/><g id="wog"></g></svg></div><div class="won" id="won"></div><div class="wob"><i id="wobi"></i></div><div id="wtp"><button data-t="-1" aria-label="Langsamer">−</button><span id="wtv"></span><button data-t="1" aria-label="Schneller">+</button></div><div class="wol"><button class="lnk" id="woc">Abbrechen</button><button class="lnk" id="wod">Schon gemacht</button></div></div></div>
 <div id="upd"><span>Version <b id="uv"></b> ist da</span><button id="ub">Aktualisieren</button></div>
 <div id="ph"><div class="exs"><h3>Wochen-Check</h3><p class="mu">Es ist Samstag. Trage dein Gewicht ein und mach ein Foto. Beides bleibt privat.</p><input class="in" id="phw" type="number" step="0.1" inputmode="decimal" placeholder="Gewicht in kg" style="margin-top:14px"><button class="btn" id="ph1">Foto aufnehmen</button><button class="ghost" id="ph2" style="margin-top:10px">Nur Gewicht speichern</button><button class="lnk" id="ph0" style="width:100%">Später</button></div></div>
 <div id="fd"><div class="exs"><h3>Essen und Belohnung</h3><p class="mu">Trage ein, was du essen willst und womit du dich belohnst. Die KI legt daraus Quests an.</p><input class="in" id="fdf" placeholder="Essen, z. B. Reis mit Hähnchen" style="margin-top:14px"><input class="in" id="fdr" placeholder="Belohnung, z. B. Eine Folge Serie"><button class="btn" id="fdgo">Quests hinzufügen</button><button class="lnk" id="fdc" style="width:100%">Abbrechen</button></div></div>
@@ -696,7 +697,7 @@ const EX={
  boxing:[100,26,100,42,100,76,116,44,134,42,104,60,112,48,108,98,112,118,92,98,88,118, 100,26,100,42,100,76,106,58,114,46,116,46,134,44,108,98,112,118,92,98,88,118, 700],
  curl:[100,24,100,40,100,74,100,58,100,76,103,58,103,76,100,96,100,118,103,96,103,118, 100,24,100,40,100,74,100,58,112,42,103,58,115,44,100,96,100,118,103,96,103,118, 1800],
  row:[130,58,116,66,88,86,118,84,118,102,121,84,121,102,102,100,96,118,104,100,98,118, 130,58,116,66,88,86,100,74,112,84,103,75,115,85,102,100,96,118,104,100,98,118, 1700],
- pullup:[100,30,100,46,100,80,99,28,100,8,101,28,102,8,100,100,88,110,102,100,90,110, 100,14,100,28,100,62,86,24,98,8,114,24,102,8,100,82,88,92,102,82,90,92, 2200],
+ pullup:[100,30,100,46,100,80,99,28,100,8,101,28,102,8,100,100,88,110,102,100,90,110, 100,17,100,31,100,65,86,26,98,8,114,26,102,8,100,85,88,95,102,85,90,95, 2200],
  run:[108,26,104,42,98,76,92,58,84,70,118,56,126,44,116,86,112,106,88,94,72,104, 108,24,104,40,98,74,118,56,126,44,92,58,84,70,88,92,72,104,116,84,112,102, 600],
  walk:[100,24,100,40,100,74,96,58,92,74,106,58,110,72,106,96,112,118,96,96,88,116, 100,24,100,40,100,74,106,58,110,72,96,58,92,74,96,96,88,116,106,96,112,118, 1100],
  bike:[114,50,104,62,86,92,118,72,130,78,119,73,131,79,106,82,108,104,104,98,98,118, 114,50,104,62,86,92,118,72,130,78,119,73,131,79,104,98,98,118,106,82,108,104, 900]
@@ -707,7 +708,7 @@ const NAMES=['Kniebeugen','Sprungkniebeugen','Liegestütze','Crunches','Sit-ups'
 const LOSE=['Laufen','Zügiges Gehen','Treppensteigen','Kniehebelauf','Mountain Climbers','Burpees','Sprungkniebeugen','Ausfallschritte','Plank'];
 const HARD=['Liegestütze','Trizeps-Dips','Crunches','Sit-ups','Beinheben','Ausfallschritte','Sprungkniebeugen','Burpees','Mountain Climbers','Plank'];
 const EQN={hantel:['Hantel-Kniebeugen','Hantel-Ausfallschritte','Hantel-Schulterdrücken','Hantel-Bizepscurls','Hantel-Rudern'],stange:['Klimmzüge'],seil:['Seilspringen'],rad:['Radfahren']},EQL={hantel:'Kurzhanteln',stange:'Klimmzugstange',seil:'Springseil',rad:'Fahrrad'};
-const EXR=[[/burpee/,'burpee'],[/sprungkniebeug|jump ?squat|strecksprung/,'jumpsquat'],[/hampel|jumping/,'jack'],[/kniebeug|squat/,'squat'],[/liegest|push/,'pushup'],[/fahrrad|bicycle/,'bicycle'],[/sit-?up|aufrichten/,'situp'],[/crunch|bauchpresse/,'crunch'],[/ausfall|lunge/,'lunge'],[/climber|bergsteig/,'climber'],[/beinheb|leg ?raise/,'legraise'],[/schere|flutter/,'flutter'],[/bridge|brücke|hüftheb|glute/,'bridge'],[/high ?knee|kniehebe|treppe|stairs/,'highknees'],[/lauf|jogg|sprint/,'run'],[/gehen|spazier|walking|marsch/,'walk'],[/radfahr|radeln|cycling/,'bike'],[/dip/,'dips'],[/wade|calf|fersenheb|zehenstand/,'calf'],[/superman|rückenstreck|rückenheb/,'superman'],[/donkey|kickback|eselkick|gesäßheb/,'donkey'],[/bird ?dog|vierfüßler/,'birddog'],[/seilspring|jump ?rope|rope/,'rope'],[/vorbeug|toe ?touch|dehn|stretch/,'fold'],[/schulterdr|shoulder ?press|überkopf|overhead|military/,'press'],[/armkreis|arm ?circle|schulterkreis/,'armcircle'],[/wandsitz|wall ?sit/,'wallsit'],[/box|punch/,'boxing'],[/curl|bizeps/,'curl'],[/rudern|\brow\b/,'row'],[/klimmzug|pull-?up|chin-?up/,'pullup'],[/plank|unterarmst/,'plank']];
+const EXR=[[/burpee/,'burpee'],[/sprungkniebeug|jump ?squat|strecksprung/,'jumpsquat'],[/hampel|jumping/,'jack'],[/kniebeug|squat/,'squat'],[/liegest|push/,'pushup'],[/fahrrad|bicycle/,'bicycle'],[/sit-?up|aufrichten/,'situp'],[/crunch|bauchpresse/,'crunch'],[/ausfall|lunge/,'lunge'],[/climber|bergsteig/,'climber'],[/beinheb|leg ?raise/,'legraise'],[/schere|flutter/,'flutter'],[/bridge|brücke|hüftheb|glute/,'bridge'],[/high ?knee|kniehebe|treppe|stairs/,'highknees'],[/lauf|jogg|sprint/,'run'],[/gehen|spazier|walking|marsch/,'walk'],[/radfahr|radeln|cycling/,'bike'],[/dip/,'dips'],[/wade|calf|fersenheb|zehenstand/,'calf'],[/superman|rückenstreck|rückenheb/,'superman'],[/donkey|kickback|eselkick|gesäßheb/,'donkey'],[/bird ?dog|vierfüßler/,'birddog'],[/seilspring|jump ?rope|rope/,'rope'],[/vorbeug|toe ?touch|dehn|stretch/,'fold'],[/schulterdr|shoulder ?press|überkopf|overhead|military/,'press'],[/armkreis|arm ?circle|schulterkreis/,'armcircle'],[/wandsitz|wall ?sit/,'wallsit'],[/box|punch/,'boxing'],[/curl|bizeps/,'curl'],[/rudern|\brow\b/,'row'],[/klimmz[uü]g|pull-?up|chin-?up/,'pullup'],[/plank|unterarmst/,'plank']];
 const exOf=n=>{n=n.toLowerCase();const r=EXR.find(x=>x[0].test(n));return r?r[1]:null};
 const SEG=[[0,1,0],[1,2,0],[1,3,1],[3,4,1],[1,5,0],[5,6,0],[2,7,1],[7,8,1],[2,9,0],[9,10,0]];
 let exRaf=0;
@@ -722,7 +723,7 @@ function showEx(i){
 }
 function playEx(d,db,T2,gid){
   const K=(d.length-1)/22,T=T2||d[d.length-1],P=Array.from({length:K},(_,j)=>d.slice(j*22,j*22+22)),g=$(gid||'#exg');
-  g.innerHTML=SEG.map(q=>`<line class="${q[2]?'far':''}"/>`).join('')+'<circle r="9"/>'+(db?'<circle class="db" r="5"/><circle class="db" r="5"/>':'');
+  g.innerHTML=SEG.map(q=>`<line class="${q[2]?'far':''}"/>`).join('')+'<circle r="9"/>'+(db?'<circle class="db" r="5"/><circle class="db" r="5"/>':'')+(d===EX.pullup?'<line class="prop" x1="62" x2="138" y1="6" y2="6"/>':'');
   const ls=g.querySelectorAll('line'),hd=g.querySelector('circle'),dbs=g.querySelectorAll('.db'),t0=performance.now();
   const f=t=>{
     const x=((t-t0)/T%1)*K,j=Math.floor(x),u=x-j,e=u*u*(3-2*u),a=P[j%K],b=P[(j+1)%K],pt=a.map((v,m)=>v+(b[m]-v)*e);
@@ -1028,7 +1029,7 @@ const ov={
   num(t,pop=true){const n=$('#won');n.textContent=t;n.style.fontSize=String(t).length>5?'52px':'';if(pop)popEl(n)},
   sub(t){$('#wos').textContent=t},
   prog(){},
-  tempo(on,t){const e=$('#wtc');e.style.display=on?'flex':'none';if(t)$('#wtv').textContent=t},
+  tempo(on,t){const e=$('#wtp');e.style.display=on?'flex':'none';if(t)$('#wtv').textContent=t},
   fig(k,db,T){if(k)playEx(EX[k],db,T,'#wog')},
   close(){cancelAnimationFrame(exRaf);const o=$('#wo');o.classList.remove('show');setTimeout(()=>{if(!wo)o.classList.remove('on')},350)}
 };
@@ -1093,7 +1094,7 @@ function woDone(){
   wo.T.push(setTimeout(()=>{woStop();setTimeout(()=>finish(i),380)},900));
 }
 function woQuick(){if(!wo)return;const i=wo.i;woStop();setTimeout(()=>finish(i),380)}
-$('#wtc').onclick=e=>{const b=e.target.closest('button');if(b&&wo&&wo.adj)wo.adj(+b.dataset.t)};
+$('#wtp').onclick=e=>{const b=e.target.closest('button');if(b&&wo&&wo.adj)wo.adj(+b.dataset.t)};
 $('#woc').onclick=woStop;$('#wod').onclick=woQuick;
 
 /* Gewicht, Verlauf und Quests pro Tag */
