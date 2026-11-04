@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="utf-8">
-<meta name="app-version" content="1.5.1">
+<meta name="app-version" content="1.6.0">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#000000">
 <title>Dizzipline</title>
@@ -278,6 +278,15 @@ nav button.pulse svg{animation:pls .4s var(--ease)}
 .plock{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;padding:34px 20px;border-radius:26px;background:rgba(255,255,255,.06);margin-top:14px}
 .plock svg{width:44px;height:44px;fill:none;stroke:#fff;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;margin-bottom:6px}
 .plock b{font-size:19px}.plock span{color:var(--mu);font-size:14px;margin-bottom:12px}.plock .btn{width:auto;padding:0 28px}
+.pin{display:flex;gap:16px;justify-content:center;margin:22px 0 18px}
+.pin i{width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,.5);transition:.2s}
+.pin i.on{background:#fff;border-color:#fff;transform:scale(1.15)}.pin.err{animation:sh .4s}
+.pad{display:grid;grid-template-columns:repeat(3,64px);gap:12px;justify-content:center;margin:0 auto 10px}
+.pad button{height:64px;width:64px;border-radius:50%;border:0;background:rgba(255,255,255,.1);font-size:26px;font-weight:500;cursor:pointer;transition:background .15s,transform .15s}
+.pad button:active{background:rgba(255,255,255,.28);transform:scale(.94)}.pad .z{visibility:hidden}
+#wtc{display:none;align-items:center;justify-content:center;gap:12px;margin-top:6px;color:var(--mu);font-size:14px;font-variant-numeric:tabular-nums}
+.wtc{position:absolute;right:14px;bottom:14px;display:flex;align-items:center;gap:8px;z-index:4;font-size:13px;color:rgba(255,255,255,.85);font-variant-numeric:tabular-nums}
+#wtc button,.wtc button{width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,255,255,.4);background:rgba(0,0,0,.4);font-size:20px;line-height:1;cursor:pointer;padding:0}
 /* Tab-Leiste */
 nav{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(440px,calc(100% - 32px));display:flex;padding:6px;border-radius:30px;background:rgba(30,30,32,.7);backdrop-filter:blur(26px) saturate(180%);-webkit-backdrop-filter:blur(26px) saturate(180%);border:1px solid var(--line);z-index:20}
 nav button{flex:1;background:none;border:0;padding:9px 0 7px;border-radius:24px;display:grid;justify-items:center;gap:3px;font-size:11px;font-weight:500;color:var(--mu);cursor:pointer;transition:.3s}
@@ -403,7 +412,7 @@ nav svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;st
     <h3 class="sh">Fotos</h3>
     <p class="mu" style="margin-bottom:14px">Deine Fotos bleiben privat auf diesem Gerät. Nichts wird hochgeladen.</p>
     <button class="btn" id="phadd">Foto aufnehmen</button><input type="file" id="phin" accept="image/*" hidden>
-    <div class="plock" id="plock" style="display:none"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg><b>Fotos gesperrt</b><span>Entsperre sie mit deinem Passwort.</span><button class="btn" id="plu">Entsperren</button></div>
+    <div class="plock" id="plock" style="display:none"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg><b>Fotos gesperrt</b><span>Entsperre sie mit deiner PIN.</span><button class="btn" id="plu">Entsperren</button></div>
     <div class="pgrid" id="pgrid"></div>
   </section>
 
@@ -422,7 +431,7 @@ nav svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;st
     </div>
     <div class="form" style="margin-top:14px"><label class="tg" style="margin:0">Timer direkt in der Karte<input type="checkbox" id="inl"></label><p class="mu" style="font-size:14px;margin-top:10px">An: Countdown und Zähler laufen in der Karte, die anderen Quests bleiben sichtbar. Aus: Training im Vollbild.</p></div>
     <div class="form" style="margin-top:14px"><label class="tg" style="margin:0">Alle Quests freischalten<input type="checkbox" id="free"></label><p class="mu" style="font-size:14px;margin-top:10px">An: Du kannst jede Quest in beliebiger Reihenfolge starten oder abhaken. Aus: Die nächste Quest schaltet sich erst frei, wenn die davor erledigt ist.</p></div>
-    <div class="form" style="margin-top:14px"><label class="tg" style="margin:0">Fotos mit Passwort sperren<input type="checkbox" id="plk"></label><p class="mu" style="font-size:14px;margin-top:10px">Im Tab Progress liegen die Fotos hinter einem Schloss, bis du dein Passwort eingibst. Die Fotos selbst sind nicht verschlüsselt.</p></div>
+    <div class="form" style="margin-top:14px"><label class="tg" style="margin:0">Fotos mit PIN sperren<input type="checkbox" id="plk"></label><p class="mu" style="font-size:14px;margin-top:10px">Im Tab Progress liegen die Fotos hinter einem Schloss, bis du deine PIN eingibst. Die Fotos selbst sind nicht verschlüsselt.</p></div>
     <div class="form" style="margin-top:14px"><h3>Seltener vorschlagen</h3><p class="mu" style="font-size:14px;margin:-6px 0 12px">Diese Übungen schlägt die App nicht mehr vor. Tippe auf eine, um sie wieder zuzulassen.</p><div class="chips eq" id="avl" style="justify-content:flex-start;margin:0"></div></div>
     <div class="form" style="margin-top:14px"><h3>Equipment</h3><p class="mu" style="font-size:14px;margin:-6px 0 12px">Was du zur Hand hast. Die KI mischt Übungen mit und ohne Equipment ausgewogen. Ohne Auswahl gibt es nur Körpergewicht.</p><div class="chips eq" id="eq" style="justify-content:flex-start;margin:0"><button class="chip" data-e="hantel">Hanteln</button><button class="chip" data-e="stange">Klimmzugstange</button><button class="chip" data-e="seil">Springseil</button><button class="chip" data-e="rad">Fahrrad</button></div></div>
     <button class="ghost" id="redo" style="margin-top:20px">Einrichtung neu starten</button>
@@ -431,11 +440,11 @@ nav svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;st
 </div>
 
 <div id="ob"></div><div id="toast"></div>
-<div id="wo"><div class="wow"><h2 id="wot"></h2><p class="mu" id="wos"></p><div class="wom" id="wov"><svg viewBox="0 0 200 130"><line x1="14" x2="186" y1="120" y2="120" stroke="rgba(255,255,255,.18)" stroke-width="1.5"/><g id="wog"></g></svg></div><div class="won" id="won"></div><div class="wob"><i id="wobi"></i></div><div class="wol"><button class="lnk" id="woc">Abbrechen</button><button class="lnk" id="wod">Schon gemacht</button></div></div></div>
+<div id="wo"><div class="wow"><h2 id="wot"></h2><p class="mu" id="wos"></p><div class="wom" id="wov"><svg viewBox="0 0 200 130"><line x1="14" x2="186" y1="120" y2="120" stroke="rgba(255,255,255,.18)" stroke-width="1.5"/><g id="wog"></g></svg></div><div class="won" id="won"></div><div class="wob"><i id="wobi"></i></div><div id="wtc"><button data-t="-1" aria-label="Langsamer">−</button><span id="wtv"></span><button data-t="1" aria-label="Schneller">+</button></div><div class="wol"><button class="lnk" id="woc">Abbrechen</button><button class="lnk" id="wod">Schon gemacht</button></div></div></div>
 <div id="upd"><span>Version <b id="uv"></b> ist da</span><button id="ub">Aktualisieren</button></div>
 <div id="ph"><div class="exs"><h3>Wochen-Check</h3><p class="mu">Es ist Samstag. Trage dein Gewicht ein und mach ein Foto. Beides bleibt privat.</p><input class="in" id="phw" type="number" step="0.1" inputmode="decimal" placeholder="Gewicht in kg" style="margin-top:14px"><button class="btn" id="ph1">Foto aufnehmen</button><button class="ghost" id="ph2" style="margin-top:10px">Nur Gewicht speichern</button><button class="lnk" id="ph0" style="width:100%">Später</button></div></div>
 <div id="fd"><div class="exs"><h3>Essen und Belohnung</h3><p class="mu">Trage ein, was du essen willst und womit du dich belohnst. Die KI legt daraus Quests an.</p><input class="in" id="fdf" placeholder="Essen, z. B. Reis mit Hähnchen" style="margin-top:14px"><input class="in" id="fdr" placeholder="Belohnung, z. B. Eine Folge Serie"><button class="btn" id="fdgo">Quests hinzufügen</button><button class="lnk" id="fdc" style="width:100%">Abbrechen</button></div></div>
-<div id="lk"><div class="exs"><h3 id="lkt"></h3><p class="mu" id="lkp"></p><input class="in" id="lk1" type="password" autocomplete="off" placeholder="Passwort" style="margin-top:14px"><input class="in" id="lk2" type="password" autocomplete="off" placeholder="Passwort wiederholen"><button class="btn" id="lkgo"></button><button class="lnk" id="lkf" style="width:100%">Passwort vergessen</button><button class="lnk" id="lkc" style="width:100%">Abbrechen</button></div></div>
+<div id="lk"><div class="exs"><h3 id="lkt"></h3><p class="mu" id="lkp"></p><div class="pin" id="lkd"><i></i><i></i><i></i><i></i></div><div class="pad" id="lkpad"></div><button class="lnk" id="lkf" style="width:100%">PIN vergessen</button><button class="lnk" id="lkc" style="width:100%">Abbrechen</button></div></div>
 <div id="pv"><img id="pvi" alt=""><div class="pvb"><span id="pvd"></span><button class="lnk" id="pvx">Löschen</button><button class="lnk" id="pvc">Schließen</button></div></div>
 <div id="qs"><div class="exs"><h3 id="qt"></h3><p class="mu" id="qp"></p><div class="fbr" id="fbr"><button data-r="easy">Zu leicht</button><button data-r="ok">Gut</button><button data-r="hard">Zu schwer</button></div><button class="ghost" id="fbav" style="margin-bottom:10px"></button><button class="btn" id="qgo">Quest neu laden</button><button class="lnk" id="qc" style="width:100%">Schließen</button></div></div>
 <div id="ex"><div class="exs"><h3 id="ext"></h3><p class="mu" id="exp"></p><svg viewBox="0 0 200 130" id="exv"><line x1="14" x2="186" y1="120" y2="120" stroke="rgba(255,255,255,.18)" stroke-width="1.5"/><g id="exg"></g></svg><button class="btn" id="exc">Verstanden</button></div></div>
@@ -589,6 +598,7 @@ function finish(i,skipped){
 $('#list').onclick=e=>{
   if(swiped)return;
   const wb=e.target.closest('.wbt button');if(wb){wb.dataset.x=='1'?woStop():woQuick();return}
+  const tb=e.target.closest('.wtc button');if(tb){if(wo&&wo.adj)wo.adj(+tb.dataset.t);return}
   const ud=e.target.closest('.ud');if(ud){undo(+ud.dataset.ud);return}
   const fq=e.target.closest('.fbb');if(fq){openQ(+fq.dataset.fb,'fb');return}
   const rq=e.target.closest('.rlb');if(rq){openQ(+rq.dataset.rl,'rl');return}
@@ -1015,31 +1025,34 @@ const buzz=p=>{try{navigator.vibrate&&navigator.vibrate(p||25)}catch(e){}};
 const popEl=n=>{n.classList.remove('pop');void n.offsetWidth;n.classList.add('pop')};
 const ov={
   open(s,k){$('#wot').textContent=s.n;$('#wov').style.display=k?'':'none';cancelAnimationFrame(exRaf);const o=$('#wo');o.classList.add('on');requestAnimationFrame(()=>requestAnimationFrame(()=>o.classList.add('show')))},
-  num(t,pop=true){const n=$('#won');n.textContent=t;if(pop)popEl(n)},
+  num(t,pop=true){const n=$('#won');n.textContent=t;n.style.fontSize=String(t).length>5?'52px':'';if(pop)popEl(n)},
   sub(t){$('#wos').textContent=t},
   prog(){},
+  tempo(on,t){const e=$('#wtc');e.style.display=on?'flex':'none';if(t)$('#wtv').textContent=t},
   fig(k,db,T){if(k)playEx(EX[k],db,T,'#wog')},
   close(){cancelAnimationFrame(exRaf);const o=$('#wo');o.classList.remove('show');setTimeout(()=>{if(!wo)o.classList.remove('on')},350)}
 };
 function inlUI(i){
-  const c=$('#list').children[i],p=c.querySelector('p'),n=document.createElement('div'),b=document.createElement('div'),pr=document.createElement('b');
+  const c=$('#list').children[i],p=c.querySelector('p'),n=document.createElement('div'),b=document.createElement('div'),pr=document.createElement('b'),tc=document.createElement('div');
   n.className='cn';b.className='wbt';b.innerHTML='<button data-x="1">Abbrechen</button><button data-x="2">Fertig</button>';pr.className='wpr';
-  c.classList.add('wk');c.append(n,b,pr);
+  tc.className='wtc';tc.style.display='none';tc.innerHTML='<button data-t="-1" aria-label="Langsamer">−</button><span></span><button data-t="1" aria-label="Schneller">+</button>';
+  c.classList.add('wk');c.append(n,b,pr,tc);
   return{
     open(){},
     num(t,pop=true){n.textContent=t;n.style.fontSize=/^[\d:]+$/.test(String(t))?'':'32px';if(pop)popEl(n)},
     sub(t){p.textContent=t},
     prog(v){pr.style.width=v+'%'},
     fig(){},
-    close(){c.classList.remove('wk');n.remove();b.remove();pr.remove();renderHeute()}
+    tempo(on,t){tc.style.display=on?'flex':'none';if(t)tc.querySelector('span').textContent=t},
+    close(){c.classList.remove('wk');n.remove();b.remove();pr.remove();tc.remove();renderHeute()}
   };
 }
 function startWo(i){
   if(wo)return;
   const s=S.steps[i],k=exOf(s.n),hold=HOLD.test(s.n),mins=MINS.test(s.n),timed=hold||mins,total=mins?s.a*60:s.a,card=$('#list').children[i];
-  const tempo=Math.round((TEMPO[k]||2500)*({leicht:1.15,hart:.9}[(S.prof||{}).i]||1)),ui=S.inl&&card&&card.offsetHeight?inlUI(i):ov;
+  const fk=k||fbKey(s.n),base=(TEMPO[k]||2500)*({leicht:1.15,hart:.9}[(S.prof||{}).i]||1);let tempo=Math.round(base*((S.tempo||{})[fk]||1));const ui=S.inl&&card&&card.offsetHeight?inlUI(i):ov;
   wo={i,T:[],iv:0,ui};const at=(f,ms)=>wo.T.push(setTimeout(f,ms));
-  ui.open(s,k);ui.sub('Mach dich bereit');ui.prog(0);ui.num('3');buzz();
+  ui.open(s,k);ui.tempo(false);ui.sub('Mach dich bereit');ui.prog(0);ui.num('3');buzz();
   try{navigator.wakeLock&&navigator.wakeLock.request('screen').then(l=>{wLock=l}).catch(()=>{})}catch(e){}
   at(()=>{ui.num('2');buzz()},1000);
   at(()=>{ui.num('1');buzz()},2000);
@@ -1055,13 +1068,16 @@ function startWo(i){
         wo.iv=setInterval(()=>{left--;ui.num(f(Math.max(0,left)),false);ui.prog(((setNo-1)*total+(total-left))/(sets*total)*100);if(left<=0)endSet()},1000);
       }else{
         let c=0;ui.num('Los!');ui.sub(lab+'von '+total+' Wiederholungen');
-        wo.iv=setInterval(()=>{c++;ui.num(c);buzz();ui.prog(((setNo-1)*total+c)/(sets*total)*100);if(c>=total)endSet()},tempo);
+        const db=/hantel|dumbbell/i.test(s.n),tick=()=>{c++;ui.num(c);buzz();ui.prog(((setNo-1)*total+c)/(sets*total)*100);if(c>=total)endSet()};
+        const go=()=>{clearInterval(wo.iv);wo.iv=setInterval(tick,tempo);ui.tempo(true,(tempo/1000).toFixed(1).replace('.',',')+' s')};
+        go();
+        wo.adj=d=>{let f=((S.tempo||{})[fk]||1)*(d>0?1/1.15:1.15);f=Math.round(Math.max(.5,Math.min(2.5,f))*100)/100;(S.tempo=S.tempo||{})[fk]=f;save();tempo=Math.round(base*f);go();ui.fig(k,db,tempo)};
       }
     };
     const endSet=()=>{
       clearInterval(wo.iv);
       if(setNo>=sets){woDone();return}
-      cancelAnimationFrame(exRaf);buzz([40,30,40]);let r=rest;ui.num(r);ui.sub('Pause · gleich Satz '+(setNo+1)+' von '+sets);
+      ui.tempo(false);wo.adj=null;cancelAnimationFrame(exRaf);buzz([40,30,40]);let r=rest;ui.num(r);ui.sub('Pause · gleich Satz '+(setNo+1)+' von '+sets);
       wo.iv=setInterval(()=>{r--;ui.num(Math.max(0,r),false);if(r<=0){clearInterval(wo.iv);ui.num('Los!');wo.T.push(setTimeout(runSet,700))}},1000);
     };
     runSet();
@@ -1073,10 +1089,11 @@ function woStop(){
 }
 function woDone(){
   if(!wo)return;const i=wo.i,u=wo.ui;clearInterval(wo.iv);
-  u.prog(100);u.num('Geschafft');u.sub('');buzz([60,40,60]);
+  u.tempo(false);wo.adj=null;cancelAnimationFrame(exRaf);u.prog(100);u.num('Geschafft');u.sub('');buzz([60,40,60]);
   wo.T.push(setTimeout(()=>{woStop();setTimeout(()=>finish(i),380)},900));
 }
 function woQuick(){if(!wo)return;const i=wo.i;woStop();setTimeout(()=>finish(i),380)}
+$('#wtc').onclick=e=>{const b=e.target.closest('button');if(b&&wo&&wo.adj)wo.adj(+b.dataset.t)};
 $('#woc').onclick=woStop;$('#wod').onclick=woQuick;
 
 /* Gewicht, Verlauf und Quests pro Tag */
@@ -1120,39 +1137,49 @@ Antworte NUR mit JSON: {"food":"...","reward":"...","pts":Zahl}`)}catch(e){o={fo
   S.steps.push(...add);$('#fdf').value=$('#fdr').value='';sig='';save();render();toast('Quests hinzugefügt.');
 };
 
-/* Foto-Sperre: Passwort wird nur als Hash auf diesem Gerät gespeichert */
-const LKK='dizzipline-lock';let phOpen=false,lkMode='';
+/* Foto-Sperre mit PIN (Zahlentastatur). Die PIN wird nur als Hash auf diesem Gerät gespeichert. */
+const LKK='dizzipline-pin';let phOpen=false,lkMode='',lkBuf='',lkFirst='';
+try{localStorage.removeItem('dizzipline-lock')}catch(e){}
 const lkGet=()=>{try{return JSON.parse(localStorage.getItem(LKK))}catch(e){return null}},lkOn=()=>!!lkGet();
 const b64=b=>btoa(String.fromCharCode(...new Uint8Array(b))),unb64=t=>Uint8Array.from(atob(t),c=>c.charCodeAt(0));
 async function pwHash(pw,salt){const k=await crypto.subtle.importKey('raw',new TextEncoder().encode(pw),'PBKDF2',false,['deriveBits']);return b64(await crypto.subtle.deriveBits({name:'PBKDF2',salt,iterations:150000,hash:'SHA-256'},k,256))}
+const lkDots=()=>document.querySelectorAll('#lkd i').forEach((d,i)=>d.classList.toggle('on',i<lkBuf.length));
+function lkText(){
+  const set=lkMode=='set';
+  $('#lkt').textContent=set?(lkFirst?'PIN wiederholen':'PIN festlegen'):lkMode=='unlock'?'Fotos entsperren':'Sperre ausschalten';
+  $('#lkp').textContent=set?(lkFirst?'Gib die PIN noch einmal ein.':'Mit dieser PIN entsperrst du deine Fotos. Es gibt keine Wiederherstellung.'):'Gib deine PIN ein.';
+  $('#lkf').style.display=set?'none':'';
+}
 function lkShow(mode){
-  lkMode=mode;const set=mode=='set';
-  $('#lkt').textContent=set?'Passwort festlegen':mode=='unlock'?'Fotos entsperren':'Sperre ausschalten';
-  $('#lkp').textContent=set?'Mit diesem Passwort entsperrst du deine Fotos. Es gibt keine Wiederherstellung.':'Gib dein Passwort ein.';
-  $('#lk2').style.display=set?'':'none';$('#lkf').style.display=set?'none':'';
-  $('#lkgo').textContent=set?'Sperre aktivieren':mode=='unlock'?'Entsperren':'Ausschalten';
-  $('#lk1').value=$('#lk2').value='';
+  lkMode=mode;lkBuf='';lkFirst='';lkText();lkDots();
+  $('#lkpad').innerHTML=[1,2,3,4,5,6,7,8,9,'',0,'⌫'].map(k=>k===''?'<button class="z" disabled></button>':`<button data-k="${k}">${k}</button>`).join('');
   const o=$('#lk');o.classList.add('on');requestAnimationFrame(()=>requestAnimationFrame(()=>o.classList.add('show')));
 }
-const lkClose=()=>{const o=$('#lk');o.classList.remove('show');setTimeout(()=>o.classList.remove('on'),350);$('#lk1').value=$('#lk2').value=''};
-$('#lkc').onclick=lkClose;$('#lk').onclick=e=>{if(e.target.id=='lk')lkClose()};
-$('#plu').onclick=()=>lkShow('unlock');
-$('#plk').onchange=e=>{const want=e.target.checked;e.target.checked=lkOn();lkShow(want?'set':'off')};
-$('#lkgo').onclick=async()=>{
-  if(!window.crypto||!crypto.subtle){toast('Dafür braucht die App eine sichere Verbindung (https).');return}
-  const a=$('#lk1').value,b=$('#lk2').value;
+const lkClose=()=>{const o=$('#lk');o.classList.remove('show');setTimeout(()=>o.classList.remove('on'),350);lkBuf='';lkFirst=''};
+const lkErr=msg=>{const d=$('#lkd');d.classList.remove('err');void d.offsetWidth;d.classList.add('err');buzz([50,40,50]);lkBuf='';lkDots();if(msg)toast(msg)};
+async function lkDone(){
+  if(!window.crypto||!crypto.subtle){lkErr('Dafür braucht die App eine sichere Verbindung (https).');return}
   if(lkMode=='set'){
-    if(a.length<4){toast('Mindestens 4 Zeichen.');return}
-    if(a!==b){toast('Die Passwörter stimmen nicht überein.');return}
+    if(!lkFirst){lkFirst=lkBuf;lkBuf='';lkText();lkDots();return}
+    if(lkBuf!==lkFirst){lkFirst='';lkText();lkErr('Die PINs stimmen nicht überein. Noch einmal.');return}
     const salt=crypto.getRandomValues(new Uint8Array(16));
-    try{localStorage.setItem(LKK,JSON.stringify({s:b64(salt),h:await pwHash(a,salt)}))}catch(e){toast('Das konnte nicht gespeichert werden.');return}
+    try{localStorage.setItem(LKK,JSON.stringify({s:b64(salt),h:await pwHash(lkBuf,salt)}))}catch(e){lkErr('Das konnte nicht gespeichert werden.');return}
     phOpen=false;lkClose();renderSet();renderPh();toast('Foto-Sperre ist aktiv.');return;
   }
   const o=lkGet();if(!o){lkClose();return}
-  if(await pwHash(a,unb64(o.s))!==o.h){toast('Falsches Passwort.');return}
+  if(await pwHash(lkBuf,unb64(o.s))!==o.h){lkErr('Falsche PIN.');return}
   if(lkMode=='unlock'){phOpen=true;lkClose();renderPh()}
   else{try{localStorage.removeItem(LKK)}catch(e){}phOpen=false;lkClose();renderSet();renderPh();toast('Foto-Sperre ist aus.')}
+}
+$('#lkpad').onclick=e=>{
+  const b=e.target.closest('button[data-k]');if(!b)return;const k=b.dataset.k;
+  if(k=='⌫'){lkBuf=lkBuf.slice(0,-1);lkDots();return}
+  if(lkBuf.length>=4)return;lkBuf+=k;lkDots();buzz(15);
+  if(lkBuf.length==4)setTimeout(lkDone,160);
 };
+$('#lkc').onclick=lkClose;$('#lk').onclick=e=>{if(e.target.id=='lk')lkClose()};
+$('#plu').onclick=()=>lkShow('unlock');
+$('#plk').onchange=e=>{const want=e.target.checked;e.target.checked=lkOn();lkShow(want?'set':'off')};
 $('#lkf').onclick=async()=>{
   if(!confirm('Alle Fotos werden gelöscht und die Sperre wird entfernt. Fortfahren?'))return;
   try{await phTx('readwrite',o=>o.clear())}catch(e){}
