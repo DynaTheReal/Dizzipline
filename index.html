@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="utf-8">
-<meta name="app-version" content="1.6.1">
+<meta name="app-version" content="1.7.0">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#000000">
 <title>Dizzipline</title>
@@ -288,6 +288,14 @@ nav button.pulse svg{animation:pls .4s var(--ease)}
 .wtc{position:absolute;right:14px;bottom:14px;display:flex;align-items:center;gap:8px;z-index:4;font-size:13px;color:rgba(255,255,255,.85);font-variant-numeric:tabular-nums}
 #wtp button,.wtc button{width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,255,255,.4);background:rgba(0,0,0,.4);font-size:20px;line-height:1;cursor:pointer;padding:0}
 #exg line.prop,#wog line.prop{stroke:rgba(255,255,255,.75);stroke-width:5}
+html{touch-action:manipulation}
+.won.chg,.cn.chg{color:#ffe36b;text-shadow:0 0 18px rgba(255,214,10,.9),0 0 42px rgba(255,214,10,.55);animation:wig .1s linear infinite alternate}
+@keyframes wig{from{transform:translate(-2px,1px) rotate(-1.4deg)}to{transform:translate(2px,-1px) rotate(1.4deg)}}
+#wo.chg{box-shadow:inset 0 0 110px rgba(255,214,10,.3);animation:chp .5s ease-in-out infinite alternate}
+@keyframes chp{to{box-shadow:inset 0 0 150px rgba(255,214,10,.45)}}
+#wo.chg #wog line{stroke:#ffe36b;filter:drop-shadow(0 0 5px rgba(255,214,10,.8))}#wo.chg #wog circle{stroke:#ffe36b}
+.card.chg{box-shadow:0 0 0 1px #ffd60a,0 0 30px rgba(255,214,10,.65);animation:chp2 .3s infinite alternate}
+@keyframes chp2{to{box-shadow:0 0 0 1px #fff3b0,0 0 46px rgba(255,214,10,.9)}}
 /* Tab-Leiste */
 nav{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(440px,calc(100% - 32px));display:flex;padding:6px;border-radius:30px;background:rgba(30,30,32,.7);backdrop-filter:blur(26px) saturate(180%);-webkit-backdrop-filter:blur(26px) saturate(180%);border:1px solid var(--line);z-index:20}
 nav button{flex:1;background:none;border:0;padding:9px 0 7px;border-radius:24px;display:grid;justify-items:center;gap:3px;font-size:11px;font-weight:500;color:var(--mu);cursor:pointer;transition:.3s}
@@ -383,6 +391,7 @@ nav svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;st
       <h3>Neuer Schritt</h3>
       <div class="seg" id="seg"><button data-t="w" class="on">Aufgabe</button><button data-t="p">Pause</button><button data-t="e">Essen</button><button data-t="b">Belohnung</button></div>
       <input class="in" id="fn" list="exl" placeholder="Name, z. B. 30 Crunches"><datalist id="exl"><option value="Kniebeugen"><option value="Sprungkniebeugen"><option value="Liegestütze"><option value="Crunches"><option value="Sit-ups"><option value="Fahrrad-Crunches"><option value="Ausfallschritte"><option value="Mountain Climbers"><option value="Plank"><option value="Beinheben"><option value="Scherenkicks"><option value="Hüftheben"><option value="Kniehebelauf"><option value="Trizeps-Dips"><option value="Wadenheben"><option value="Superman"><option value="Donkey Kicks"><option value="Bird Dog"><option value="Seilspringen"><option value="Schulterdrücken"><option value="Wandsitzen"><option value="Schattenboxen"><option value="Burpees"><option value="Seilspringen"><option value="Laufen"><option value="Zügiges Gehen"><option value="Treppensteigen"><option value="Radfahren"><option value="Klimmzüge"><option value="Hantel-Kniebeugen"><option value="Hantel-Ausfallschritte"><option value="Hantel-Schulterdrücken"><option value="Hantel-Bizepscurls"><option value="Hantel-Rudern"></datalist>
+      <div class="amt" id="amm"><div class="seg" id="fm"><button data-m="r" class="on">Wiederholungen</button><button data-m="s">Sekunden</button><button data-m="m">Minuten</button></div></div>
       <div class="amt" id="amts"><input class="in" id="fs" type="number" min="1" max="10" value="1" inputmode="numeric" placeholder="Sätze (1 = einmal)"></div>
       <div class="amt" id="amt"><input class="in" id="fa" type="number" min="1" value="30" inputmode="numeric" placeholder="Wiederholungen"></div>
       <div class="sw" id="sw"><button class="t0 on" data-th="0"></button><button class="t1" data-th="1"></button><button class="t2" data-th="2"></button><button class="t3" data-th="3"></button><button class="t4" data-th="4"></button></div>
@@ -503,7 +512,7 @@ const save=()=>{
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const LBL={w:'Aufgabe',p:'Pause',e:'Essen',b:'Belohnung'};
 const pts=s=>s.t=='w'?10+Math.floor(s.a*(s.sets||1)/10):s.t=='b'?s.a:5;
-const meta=s=>({w:(s.sets>1?s.sets+'× ':'')+s.a+(HOLD.test(s.n)?' Sek.':MINS.test(s.n)?' Min.':' Wdh.'),p:s.a+' Min.',e:'+5 Punkte',b:'+'+s.a+' Punkte'})[s.t];
+const meta=s=>({w:(s.sets>1?s.sets+'× ':'')+s.a+({sec:' Sek.',min:' Min.',rep:' Wdh.'})[kind(s)],p:s.a+' Min.',e:'+5 Punkte',b:'+'+s.a+' Punkte'})[s.t];
 const ctext=(s,i,lk,run)=>lk?'Gesperrt, erst „'+S.steps[i-1].n+'“ erledigen':s.done?(s.t=='b'?'Eingelöst':'Erledigt'):({w:(s.sets>1?s.sets+' Sätze × ':'')+s.a+' '+unit(s)+' · Tippen zum Starten',p:run?fmt(s.until-Date.now())+' verbleibend':s.a+' Minuten · Tippen zum Starten',e:'Tippen, wenn du gegessen hast',b:'+'+s.a+' Bonuspunkte · Tippen zum Einlösen'})[s.t];
 const fmt=ms=>{const s=Math.ceil(ms/1000);return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};
 const CHK='<svg viewBox="0 0 24 24"><path d="M6 12.5l4 4 8-9"/></svg>',
@@ -626,17 +635,18 @@ $('#nav').onclick=e=>{const b=e.target.closest('button');if(!b)return;
 $('#ppill').onclick=()=>document.querySelector('nav [data-s=profil]').click();
 
 /* Plan bearbeiten */
-const ed={t:'w',th:0},DEF={w:0,p:2,e:3,b:4};
+const ed={t:'w',th:0,m:'r'},DEF={w:0,p:2,e:3,b:4};
 const pick=(q,el)=>document.querySelectorAll(q+' button').forEach(x=>x.classList.toggle('on',x==el));
 $('#seg').onclick=e=>{const b=e.target.closest('button');if(!b)return;
   ed.t=b.dataset.t;ed.th=DEF[ed.t];pick('#seg',b);pick('#sw',$('#sw').children[ed.th]);
-  $('#amt').classList.toggle('h',ed.t=='e');$('#amts').classList.toggle('h',ed.t!='w');
+  $('#amt').classList.toggle('h',ed.t=='e');$('#amts').classList.toggle('h',ed.t!='w');$('#amm').classList.toggle('h',ed.t!='w');ed.m='r';pick('#fm',$('#fm').children[0]);
   $('#fa').placeholder={w:'Wiederholungen',p:'Minuten',b:'Bonuspunkte'}[ed.t]||'';
   $('#fa').value={w:30,p:5,b:20}[ed.t]||0;
   $('#fn').placeholder={w:'Name, z. B. 30 Crunches',p:'Name, z. B. Pause',e:'Name, z. B. Proteinshake',b:'Name, z. B. Eine Folge Serie'}[ed.t]};
+$('#fm').onclick=e=>{const b=e.target.closest('button');if(!b)return;ed.m=b.dataset.m;pick('#fm',b);$('#fa').placeholder={r:'Wiederholungen',s:'Sekunden',m:'Minuten'}[ed.m];$('#fa').value={r:12,s:60,m:5}[ed.m]};
 $('#sw').onclick=e=>{const b=e.target.closest('button');if(!b)return;ed.th=+b.dataset.th;pick('#sw',b)};
 $('#add').onclick=()=>{
-  S.steps.push({n:$('#fn').value.trim()||LBL[ed.t],t:ed.t,a:ed.t=='e'?0:Math.max(1,+$('#fa').value||1),th:ed.th,lk:$('#fl').checked,...(ed.t=='w'&&+$('#fs').value>1?{sets:Math.min(10,Math.round(+$('#fs').value)),rest:60}:{})});
+  S.steps.push({n:$('#fn').value.trim()||LBL[ed.t],t:ed.t,a:ed.t=='e'?0:Math.max(1,+$('#fa').value||1),th:ed.th,lk:$('#fl').checked,...(ed.t=='w'&&+$('#fs').value>1?{sets:Math.min(10,Math.round(+$('#fs').value)),rest:60}:{}),...(ed.t=='w'?{tm:ed.m||'r'}:{})});
   $('#fn').value='';save();fresh=S.steps.length-1;render()};
 /* Plan: sanft löschen, per Griff ziehen */
 function kill(r,i){
@@ -739,7 +749,7 @@ $('#exc').onclick=exClose;
 $('#ex').onclick=e=>{if(e.target.id=='ex')exClose()};
 
 /* Auswahl, Feedback, Neu laden */
-const ABS=/crunch|sit-?up|fahrrad|bicycle|schere|flutter|beinheb|bauchpresse/i,HOLD=/plank|wandsitz|wall ?sit/i,MINS=/lauf|jogg|sprint|gehen|spazier|walking|radfahr|radeln|treppe|schwimm|wandern|marsch|cycling/i,unit=s=>HOLD.test(s.n)?'Sekunden':MINS.test(s.n)?'Minuten':'Wiederholungen';
+const ABS=/crunch|sit-?up|fahrrad|bicycle|schere|flutter|beinheb|bauchpresse/i,HOLD=/plank|wandsitz|wall ?sit/i,MINS=/lauf|jogg|sprint|gehen|spazier|walking|radfahr|radeln|treppe|schwimm|wandern|marsch|cycling/i,kind=s=>s.tm?({r:'rep',s:'sec',m:'min'})[s.tm]:HOLD.test(s.n)?'sec':MINS.test(s.n)?'min':'rep',unit=s=>({sec:'Sekunden',min:'Minuten',rep:'Wiederholungen'})[kind(s)];
 function allowed(){const ab=S.prof&&S.prof.goal=='abnehmen',L=[...(ab?LOSE:HARD),...(S.eq||[]).filter(k=>!(ab&&k=='stange')).flatMap(k=>EQN[k]||[])];return L.filter(n=>!(S.avoid||{})[fbKey(n)])}
 const fbKey=n=>n.toLowerCase().replace(/\d+\s*(sekunden|sek\.?|minuten|min\.?)?/g,'').replace(/[^a-zäöüß]+/g,'_').replace(/^_|_$/g,'').slice(0,40)||'x';
 const fbText=()=>{const e=Object.entries(S.fb||{}).slice(-12);return e.length?'Feedback des Nutzers (passe die Schwierigkeit an: bei "zu leicht" mehr Wiederholungen oder schwerere Variante, bei "zu schwer" weniger oder leichtere): '+e.map(([k,v])=>k.replace(/_/g,' ')+': '+({easy:'zu leicht',ok:'gut',hard:'zu schwer'})[v]).join('; ')+'.':''};
@@ -778,7 +788,7 @@ const addSeen=n=>{const a=seenSet(),k=fbKey(n);if(!a.includes(k))a.push(k)};
 const usedKeys=()=>new Set([...seenSet(),...S.steps.map(x=>fbKey(x.n))]);
 function localStep(s){
   if(s.t!='w')return null;
-  const f=s.fb=='easy'?1.25:s.fb=='hard'?.75:1,hold=HOLD.test(s.n),mins=MINS.test(s.n),used=usedKeys(),pool=allowed().filter(x=>HOLD.test(x)==hold&&MINS.test(x)==mins&&!used.has(fbKey(x)));
+  const f=s.fb=='easy'?1.25:s.fb=='hard'?.75:1,hold=kind(s)=='sec',mins=kind(s)=='min',used=usedKeys(),pool=allowed().filter(x=>HOLD.test(x)==hold&&MINS.test(x)==mins&&!used.has(fbKey(x)));
   if(!pool.length)return null;
   const a=hold?Math.min(120,Math.max(15,Math.round(s.a*f/5)*5)):mins?Math.min(60,Math.max(5,Math.round(s.a*f/5)*5)):Math.min(30,Math.max(5,Math.round(s.a*f))),nm=pool[Math.floor(Math.random()*pool.length)];
   const num=!(s.sets>1);return{n:num?(hold?nm+' '+a+' Sekunden':mins?nm+' '+a+' Minuten':a+' '+nm):nm,t:'w',a,th:s.th,lk:s.lk,sets:s.sets,rest:s.rest};
@@ -1030,8 +1040,9 @@ const ov={
   sub(t){$('#wos').textContent=t},
   prog(){},
   tempo(on,t){const e=$('#wtp');e.style.display=on?'flex':'none';if(t)$('#wtv').textContent=t},
+  charge(on){$('#won').classList.toggle('chg',on);$('#wo').classList.toggle('chg',on)},
   fig(k,db,T){if(k)playEx(EX[k],db,T,'#wog')},
-  close(){cancelAnimationFrame(exRaf);const o=$('#wo');o.classList.remove('show');setTimeout(()=>{if(!wo)o.classList.remove('on')},350)}
+  close(){cancelAnimationFrame(exRaf);const o=$('#wo');o.classList.remove('show','chg');$('#won').classList.remove('chg');setTimeout(()=>{if(!wo)o.classList.remove('on')},350)}
 };
 function inlUI(i){
   const c=$('#list').children[i],p=c.querySelector('p'),n=document.createElement('div'),b=document.createElement('div'),pr=document.createElement('b'),tc=document.createElement('div');
@@ -1045,14 +1056,15 @@ function inlUI(i){
     prog(v){pr.style.width=v+'%'},
     fig(){},
     tempo(on,t){tc.style.display=on?'flex':'none';if(t)tc.querySelector('span').textContent=t},
-    close(){c.classList.remove('wk');n.remove();b.remove();pr.remove();tc.remove();renderHeute()}
+    charge(on){n.classList.toggle('chg',on);c.classList.toggle('chg',on)},
+    close(){c.classList.remove('wk','chg');n.remove();b.remove();pr.remove();tc.remove();renderHeute()}
   };
 }
 function startWo(i){
   if(wo)return;
-  const s=S.steps[i],k=exOf(s.n),hold=HOLD.test(s.n),mins=MINS.test(s.n),timed=hold||mins,total=mins?s.a*60:s.a,card=$('#list').children[i];
+  const s=S.steps[i],k=exOf(s.n),hold=kind(s)=='sec',mins=kind(s)=='min',timed=hold||mins,total=mins?s.a*60:s.a,card=$('#list').children[i];
   const fk=k||fbKey(s.n),base=(TEMPO[k]||2500)*({leicht:1.15,hart:.9}[(S.prof||{}).i]||1);let tempo=Math.round(base*((S.tempo||{})[fk]||1));const ui=S.inl&&card&&card.offsetHeight?inlUI(i):ov;
-  wo={i,T:[],iv:0,ui};const at=(f,ms)=>wo.T.push(setTimeout(f,ms));
+  wo={i,T:[],iv:0,ui};zoomLock(true);const at=(f,ms)=>wo.T.push(setTimeout(f,ms));
   ui.open(s,k);ui.tempo(false);ui.sub('Mach dich bereit');ui.prog(0);ui.num('3');buzz();
   try{navigator.wakeLock&&navigator.wakeLock.request('screen').then(l=>{wLock=l}).catch(()=>{})}catch(e){}
   at(()=>{ui.num('2');buzz()},1000);
@@ -1068,25 +1080,27 @@ function startWo(i){
         ui.num(f(left));ui.sub(lab+(hold?'Sekunden halten':'Minuten'));
         wo.iv=setInterval(()=>{left--;ui.num(f(Math.max(0,left)),false);ui.prog(((setNo-1)*total+(total-left))/(sets*total)*100);if(left<=0)endSet()},1000);
       }else{
-        let c=0;ui.num('Los!');ui.sub(lab+'von '+total+' Wiederholungen');
-        const db=/hantel|dumbbell/i.test(s.n),tick=()=>{c++;ui.num(c);buzz();ui.prog(((setNo-1)*total+c)/(sets*total)*100);if(c>=total)endSet()};
+        let c=0;ui.sub(lab+'von '+total+' Wiederholungen');
+        const db=/hantel|dumbbell/i.test(s.n),last=Math.max(1,Math.ceil(total*.1));
+        /* Die Zahl zeigt die Wiederholung, die gerade läuft. Erst nach der letzten ist es geschafft. */
+        const tick=()=>{if(c>=total){endSet();return}c++;ui.num(c);buzz();ui.prog(((setNo-1)*total+c-1)/(sets*total)*100);ui.charge(c>total-last)};
         const go=()=>{clearInterval(wo.iv);wo.iv=setInterval(tick,tempo);ui.tempo(true,(tempo/1000).toFixed(1).replace('.',',')+' s')};
-        go();
+        tick();go();
         wo.adj=d=>{let f=((S.tempo||{})[fk]||1)*(d>0?1/1.15:1.15);f=Math.round(Math.max(.5,Math.min(2.5,f))*100)/100;(S.tempo=S.tempo||{})[fk]=f;save();tempo=Math.round(base*f);go();ui.fig(k,db,tempo)};
       }
     };
     const endSet=()=>{
       clearInterval(wo.iv);
       if(setNo>=sets){woDone();return}
-      ui.tempo(false);wo.adj=null;cancelAnimationFrame(exRaf);buzz([40,30,40]);let r=rest;ui.num(r);ui.sub('Pause · gleich Satz '+(setNo+1)+' von '+sets);
+      ui.charge(false);ui.tempo(false);wo.adj=null;cancelAnimationFrame(exRaf);buzz([40,30,40]);let r=rest;ui.num(r);ui.sub('Pause · gleich Satz '+(setNo+1)+' von '+sets);
       wo.iv=setInterval(()=>{r--;ui.num(Math.max(0,r),false);if(r<=0){clearInterval(wo.iv);ui.num('Los!');wo.T.push(setTimeout(runSet,700))}},1000);
     };
-    runSet();
+    if(timed)runSet();else{ui.num('Los!');wo.T.push(setTimeout(runSet,600))}
   },3000);
 }
 function woStop(){
   if(!wo)return;const u=wo.ui;wo.T.forEach(clearTimeout);clearInterval(wo.iv);wo=null;
-  try{wLock&&wLock.release()}catch(e){}wLock=null;u.close();
+  try{wLock&&wLock.release()}catch(e){}wLock=null;zoomLock(false);u.close();
 }
 function woDone(){
   if(!wo)return;const i=wo.i,u=wo.ui;clearInterval(wo.iv);
@@ -1094,6 +1108,10 @@ function woDone(){
   wo.T.push(setTimeout(()=>{woStop();setTimeout(()=>finish(i),380)},900));
 }
 function woQuick(){if(!wo)return;const i=wo.i;woStop();setTimeout(()=>finish(i),380)}
+const vpEl=document.querySelector('meta[name=viewport]'),vp0=vpEl.content;
+function zoomLock(on){vpEl.content=on?vp0+',maximum-scale=1,user-scalable=no':vp0;document.documentElement.style.touchAction=on?'pan-y':''}
+['gesturestart','gesturechange','gestureend'].forEach(t=>document.addEventListener(t,e=>{if(wo)e.preventDefault()}));
+document.addEventListener('touchmove',e=>{if(wo&&e.touches.length>1)e.preventDefault()},{passive:false});
 $('#wtp').onclick=e=>{const b=e.target.closest('button');if(b&&wo&&wo.adj)wo.adj(+b.dataset.t)};
 $('#woc').onclick=woStop;$('#wod').onclick=woQuick;
 
