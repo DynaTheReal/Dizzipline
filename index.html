@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="utf-8">
-<meta name="app-version" content="1.7.0">
+<meta name="app-version" content="1.7.1">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#000000">
 <title>Dizzipline</title>
@@ -1078,7 +1078,8 @@ function startWo(i){
       if(timed){
         let left=total;const f=v=>hold&&total<=90?String(v):Math.floor(v/60)+':'+String(v%60).padStart(2,'0');
         ui.num(f(left));ui.sub(lab+(hold?'Sekunden halten':'Minuten'));
-        wo.iv=setInterval(()=>{left--;ui.num(f(Math.max(0,left)),false);ui.prog(((setNo-1)*total+(total-left))/(sets*total)*100);if(left<=0)endSet()},1000);
+        const lt=Math.min(Math.max(5,Math.ceil(total*.1)),Math.floor(total/2));
+        wo.iv=setInterval(()=>{left--;ui.num(f(Math.max(0,left)),false);ui.charge(left<=lt);ui.prog(((setNo-1)*total+(total-left))/(sets*total)*100);if(left<=0)endSet()},1000);
       }else{
         let c=0;ui.sub(lab+'von '+total+' Wiederholungen');
         const db=/hantel|dumbbell/i.test(s.n),last=Math.max(1,Math.ceil(total*.1));
