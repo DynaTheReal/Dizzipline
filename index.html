@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="utf-8">
-<meta name="app-version" content="1.7.1">
+<meta name="app-version" content="1.8.0">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#000000">
 <title>Dizzipline</title>
@@ -296,6 +296,17 @@ html{touch-action:manipulation}
 #wo.chg #wog line{stroke:#ffe36b;filter:drop-shadow(0 0 5px rgba(255,214,10,.8))}#wo.chg #wog circle{stroke:#ffe36b}
 .card.chg{box-shadow:0 0 0 1px #ffd60a,0 0 30px rgba(255,214,10,.65);animation:chp2 .3s infinite alternate}
 @keyframes chp2{to{box-shadow:0 0 0 1px #fff3b0,0 0 46px rgba(255,214,10,.9)}}
+.card.dn.wk{filter:none}
+.ib{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.07);display:grid;place-items:center;cursor:pointer;flex:none}
+.ib svg{width:19px;height:19px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ci{cursor:pointer;gap:14px}#cklist.ed .ci{cursor:default}
+.cc{width:30px;height:30px;flex:none;border-radius:50%;border:2px solid rgba(255,255,255,.35);display:grid;place-items:center;transition:background .35s var(--ease),border-color .35s var(--ease),transform .4s cubic-bezier(.3,1.7,.5,1)}
+.cc svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:22;stroke-dashoffset:22;transition:stroke-dashoffset .4s .08s var(--ease)}
+.ci:active .cc{transform:scale(.88)}
+.ci.on .cc{background:#30d158;border-color:#30d158}.ci.on .cc svg{stroke-dashoffset:0}
+.lt{font-style:normal;background:linear-gradient(currentColor,currentColor) no-repeat 0 55%/0 1.5px;transition:color .35s,background-size .4s var(--ease)}
+.ci.on .lt{color:var(--mu);background-size:100% 1.5px}
+.ckadd{display:flex;gap:10px;margin-top:14px}.ckadd .in{margin:0;flex:1}.ckadd .btn{width:auto;padding:0 20px}
 /* Tab-Leiste */
 nav{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(440px,calc(100% - 32px));display:flex;padding:6px;border-radius:30px;background:rgba(30,30,32,.7);backdrop-filter:blur(26px) saturate(180%);-webkit-backdrop-filter:blur(26px) saturate(180%);border:1px solid var(--line);z-index:20}
 nav button{flex:1;background:none;border:0;padding:9px 0 7px;border-radius:24px;display:grid;justify-items:center;gap:3px;font-size:11px;font-weight:500;color:var(--mu);cursor:pointer;transition:.3s}
@@ -382,6 +393,14 @@ nav svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;st
     <button class="ghost" id="dtog" style="margin-top:6px;display:none"></button>
   </section>
 
+  <section class="screen" id="s-check">
+    <div class="top"><div><p class="mu" id="ckd"></p><h2>Checkliste</h2></div><button class="ib" id="cked" aria-label="Checkliste bearbeiten"></button></div>
+    <p class="mu" id="cks" style="margin-top:8px"></p>
+    <div class="bar"><i id="ckb"></i></div>
+    <div id="cklist"></div>
+    <div class="ckadd" id="ckadd" style="display:none"><input class="in" id="cki" placeholder="Neuer Punkt, z. B. 3 Liter Wasser"><button class="btn" id="ckb2">Hinzufügen</button></div>
+  </section>
+
   <section class="screen" id="s-plan">
     <div class="top"><h2 id="plt">Trainingsplan</h2></div>
     <p class="mu" style="margin-bottom:18px">Die Reihenfolge entscheidet, was gesperrt ist. Ziehe an den drei Strichen zum Sortieren.</p>
@@ -460,6 +479,7 @@ nav svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;st
 <div id="ex"><div class="exs"><h3 id="ext"></h3><p class="mu" id="exp"></p><svg viewBox="0 0 200 130" id="exv"><line x1="14" x2="186" y1="120" y2="120" stroke="rgba(255,255,255,.18)" stroke-width="1.5"/><g id="exg"></g></svg><button class="btn" id="exc">Verstanden</button></div></div>
 <nav id="nav">
   <button data-s="heute" class="on"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l3 3 5-6"/></svg>Heute</button>
+  <button data-s="check"><svg viewBox="0 0 24 24"><path d="M10 7h10M10 12h10M10 17h10"/><path d="M3.5 7l1.3 1.3L7.2 5.8M3.5 12l1.3 1.3 2.4-2.5M3.5 17l1.3 1.3 2.4-2.5"/></svg>Checkliste</button>
   <button data-s="plan"><svg viewBox="0 0 24 24"><path d="M8 7h12M8 12h12M8 17h12M4 7h.01M4 12h.01M4 17h.01"/></svg>Plan</button>
   <button data-s="progress"><svg viewBox="0 0 24 24"><path d="M4 18l5-6 4 3 7-9M15 6h5v5"/></svg>Progress</button>
   <button data-s="profil"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg>Profil</button>
@@ -498,7 +518,7 @@ const dk=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+Strin
 const gap=(a,b)=>Math.round((new Date(b+'T12:00')-new Date(a+'T12:00'))/864e5);
 /* je 2 komplett ausgelassene Tage: ein Level weg */
 function roll(){
-  if(S.day!==today){S.hist={steps:(S.pf=='ai'?S.steps:S.alt||[]).map(x=>({n:x.n,t:x.t,a:x.a,done:!!x.done}))};S.day=today;[S.steps,S.alt||[]].forEach(L=>L.forEach(s=>{if(s.t=='w'&&s.fb&&s.fb!='ok'){s.a=Math.max(1,Math.round(s.a*(s.fb=='easy'?1.15:.85)));s.n=s.n.replace(/\d+/,s.a)}delete s.fb;delete s.pa;s.done=0;s.until=0}))}
+  if(S.day!==today){S.hist={steps:(S.pf=='ai'?S.steps:S.alt||[]).map(x=>({n:x.n,t:x.t,a:x.a,done:!!x.done}))};S.day=today;[S.steps,S.alt||[]].forEach(L=>L.forEach(s=>{if(s.t=='w'&&s.fb&&s.fb!='ok'){s.a=Math.max(1,Math.round(s.a*(s.fb=='easy'?1.15:.85)));s.n=s.n.replace(/\d+/,s.a)}delete s.fb;delete s.pa;delete s.rp;s.done=0;s.until=0}))}
   S.lvl=S.lvl||1;S.pl=S.pl||0;S.lost=S.lost||0;
   if(!S.cl2){S.cl2=1;const cl=l=>(l||[]).filter(x=>!(x.t=='e'||x.t=='b')||x.u);if(S.pf=='ai')S.steps=cl(S.steps);else if(S.alt)S.alt=cl(S.alt)}
   if(S.last){const tot=Math.floor((gap(S.last,TK)-1)/2),dl=tot-S.pl;if(dl>0){const o=S.lvl;S.lvl=Math.max(1,S.lvl-dl);S.lost+=o-S.lvl}S.pl=Math.max(S.pl,tot)}
@@ -513,7 +533,7 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',
 const LBL={w:'Aufgabe',p:'Pause',e:'Essen',b:'Belohnung'};
 const pts=s=>s.t=='w'?10+Math.floor(s.a*(s.sets||1)/10):s.t=='b'?s.a:5;
 const meta=s=>({w:(s.sets>1?s.sets+'× ':'')+s.a+({sec:' Sek.',min:' Min.',rep:' Wdh.'})[kind(s)],p:s.a+' Min.',e:'+5 Punkte',b:'+'+s.a+' Punkte'})[s.t];
-const ctext=(s,i,lk,run)=>lk?'Gesperrt, erst „'+S.steps[i-1].n+'“ erledigen':s.done?(s.t=='b'?'Eingelöst':'Erledigt'):({w:(s.sets>1?s.sets+' Sätze × ':'')+s.a+' '+unit(s)+' · Tippen zum Starten',p:run?fmt(s.until-Date.now())+' verbleibend':s.a+' Minuten · Tippen zum Starten',e:'Tippen, wenn du gegessen hast',b:'+'+s.a+' Bonuspunkte · Tippen zum Einlösen'})[s.t];
+const ctext=(s,i,lk,run)=>lk?'Gesperrt, erst „'+S.steps[i-1].n+'“ erledigen':s.done?(s.t=='b'?'Eingelöst':'Erledigt'+(s.rp?' · '+(s.rp+1)+'× gemacht':'')+(s.t=='w'?' · Tippen zum Wiederholen':'')):({w:(s.sets>1?s.sets+' Sätze × ':'')+s.a+' '+unit(s)+' · Tippen zum Starten',p:run?fmt(s.until-Date.now())+' verbleibend':s.a+' Minuten · Tippen zum Starten',e:'Tippen, wenn du gegessen hast',b:'+'+s.a+' Bonuspunkte · Tippen zum Einlösen'})[s.t];
 const fmt=ms=>{const s=Math.ceil(ms/1000);return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};
 const CHK='<svg viewBox="0 0 24 24"><path d="M6 12.5l4 4 8-9"/></svg>',
 LOCK='<svg viewBox="0 0 24 24"><rect x="6" y="11" width="12" height="9" rx="2"/><path d="M9 11V8a3 3 0 016 0v3"/></svg>',
@@ -616,7 +636,7 @@ $('#list').onclick=e=>{
   const sk=e.target.closest('.sk');if(sk){finish(+sk.dataset.sk,true);return}
   const c=e.target.closest('.card');if(!c||c.classList.contains('wk'))return;
   const i=+c.dataset.i,s=S.steps[i];
-  if(s.done)return;
+  if(s.done){if(s.t=='w')startWo(i,true);return}
   if(isLocked(i)){c.classList.remove('shake');void c.offsetWidth;c.classList.add('shake');return}
   if(s.t=='p'){if(s.until<Date.now()){s.until=Date.now()+s.a*60000;save();renderHeute()}return}
   if(s.t=='w'){startWo(i);return}
@@ -845,7 +865,7 @@ $('#pfs').onclick=e=>{const b=e.target.closest('button');if(b)swapPf(b.dataset.p
 /* Aus Versehen erledigt: Quest wieder öffnen, Punkte und ggf. das Tages-Level zurücknehmen */
 function undo(i){
   const s=S.steps[i];if(!s||!s.done)return;
-  if(s.pa>0&&S.log&&S.log[TK]>0)S.log[TK]--;S.pts=Math.max(0,S.pts-(s.pa||0));S.total=Math.max(0,S.total-1);delete s.pa;s.done=0;s.until=0;
+  if(s.pa>0&&S.log&&S.log[TK]>0)S.log[TK]--;S.pts=Math.max(0,S.pts-(s.pa||0));S.total=Math.max(0,S.total-1);delete s.pa;delete s.rp;s.done=0;s.until=0;
   const R=S.lvlRev;
   if(R&&R.d===TK&&R.pf==(S.pf||'std')&&S.lvlDay===TK){S.lvl=R.lvl;S.last=R.last;S.pl=R.pl;S.lvlDay='';S.lvlRev=null}
   save();render();toast('Die Quest ist wieder offen.');
@@ -1017,7 +1037,7 @@ $('#phin').onchange=async e=>{
   try{const b=await phShrink(f);await phTx('readwrite',o=>o.put({id:Date.now(),t:Date.now(),b}));S.phDay=TK;save();document.querySelector('nav [data-s=progress]').click();toast('Foto gespeichert. Es bleibt privat auf diesem Gerät.')}
   catch(x){toast('Das Foto konnte nicht gespeichert werden.')}
 };
-$('#nav').addEventListener('click',e=>{const b=e.target.closest('button');if(b){if(b.dataset.s=='progress'){renderPh();renderWt()}else phOpen=false}});
+$('#nav').addEventListener('click',e=>{const b=e.target.closest('button');if(b){if(b.dataset.s=='progress'){renderPh();renderWt()}else phOpen=false;if(b.dataset.s=='check'){ckEdit=false;renderCk()}}});
 const phClose=()=>{$('#ph').classList.remove('show');setTimeout(()=>$('#ph').classList.remove('on'),350)};
 function phCheck(){
   if(phShown||new Date().getDay()!=6||!S.user||!S.prof||S.phDay===TK)return;
@@ -1060,11 +1080,11 @@ function inlUI(i){
     close(){c.classList.remove('wk','chg');n.remove();b.remove();pr.remove();tc.remove();renderHeute()}
   };
 }
-function startWo(i){
+function startWo(i,rep){
   if(wo)return;
   const s=S.steps[i],k=exOf(s.n),hold=kind(s)=='sec',mins=kind(s)=='min',timed=hold||mins,total=mins?s.a*60:s.a,card=$('#list').children[i];
   const fk=k||fbKey(s.n),base=(TEMPO[k]||2500)*({leicht:1.15,hart:.9}[(S.prof||{}).i]||1);let tempo=Math.round(base*((S.tempo||{})[fk]||1));const ui=S.inl&&card&&card.offsetHeight?inlUI(i):ov;
-  wo={i,T:[],iv:0,ui};zoomLock(true);const at=(f,ms)=>wo.T.push(setTimeout(f,ms));
+  wo={i,rep,T:[],iv:0,ui};zoomLock(true);const at=(f,ms)=>wo.T.push(setTimeout(f,ms));
   ui.open(s,k);ui.tempo(false);ui.sub('Mach dich bereit');ui.prog(0);ui.num('3');buzz();
   try{navigator.wakeLock&&navigator.wakeLock.request('screen').then(l=>{wLock=l}).catch(()=>{})}catch(e){}
   at(()=>{ui.num('2');buzz()},1000);
@@ -1104,11 +1124,17 @@ function woStop(){
   try{wLock&&wLock.release()}catch(e){}wLock=null;zoomLock(false);u.close();
 }
 function woDone(){
-  if(!wo)return;const i=wo.i,u=wo.ui;clearInterval(wo.iv);
+  if(!wo)return;const i=wo.i,u=wo.ui,rp=wo.rep;clearInterval(wo.iv);
   u.tempo(false);wo.adj=null;cancelAnimationFrame(exRaf);u.prog(100);u.num('Geschafft');u.sub('');buzz([60,40,60]);
-  wo.T.push(setTimeout(()=>{woStop();setTimeout(()=>finish(i),380)},900));
+  wo.T.push(setTimeout(()=>{woStop();setTimeout(()=>rp?again(i):finish(i),380)},900));
 }
-function woQuick(){if(!wo)return;const i=wo.i;woStop();setTimeout(()=>finish(i),380)}
+function woQuick(){if(!wo)return;const i=wo.i,rp=wo.rep;woStop();setTimeout(()=>rp?again(i):finish(i),380)}
+/* Schon erledigte Übung nochmal gemacht: Punkte ja, kein Level, nichts wird zurückgesetzt */
+function again(i){
+  const s=S.steps[i];if(!s)return;
+  const p=pts(s);S.pts+=p;S.total++;s.rp=(s.rp||0)+1;(S.log=S.log||{})[TK]=((S.log||{})[TK]||0)+1;
+  save();render();bubbles(p,i,false);mcZap();toast('Nochmal geschafft: +'+p+' Punkte');
+}
 const vpEl=document.querySelector('meta[name=viewport]'),vp0=vpEl.content;
 function zoomLock(on){vpEl.content=on?vp0+',maximum-scale=1,user-scalable=no':vp0;document.documentElement.style.touchAction=on?'pan-y':''}
 ['gesturestart','gesturechange','gestureend'].forEach(t=>document.addEventListener(t,e=>{if(wo)e.preventDefault()}));
@@ -1206,6 +1232,26 @@ $('#lkf').onclick=async()=>{
   try{localStorage.removeItem(LKK)}catch(e){}phOpen=false;lkClose();renderSet();renderPh();toast('Fotos gelöscht, Sperre entfernt.');
 };
 document.addEventListener('visibilitychange',()=>{if(document.hidden){phOpen=false;if(lkOn())renderPh()}});
+
+/* Tägliche Checkliste: ohne Punkte, ohne Explosion. Abgehakte Punkte bleiben grün und grau stehen, am nächsten Tag sind alle wieder offen. */
+let ckEdit=false;
+const CKPEN='<svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg>',CKOK='<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',ckDone=x=>x.d===TK;
+function ckCount(){const a=S.cl||[],d=a.filter(ckDone).length;$('#cks').textContent=a.length?(d==a.length?'Alles abgehakt. Stark.':d+' von '+a.length+' erledigt'):'Richte deine Checkliste mit dem Stift ein.';$('#ckb').style.width=a.length?d/a.length*100+'%':0}
+function renderCk(){
+  const a=S.cl||[],L=$('#cklist');
+  $('#ckd').textContent=new Date().toLocaleDateString('de-DE',{weekday:'long',day:'numeric',month:'long'});
+  L.innerHTML=a.length?a.map((x,i)=>`<div class="row ci${ckDone(x)?' on':''}" data-i="${i}"><i class="cc"><svg viewBox="0 0 24 24"><path d="M6 12.5l4 4 8-9"/></svg></i><b><i class="lt">${esc(x.n)}</i></b>${ckEdit?`<button data-d="${i}" aria-label="Löschen">✕</button>`:''}</div>`).join(''):'<p class="mu">Noch keine Punkte. Tippe oben rechts auf den Stift und richte deine tägliche Checkliste ein.</p>';
+  L.classList.toggle('ed',ckEdit);$('#ckadd').style.display=ckEdit?'':'none';$('#cked').innerHTML=ckEdit?CKOK:CKPEN;ckCount();
+}
+$('#cked').onclick=()=>{ckEdit=!ckEdit;renderCk()};
+$('#cklist').onclick=e=>{
+  const del=e.target.closest('[data-d]');
+  if(del){const r=del.closest('.row');if(r.classList.contains('fade'))return;const i=+del.dataset.d;r.style.height=r.offsetHeight+'px';r.classList.add('fade');setTimeout(()=>r.classList.add('out'),220);setTimeout(()=>{S.cl.splice(i,1);save();renderCk()},560);return}
+  const r=e.target.closest('.ci');if(!r||ckEdit)return;
+  const x=S.cl[+r.dataset.i];x.d=ckDone(x)?'':TK;r.classList.toggle('on',ckDone(x));if(ckDone(x))buzz(20);save();ckCount();
+};
+function ckAdd(){const v=$('#cki').value.trim();if(!v)return;(S.cl=S.cl||[]).push({n:v.slice(0,60),d:''});$('#cki').value='';save();renderCk();const l=$('#cklist').lastElementChild;if(l)l.classList.add('new')}
+$('#ckb2').onclick=ckAdd;$('#cki').addEventListener('keydown',e=>{if(e.key=='Enter')ckAdd()});
 
 /* Toast */
 const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove('on'),3500)};
